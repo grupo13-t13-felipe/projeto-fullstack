@@ -9,7 +9,6 @@ export class AddressPrismaRepository implements AddressRepository {
     constructor(private prisma: PrismaService) {}
     async findAll(): Promise<Address[]> {
         const addresses: Address[] = await this.prisma.address.findMany();
-        console.log(addresses)
         return addresses;
     }
     async findOne(id: string): Promise<Address> {

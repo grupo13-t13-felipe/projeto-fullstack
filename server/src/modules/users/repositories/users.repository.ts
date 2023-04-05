@@ -3,7 +3,6 @@ import { CreateUserDto } from "../dto/create-user.dto";
 import { UpdateUserDto } from "../dto/update-user.dto";
 import { User } from "../entities/user.entity";
 
-
 export abstract class UsersRepository {
     abstract create(userDto: CreateUserDto, addressDto: CreateAddressDto): Promise<User>;
     abstract findAll(): Promise<User[]>
