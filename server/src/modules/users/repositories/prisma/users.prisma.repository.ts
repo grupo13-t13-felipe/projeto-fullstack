@@ -49,18 +49,6 @@ export class UsersPrismaRepository implements UsersRepository {
         });
         return user;
     }
-    async findByCpf(cpf: string): Promise<User> {
-        const user = await this.prisma.user.findUnique({
-            where: { cpf },
-        });
-        return plainToInstance(User, user);
-    }
-    async findByPhone(phone: string): Promise<User> {
-        const user = await this.prisma.user.findUnique({
-            where: { phone },
-        });
-        return plainToInstance(User, user);
-    }
     async update(id: string, data: UpdateUserDto): Promise<User> {
         const user = await this.prisma.user.update({
             where: { id },

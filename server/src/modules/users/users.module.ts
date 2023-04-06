@@ -5,6 +5,7 @@ import { PrismaService } from 'src/database/prisma.service';
 import { UsersRepository } from './repositories/users.repository';
 import { UsersPrismaRepository } from './repositories/prisma/users.prisma.repository';
 
+
 @Module({
   controllers: [UsersController],
   providers: [
