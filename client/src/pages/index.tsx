@@ -18,7 +18,7 @@ export default function Home() {
       </Head>
      <DefaultHeader/>
      <Flex direction={'column'} height={'100%'}>
-      <Stack bgGradient='linear(to-r, grey.150, grey.400)' alignItems={'center'} justifyContent={'center'}>
+      <Stack bgGradient='linear(to-b, grey.150, grey.400)' alignItems={'center'} justifyContent={'center'}>
       <Box backgroundImage={'/Photo.svg'} display={'flex'}  filter='grayscale(80%)' backgroundPosition={'center'} backgroundSize={'cover'} backgroundRepeat={'no-repeat'} height={['50vh', '50vh', '50vh']} >
         <VStack color={'grey.0'} justifyContent={['normal', 'normal', 'center']} mt={'30px'}>
           <Text fontSize={['4xl','4xl','6xl']} fontWeight={'extrabold'} >Motors Shop</Text>
