@@ -1,20 +1,21 @@
-import { Box, Flex, Text } from "@chakra-ui/react";
+import { Box, Flex, Text, Stack } from "@chakra-ui/react";
 import { ChevronUpIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 
 const DefaultFooter = () => {
   return (
     <Flex position={"relative"}>
-      <Flex
+      <Stack
         position={"absolute"}
         backgroundColor={"grey.500"}
         top="100vh"
         width={"100vw"}
         justifyContent={"space-between"}
         alignItems={"center"}
-        py={"10px"}
-        mx={"15px"}
+        py={"40px"}
+        px={"30px"}
         direction={["column", "column", "row"]}
+        spacing={6}
       >
         <Text color={"grey.0"} fontSize={"lg"}>
           Motors Shop
@@ -25,7 +26,7 @@ const DefaultFooter = () => {
         <Link href={"#top"}>
           <ChevronUpIcon color={"grey.0"} backgroundColor={"grey.400"} />
         </Link>
-      </Flex>
+      </Stack>
     </Flex>
   );
 };
