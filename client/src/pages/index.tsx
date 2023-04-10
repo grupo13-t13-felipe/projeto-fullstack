@@ -17,13 +17,19 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
      <DefaultHeader/>
-      <Box backgroundImage={'/volkswagen-gol-ultima-geracao-foto-VW.webp'} display={'flex'} alignItems={'center'} justifyContent={'center'} filter='auto' backgroundPosition={'center'} backgroundSize={'cover'} backgroundRepeat={'no-repeat'}>
-        <VStack color={'grey.0'}>
+     <Flex direction={'column'} height={'100%'}>
+      <Stack bgGradient='linear(to-b, grey.150, grey.400)' alignItems={'center'} justifyContent={'center'}>
+      <Box backgroundImage={'/Photo.svg'} display={'flex'}  filter='grayscale(80%)' backgroundPosition={'center'} backgroundSize={'cover'} backgroundRepeat={'no-repeat'} height={['50vh', '50vh', '50vh']} >
+        <VStack color={'grey.0'} justifyContent={['normal', 'normal', 'center']} mt={'30px'}>
           <Text fontSize={['4xl','4xl','6xl']} fontWeight={'extrabold'} >Motors Shop</Text>
           <Text fontSize={['2xl','2xl' ,'4xl']} fontWeight={'medium'} textAlign={'center'}>A melhor plataformade anúncios de carros do país</Text>
-
         </VStack>
       </Box>
+      </Stack>
+      <Stack>
+        <Text>Cards</Text>
+      </Stack>
+    </Flex>
       <DefaultFooter/>
       
     </>
