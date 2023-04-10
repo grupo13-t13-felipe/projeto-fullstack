@@ -3,7 +3,7 @@ import Head from 'next/head'
 import {Text, Image, Stack, HStack, Flex, Box, Menu, MenuButton, IconButton, MenuItem, MenuList, Link, VStack} from '@chakra-ui/react'
 import { HamburgerIcon} from '@chakra-ui/icons'
 import DefaultFooter from '@/components/footer'
-import DefaultHeader from '@/components/hearder'
+import DefaultHeader from '@/components/headers/headerDefault'
 
 
 export default function Home() {
@@ -20,7 +20,7 @@ export default function Home() {
       <Box backgroundImage={'/volkswagen-gol-ultima-geracao-foto-VW.webp'} display={'flex'} alignItems={'center'} justifyContent={'center'} filter='auto' backgroundPosition={'center'} backgroundSize={'cover'} backgroundRepeat={'no-repeat'}>
         <VStack color={'grey.0'}>
           <Text fontSize={['4xl','4xl','6xl']} fontWeight={'extrabold'} >Motors Shop</Text>
-          <Text fontSize={['2xl','2xl' ,'4xl']} fontWeight={'medium'} textAlign={'center'}>A melhot plataformade anúncios de carros do país</Text>
+          <Text fontSize={['2xl','2xl' ,'4xl']} fontWeight={'medium'} textAlign={'center'}>A melhor plataformade anúncios de carros do país</Text>
 
         </VStack>
       </Box>
