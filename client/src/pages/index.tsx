@@ -2,6 +2,7 @@ import Head from 'next/head'
 // import Image from 'next/image'
 import {Text, Image, Stack, HStack, Flex, Box, Menu, MenuButton, IconButton, MenuItem, MenuList, Link, VStack} from '@chakra-ui/react'
 import { HamburgerIcon} from '@chakra-ui/icons'
+import DefaultFooter from '@/components/footer'
 
 
 export default function Home() {
@@ -22,9 +23,9 @@ export default function Home() {
           bgClip='text'>Shop</Text>
         </HStack>
         <HStack spacing={10}>
-          <Link color={"grey.300"} display={["none", "block"]} fontWeight={'medium'} href='/login'>{""}Fazer Login</Link>
-          <Link color={"grey.500"} display={["none", "block"]} href='/register' fontWeight={'medium'} border={'1px'} borderColor={'grey.200'} px={'20px'} py={'5px'} borderRadius={'base'}>Cadastro</Link>
-          <Box display={["bock", "none"]} >
+          <Link color={"grey.300"} display={["none",'none' ,"block"]} fontWeight={'medium'} href='/login'>{""}Fazer Login</Link>
+          <Link color={"grey.500"} display={["none", 'none',"block"]} href='/register' fontWeight={'medium'} border={'1px'} borderColor={'grey.200'} px={'20px'} py={'5px'} borderRadius={'base'}>Cadastro</Link>
+          <Box display={["block",'block' ,"none"]} >
           <Menu>
             <MenuButton
               as={IconButton}
@@ -52,6 +53,7 @@ export default function Home() {
 
         </VStack>
       </Box>
+      <DefaultFooter/>
       
     </>
   )
