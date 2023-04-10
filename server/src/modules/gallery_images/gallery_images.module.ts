@@ -4,6 +4,7 @@ import { GalleryImagesController } from './gallery_images.controller';
 
 @Module({
   controllers: [GalleryImagesController],
-  providers: [GalleryImagesService]
+  providers: [GalleryImagesService],
+  exports: [GalleryImagesService],
 })
 export class GalleryImagesModule {}
