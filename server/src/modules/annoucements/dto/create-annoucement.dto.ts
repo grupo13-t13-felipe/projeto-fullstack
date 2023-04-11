@@ -1,11 +1,4 @@
-import { Type } from 'class-transformer';
-import {
-  IsArray,
-  IsDateString,
-  IsDecimal,
-  IsString,
-  IsUrl,
-} from 'class-validator';
+import { IsDateString, IsDecimal, IsString, IsUrl } from 'class-validator';
 
 export class CreateAnnoucementDto {
   @IsString()
@@ -37,7 +30,4 @@ export class CreateAnnoucementDto {
 
   @IsUrl()
   cover_image: string;
-
-  @IsArray()
-  gallery_images: string[];
 }
