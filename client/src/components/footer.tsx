@@ -9,7 +9,7 @@ const DefaultFooter = () => {
         position={"absolute"}
         backgroundColor={"grey.500"}
         top="100vh"
-        width={"100vw"}
+        width={"100%"}
         justifyContent={"space-between"}
         alignItems={"center"}
         py={"40px"}

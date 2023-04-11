@@ -1,10 +1,9 @@
 import Head from 'next/head'
 // import Image from 'next/image'
-import {Text, Image, Stack, HStack, Flex, Box, Menu, MenuButton, IconButton, MenuItem, MenuList, Link, VStack} from '@chakra-ui/react'
-import { HamburgerIcon} from '@chakra-ui/icons'
+import { Text, Image, Stack, HStack, Flex, Box, Menu, MenuButton, IconButton, MenuItem, MenuList, Link, VStack } from '@chakra-ui/react'
+import { HamburgerIcon } from '@chakra-ui/icons'
 import DefaultFooter from '@/components/footer'
 import DefaultHeader from '@/components/headers/headerDefault'
-
 
 export default function Home() {
 
@@ -31,7 +30,6 @@ export default function Home() {
       </Stack>
     </Flex>
       <DefaultFooter/>
-      
     </>
   )
 }
