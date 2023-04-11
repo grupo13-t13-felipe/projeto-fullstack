@@ -10,17 +10,17 @@ import {
 } from '@chakra-ui/react'
 import Buttons from './button';
 
-const Modals = ({ modalTitle, titlesColor, modalContent, modalButtons }: any) => {
+const Modals = ({ modalTitle, titlesColor, modalContent, modalButtons, nameButton, sizeTitle, footerDirection, footerWidth, modalButtonColor, modalButtonBg, buttonWidth }: any) => {
 
     const { isOpen, onOpen, onClose } = useDisclosure()
     return (
         <>
-            <Buttons onClick={onOpen} valueButton="Abrir Modal" color="#5126EA" />
+            <Buttons onClick={onOpen} valueButton={nameButton} color={modalButtonColor}backgroundColor={modalButtonBg} width={buttonWidth} />
 
             <Modal isOpen={isOpen} onClose={onClose}>
                 <ModalOverlay />
                 <ModalContent>
-                    <ModalHeader color={titlesColor}>{modalTitle}</ModalHeader>
+                    <ModalHeader color={titlesColor} fontSize={sizeTitle}>{modalTitle}</ModalHeader>
                     <ModalCloseButton />
                     <ModalBody>
                         {
@@ -28,7 +28,7 @@ const Modals = ({ modalTitle, titlesColor, modalContent, modalButtons }: any) =>
                         }
                     </ModalBody>
 
-                    <ModalFooter>
+                    <ModalFooter justifyContent={footerDirection} width={footerWidth}>
                         {
                             modalButtons
                         }
