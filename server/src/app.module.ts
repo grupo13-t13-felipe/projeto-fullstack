@@ -7,11 +7,16 @@ import { AuthModule } from './modules/auth/auth.module';
 import { ProfileModule } from './modules/profile/profile.module';
 import { AnnoucementsModule } from './modules/annoucements/annoucements.module';
 import { GalleryImagesModule } from './modules/gallery_images/gallery_images.module';
-import { GalleryImagesModule } from './modules/gallery_images/gallery_images.module';
-import { GalleryImagesModule } from './modules/gallery_images/gallery_images.module';
 
 @Module({
-  imports: [UsersModule, AddressModule, AuthModule, ProfileModule, AnnoucementsModule, GalleryImagesModule],
+  imports: [
+    UsersModule,
+    AddressModule,
+    AuthModule,
+    ProfileModule,
+    AnnoucementsModule,
+    GalleryImagesModule,
+  ],
   controllers: [AppController],
   providers: [AppService],
 })

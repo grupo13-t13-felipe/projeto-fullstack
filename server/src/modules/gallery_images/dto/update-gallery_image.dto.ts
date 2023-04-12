@@ -1,4 +1,4 @@
 import { PartialType } from '@nestjs/mapped-types';
-import { CreateGalleryImageDto } from './create-gallery_image.dto';
+import { GalleryImageDto } from './create-gallery_image.dto';
 
-export class UpdateGalleryImageDto extends PartialType(CreateGalleryImageDto) {}
+export class UpdateGalleryImageDto extends PartialType(GalleryImageDto) {}

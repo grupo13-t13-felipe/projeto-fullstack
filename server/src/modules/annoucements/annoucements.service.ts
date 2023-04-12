@@ -1,26 +1,68 @@
 import { Injectable } from '@nestjs/common';
 import { CreateAnnoucementDto } from './dto/create-annoucement.dto';
 import { UpdateAnnoucementDto } from './dto/update-annoucement.dto';
+import { PrismaService } from 'src/database/prisma.service';
+import { User } from '../users/entities/user.entity';
+import { CreateGalleryImagesArrayDto } from '../gallery_images/dto/create-gallery_image.dto';
+import { GalleryImagesService } from '../gallery_images/gallery_images.service';
 
 @Injectable()
 export class AnnoucementsService {
-  create(createAnnoucementDto: CreateAnnoucementDto) {
-    return 'This action adds a new annoucement';
+  constructor(
+    private prisma: PrismaService,
+    private galleryImageService: GalleryImagesService,
+  ) {}
+  async create(
+    createAnnoucementDto: CreateAnnoucementDto,
+    createGalleryImagesArrayDto: CreateGalleryImagesArrayDto,
+    user: User,
+  ) {
+    const annoucement = await this.prisma.annoucement.create({
+      data: {
+        ...createAnnoucementDto,
+        owner: {
+          connect: { id: user.id },
+        },
+      },
+    });
+    this.galleryImageService.createMany(
+      createGalleryImagesArrayDto,
+      annoucement,
+    );
+    return this.prisma.annoucement.findFirst({
+      where: { id: annoucement.id },
+      include: { gallery_images: true },
+    });
   }
 
-  findAll() {
-    return `This action returns all annoucements`;
+  async findAll() {
+    return await this.prisma.annoucement.findMany({
+      include: { gallery_images: true },
+    });
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} annoucement`;
+  async findOne(id: string) {
+    return await this.prisma.annoucement.findFirst({
+      where: { id },
+      include: { gallery_images: true },
+    });
   }
 
-  update(id: number, updateAnnoucementDto: UpdateAnnoucementDto) {
-    return `This action updates a #${id} annoucement`;
+  async update(
+    annoucement_id: string,
+    updateAnnoucementDto: UpdateAnnoucementDto,
+  ) {
+    await this.prisma.annoucement.update({
+      data: { ...updateAnnoucementDto },
+      where: { id: annoucement_id },
+    });
+    return this.findOne(annoucement_id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} annoucement`;
+  async remove(id: string) {
+    const annoucement = await this.prisma.annoucement.delete({
+      where: { id },
+    });
+    return annoucement;
   }
 }

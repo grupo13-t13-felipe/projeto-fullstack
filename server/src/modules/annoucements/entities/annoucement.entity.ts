@@ -13,5 +13,5 @@ export class Annoucement {
   is_active: boolean;
   created_at: Date;
   updated_at: Date;
-  owner: string;
+  owner_id: string;
 }
