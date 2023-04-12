@@ -16,9 +16,8 @@ import { CreateAnnoucementDto } from './dto/create-annoucement.dto';
 import { UpdateAnnoucementDto } from './dto/update-annoucement.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { User } from '../users/entities/user.entity';
-import { CreateGalleryImageDto } from '../gallery_images/dto/create-gallery_image.dto';
+import { CreateGalleryImagesArrayDto } from '../gallery_images/dto/create-gallery_image.dto';
 import { AnnoucementExistsGuard } from './guards/annoucement-exists.guard';
-import { UpdateGalleryImageDto } from '../gallery_images/dto/update-gallery_image.dto';
 
 interface AuthRequest extends Request {
   user: User;
@@ -30,13 +29,13 @@ export class AnnoucementsController {
   @Post()
   @UseGuards(JwtAuthGuard)
   create(
-    @Body() createGalleryImageDto: CreateGalleryImageDto,
+    @Body() createGalleryImagesArrayDto: CreateGalleryImagesArrayDto,
     @Body() createAnnoucementDto: CreateAnnoucementDto,
     @Request() request: AuthRequest,
   ) {
     return this.annoucementsService.create(
       createAnnoucementDto,
-      createGalleryImageDto,
+      createGalleryImagesArrayDto,
       request.user,
     );
   }

@@ -1,11 +1,10 @@
-import { HttpException, Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CreateAnnoucementDto } from './dto/create-annoucement.dto';
 import { UpdateAnnoucementDto } from './dto/update-annoucement.dto';
 import { PrismaService } from 'src/database/prisma.service';
 import { User } from '../users/entities/user.entity';
-import { CreateGalleryImageDto } from '../gallery_images/dto/create-gallery_image.dto';
+import { CreateGalleryImagesArrayDto } from '../gallery_images/dto/create-gallery_image.dto';
 import { GalleryImagesService } from '../gallery_images/gallery_images.service';
-import { UpdateGalleryImageDto } from '../gallery_images/dto/update-gallery_image.dto';
 
 @Injectable()
 export class AnnoucementsService {
@@ -15,7 +14,7 @@ export class AnnoucementsService {
   ) {}
   async create(
     createAnnoucementDto: CreateAnnoucementDto,
-    createGalleryImageDto: CreateGalleryImageDto,
+    createGalleryImagesArrayDto: CreateGalleryImagesArrayDto,
     user: User,
   ) {
     const annoucement = await this.prisma.annoucement.create({
@@ -26,7 +25,10 @@ export class AnnoucementsService {
         },
       },
     });
-    this.galleryImageService.createMany(createGalleryImageDto, annoucement);
+    this.galleryImageService.createMany(
+      createGalleryImagesArrayDto,
+      annoucement,
+    );
     return this.prisma.annoucement.findFirst({
       where: { id: annoucement.id },
       include: { gallery_images: true },
@@ -50,10 +52,6 @@ export class AnnoucementsService {
     annoucement_id: string,
     updateAnnoucementDto: UpdateAnnoucementDto,
   ) {
-    // await this.galleryImageService.updateMany(
-    //   annoucement_id,
-    //   updateGalleryImageDto,
-    // );
     await this.prisma.annoucement.update({
       data: { ...updateAnnoucementDto },
       where: { id: annoucement_id },
@@ -65,5 +63,6 @@ export class AnnoucementsService {
     const annoucement = await this.prisma.annoucement.delete({
       where: { id },
     });
+    return annoucement;
   }
 }

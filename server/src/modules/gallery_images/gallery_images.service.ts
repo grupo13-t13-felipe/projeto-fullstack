@@ -1,14 +1,18 @@
 import { Injectable } from '@nestjs/common';
-import { CreateGalleryImageDto } from './dto/create-gallery_image.dto';
-import { UpdateGalleryImageDto } from './dto/update-gallery_image.dto';
+import {
+  CreateGalleryImagesArrayDto,
+  GalleryImageDto,
+} from './dto/create-gallery_image.dto';
 import { PrismaService } from 'src/database/prisma.service';
 import { Annoucement } from '../annoucements/entities/annoucement.entity';
+import { UpdateGalleryImageDto } from './dto/update-gallery_image.dto';
 
 @Injectable()
 export class GalleryImagesService {
   constructor(private prisma: PrismaService) {}
+
   async createMany(
-    createGalleryImageDto: CreateGalleryImageDto,
+    createGalleryImageDto: CreateGalleryImagesArrayDto,
     annoucement: Annoucement,
   ) {
     const galleryImageData = createGalleryImageDto.gallery_images.map(
@@ -25,28 +29,32 @@ export class GalleryImagesService {
     return galleryImageData;
   }
 
-  async findAll() {
-    return await this.prisma.galleryImage.findMany();
+  async create(annoucement_id: string, galleryImageDto: GalleryImageDto) {
+    const image = await this.prisma.galleryImage.create({
+      data: {
+        ...galleryImageDto,
+        annoucement_id,
+      },
+    });
+    return image;
   }
 
-  async updateMany(
-    annoucement_id: string,
-    updateGalleryImageDto: UpdateGalleryImageDto,
-  ) {
-    // const annoucement = await this.prisma.annoucement.findFirst({
-    //   where: { id: annoucement_id },
-    //   include: { gallery_images: true },
-    // });
-    // updateGalleryImageDto.gallery_images.forEach((galleryImage) => {});
-    // const galleryImages = await this.prisma.galleryImage.updateMany({
-    //   where: { annoucement_id },
-    //   data: { ...updateGalleryImageDto.gallery_images },
-    // });
-    // console.log(galleryImages);
-    // return galleryImages;
+  async findAllFromAnnoucement(annoucement_id: string) {
+    const images = await this.prisma.galleryImage.findMany({
+      where: { annoucement_id },
+    });
+    return images;
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} galleryImage`;
+  async update(image_id: string, updateGalleryImageDto: UpdateGalleryImageDto) {
+    const image = await this.prisma.galleryImage.update({
+      where: { id: image_id },
+      data: updateGalleryImageDto,
+    });
+    return image;
+  }
+
+  async remove(image_id: string) {
+    await this.prisma.galleryImage.delete({ where: { id: image_id } });
   }
 }

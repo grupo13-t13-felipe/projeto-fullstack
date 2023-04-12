@@ -73,5 +73,5 @@ model GalleryImage{
   url String
   annoucement_id String
 
-  annoucement Annoucement @relation(fields: [annoucement_id], references: [id])
+  annoucement Annoucement @relation(fields: [annoucement_id], references: [id], onDelete: Cascade)
 }

@@ -7,16 +7,15 @@ import {
   ValidateNested,
 } from 'class-validator';
 
-export class CreateGalleryImageDto {
+export class CreateGalleryImagesArrayDto {
   @IsOptional()
   @IsArray()
   @ValidateNested({ each: true })
-  @Type(() => GalleryImage)
-  gallery_images: GalleryImage[];
+  @Type(() => GalleryImageDto)
+  gallery_images: GalleryImageDto[];
 }
 
-class GalleryImage {
+export class GalleryImageDto {
   @IsString()
   url: string;
-  annoucement_id?: string;
 }
