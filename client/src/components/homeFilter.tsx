@@ -12,10 +12,14 @@ const HomeFilter = () => {
            <FilterList filterTitle={'Cor'} filterDetail01={'Branco'} filterDetail02={'Cinza'}/>
            <FilterList filterTitle={'Ano'} filterDetail01={'2023'} filterDetail02={'2022'}/>
            <FilterList filterTitle={'Combustível'} filterDetail01={'Diesel'} filterDetail02={'Etanol'}/>
-           <FilterList filterTitle={'Km'} filterDetail01={<Buttons/>} filterDetail02={<Buttons/>}/>
-           <FilterList filterTitle={'Preço'} filterDetail01={<Flex direction={'row'}>
-            <Buttons backgroundColor={'grey.150'} color={'grey.250'} radius={'0px'} valueButton={'mínimo'}/>
-            <Buttons backgroundColor={'grey.150'} color={'grey.250'} radius={'0px'} valueButton={'máximo'}/>
+            <FilterList filterTitle={'Km'} filterDetail01={<Flex direction={'row'}>
+            <Buttons backgroundColor={'grey.150'} color={'grey.250'} radius={'0px'} valueButton={'mínimo'} margin={'0px 10px 0px 0px'}/>
+            <Buttons backgroundColor={'grey.150'} color={'grey.250'} radius={'0px'} valueButton={'máximo'} margin={'0px 10px 0px 0px'}/>
+           
+            </Flex>} />
+            <FilterList filterTitle={'Preço'} filterDetail01={<Flex direction={'row'}>
+            <Buttons backgroundColor={'grey.150'} color={'grey.250'} radius={'0px'} valueButton={'mínimo'} margin={'0px 10px 0px 0px'}/>
+            <Buttons backgroundColor={'grey.150'} color={'grey.250'} radius={'0px'} valueButton={'máximo'} margin={'0px 10px 0px 0px'}/>
            
             </Flex>} />
         </Flex>

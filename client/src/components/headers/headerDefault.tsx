@@ -25,7 +25,7 @@ const DefaultHeader = () => {
         <MenuButton
           as={IconButton}
           aria-label='Options'
-          icon={ menuIcon ? <HamburgerIcon />  : <CloseIcon fontSize={'xs'}/>}
+          icon={ menuIcon ?  <CloseIcon fontSize={'xs'}/> : <HamburgerIcon />}
           variant='outline'
           onClick={() => menuIcon ? setMenuIcon(false): setMenuIcon(true)}
           

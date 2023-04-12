@@ -21,7 +21,7 @@ export default function Home() {
      <DefaultHeader/>
      <Flex direction={'column'} height={'100%'}>
       <Stack bgGradient='linear(to-b, grey.150, grey.400)' alignItems={'center'} justifyContent={'center'}>
-      <Box backgroundImage={'/Photo.svg'} display={'flex'}  filter='grayscale(80%)' backgroundPosition={'center'} width={'100%'} maxW={'980px'} backgroundRepeat={'no-repeat'} height={['50vh', '50vh', '50vh']} >
+      <Box backgroundImage={'/Photo.svg'} display={'flex'}  filter='grayscale(80%)' backgroundPosition={'center'} width={'100%'} maxW={'1174px'} backgroundRepeat={'no-repeat'} height={['50vh', '50vh', '50vh']} justifyContent={'center'} >
         <VStack color={'grey.0'} justifyContent={['normal', 'normal', 'center']} mt={'30px'}>
           <Text fontSize={['4xl','4xl','6xl']} fontWeight={'extrabold'} >Motors Shop</Text>
           <Text fontSize={['2xl','2xl' ,'4xl']} fontWeight={'medium'} textAlign={'center'}>A melhor plataformade anúncios de carros do país</Text>
@@ -39,6 +39,11 @@ export default function Home() {
       <HomeFilter/>} modalButtons={<Buttons backgroundColor={'blue.400'} color={"grey.0" } valueButton={"Ver anúncios"}/>} nameButton={"Filtros"} titlesColor={'grey.400'} sizeTitle={'md'} footerDirection={'center'} footerWidth={'100%'} modalButtonColor={'grey.0'} modalButtonBg={'blue.400'} buttonWidth={'90%'}/>
 
     </Stack>
+      <List display={'flex'} justifyContent={'center'}>
+        <ListItem mr={'20px'}><Link href="#" color={'blue.400'}>Anterior ❮ </Link></ListItem>
+        <Text mr={'20px'} color={'grey.250'}>2 de 3</Text>
+        <ListItem><Link href="#" color={'blue.400'}> Seguinte ❯ </Link></ListItem>
+      </List>
     </Flex>
       <DefaultFooter/>
     </>
