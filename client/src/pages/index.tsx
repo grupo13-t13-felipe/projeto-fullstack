@@ -33,12 +33,25 @@ export default function Home() {
       <Stack>
         <List spacing={"4em"} ml={"auto"} w={"75%"}>
           {announcements.map((item, index) => {
-            const good = (Math.floor(Math.random() * 20) + 1) % 2 === 0 ? true : false;
             return (
-                <ListItem display={"inline-block"} key={index}>
-                  <ProductCard good={good} image={item.cover_image} alt={item.model} brand={item.brand} model={item.model} description={item.description} owner={item.owner.name} userAvatar={''} km={item.km} year={item.year} price={item.price}></ProductCard>
-                </ListItem>
-            )
+              <ListItem display={"inline-block"} key={index}>
+                <ProductCard
+                  good={
+                    true
+                  }
+                  image={item.cover_image}
+                  alt={item.model}
+                  brand={item.brand}
+                  model={item.model}
+                  description={item.description}
+                  owner={item.owner.name}
+                  userAvatar={""}
+                  km={item.km}
+                  year={item.year}
+                  price={item.price}
+                ></ProductCard>
+              </ListItem>
+            );
         })}
         </List>
       </Stack>
