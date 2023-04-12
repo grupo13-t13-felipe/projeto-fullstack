@@ -10,7 +10,9 @@ import {
   Request,
   HttpCode,
   HttpStatus,
+  Query,
 } from '@nestjs/common';
+import { Request as req } from 'express';
 import { AnnoucementsService } from './annoucements.service';
 import { CreateAnnoucementDto } from './dto/create-annoucement.dto';
 import { UpdateAnnoucementDto } from './dto/update-annoucement.dto';
@@ -18,8 +20,9 @@ import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { User } from '../users/entities/user.entity';
 import { CreateGalleryImagesArrayDto } from '../gallery_images/dto/create-gallery_image.dto';
 import { AnnoucementExistsGuard } from './guards/annoucement-exists.guard';
+import { AnnoucementFiltersDto } from './dto/annoucements-filters.dto';
 
-interface AuthRequest extends Request {
+interface AuthRequest extends req {
   user: User;
 }
 @Controller('annoucements')
@@ -41,8 +44,8 @@ export class AnnoucementsController {
   }
 
   @Get()
-  findAll() {
-    return this.annoucementsService.findAll();
+  findAll(@Query() query: AnnoucementFiltersDto) {
+    return this.annoucementsService.findAll(query);
   }
 
   @Get(':annoucement_id')

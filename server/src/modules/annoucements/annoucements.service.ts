@@ -5,6 +5,7 @@ import { PrismaService } from 'src/database/prisma.service';
 import { User } from '../users/entities/user.entity';
 import { CreateGalleryImagesArrayDto } from '../gallery_images/dto/create-gallery_image.dto';
 import { GalleryImagesService } from '../gallery_images/gallery_images.service';
+import { AnnoucementFiltersDto } from './dto/annoucements-filters.dto';
 
 @Injectable()
 export class AnnoucementsService {
@@ -37,9 +38,11 @@ export class AnnoucementsService {
     });
   }
 
-  async findAll() {
+  async findAll(filteredQueries: AnnoucementFiltersDto) {
+    const willFilter = filteredQueries ? { where: filteredQueries } : undefined;
     return await this.prisma.annoucement.findMany({
       include: { gallery_images: true },
+      ...willFilter,
     });
   }
 
