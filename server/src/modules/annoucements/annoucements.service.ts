@@ -25,10 +25,12 @@ export class AnnoucementsService {
         },
       },
     });
-    this.galleryImageService.createMany(
-      createGalleryImagesArrayDto,
-      annoucement,
-    );
+    if (createGalleryImagesArrayDto.gallery_images) {
+      this.galleryImageService.createMany(
+        createGalleryImagesArrayDto,
+        annoucement,
+      );
+    }
     return this.prisma.annoucement.findFirst({
       where: { id: annoucement.id },
       include: { gallery_images: true },
