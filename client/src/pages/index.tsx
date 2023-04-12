@@ -1,5 +1,6 @@
 import Head from 'next/head'
 // import Image from 'next/image'
+
 import { Text, Image, Stack, HStack, Flex, Box, Menu, MenuButton, IconButton, MenuItem, MenuList, Link, VStack, ListItem, List } from '@chakra-ui/react'
 import { HamburgerIcon } from '@chakra-ui/icons'
 import DefaultFooter from '@/components/footer'
@@ -7,9 +8,10 @@ import DefaultHeader from '@/components/headers/headerDefault'
 import Modals from '@/components/modal'
 import Buttons from '@/components/button'
 import HomeFilter from '@/components/homeFilter'
+import { announcements } from '@/mocks/announcements'
+import ProductCard from '@/components/productCard'
 
 export default function Home() {
-
   return (
     <>
       <Head>
@@ -28,11 +30,30 @@ export default function Home() {
         </VStack>
       </Box>
       </Stack>
-      <Stack direction={'row'} my={'50px'}>
-        <Box mx={'30px'} display={['none', 'none', 'block']}>
-          <HomeFilter/>
-        </Box>
-        <Text>Cards</Text>
+      <Stack>
+        <List spacing={"4em"} ml={"auto"} w={"75%"}>
+          {announcements.map((item, index) => {
+            return (
+              <ListItem display={"inline-block"} key={index}>
+                <ProductCard
+                  good={
+                    true
+                  }
+                  image={item.cover_image}
+                  alt={item.model}
+                  brand={item.brand}
+                  model={item.model}
+                  description={item.description}
+                  owner={item.owner.name}
+                  userAvatar={""}
+                  km={item.km}
+                  year={item.year}
+                  price={item.price}
+                ></ProductCard>
+              </ListItem>
+            );
+        })}
+        </List>
       </Stack>
       <Stack mx={'50px'} my={'30px'} display={['flex', 'flex', 'none']} alignItems={'center'}>
       <Modals modalTitle={'Filtro'} modalContent={
