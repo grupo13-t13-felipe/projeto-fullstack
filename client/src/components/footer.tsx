@@ -4,9 +4,8 @@ import Link from "next/link";
 
 const DefaultFooter = () => {
   return (
-    <Flex position={"relative"}>
+    <Flex mt={"20px"}>
       <Stack
-        position={"absolute"}
         backgroundColor={"grey.500"}
         top="100vh"
         width={"100%"}
