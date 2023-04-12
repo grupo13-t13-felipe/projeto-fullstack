@@ -30,7 +30,10 @@ export default function Home() {
         </VStack>
       </Box>
       </Stack>
-      <Stack>
+      <Stack direction={'row'} justifyContent={"space-around"} my={'50px'}>
+        <Box mx={'30px'} display={['none', 'none', 'block']}>
+          <HomeFilter/>
+        </Box>
         <List spacing={"4em"} ml={"auto"} w={"75%"}>
           {announcements.map((item, index) => {
             return (
@@ -54,12 +57,11 @@ export default function Home() {
             );
         })}
         </List>
-      </Stack>
-      <Stack mx={'50px'} my={'30px'} display={['flex', 'flex', 'none']} alignItems={'center'}>
-      <Modals modalTitle={'Filtro'} modalContent={
-      <HomeFilter/>} modalButtons={<Buttons backgroundColor={'blue.400'} color={"grey.0" } valueButton={"Ver anúncios"}/>} nameButton={"Filtros"} titlesColor={'grey.400'} sizeTitle={'md'} footerDirection={'center'} footerWidth={'100%'} modalButtonColor={'grey.0'} modalButtonBg={'blue.400'} buttonWidth={'90%'}/>
-
-    </Stack>
+</Stack>
+<Stack mx={'50px'} my={'30px'} display={['flex', 'flex', 'none']} alignItems={'center'}>
+<Modals modalTitle={'Filtro'} modalContent={
+<HomeFilter/>} modalButtons={<Buttons backgroundColor={'blue.400'} color={"grey.0" } valueButton={"Ver anúncios"}/>} nameButton={"Filtros"} titlesColor={'grey.400'} sizeTitle={'md'} footerDirection={'center'} footerWidth={'100%'} modalButtonColor={'grey.0'} modalButtonBg={'blue.400'} buttonWidth={'90%'}/>
+</Stack>
       <List display={'flex'} justifyContent={'center'}>
         <ListItem mr={'20px'}><Link href="#" color={'blue.400'}>Anterior ❮ </Link></ListItem>
         <Text mr={'20px'} color={'grey.250'}>2 de 3</Text>
