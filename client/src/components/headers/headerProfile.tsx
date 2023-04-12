@@ -11,7 +11,7 @@ const HeaderProfile = () => {
       bgClip='text'>Shop</Text>
     </HStack>
     <HStack borderLeft={'1px'} borderColor={'grey.200'}>
-        <Box background={'blue.400'} borderRadius={'100%'} color={'grey.0'} p={'5px'} ml={'10px'}>
+        <Box background={'blue.400'} borderRadius={'50%'} color={'grey.0'} p={'5px'} ml={'10px'}>
             JS
         </Box>
       <Link color={"grey.300"} display={["none", 'none',"block"]} fontWeight={'normal'} fontSize={'md'}>Nome Pessoa</Link>

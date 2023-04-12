@@ -1,8 +1,5 @@
 import Head from 'next/head'
-// import Image from 'next/image'
-
 import { Text, Image, Stack, HStack, Flex, Box, Menu, MenuButton, IconButton, MenuItem, MenuList, Link, VStack, ListItem, List } from '@chakra-ui/react'
-import { HamburgerIcon } from '@chakra-ui/icons'
 import DefaultFooter from '@/components/footer'
 import DefaultHeader from '@/components/headers/headerDefault'
 import Modals from '@/components/modal'
@@ -10,6 +7,7 @@ import Buttons from '@/components/button'
 import HomeFilter from '@/components/homeFilter'
 import { announcements } from '@/mocks/announcements'
 import ProductCard from '@/components/productCard'
+import NextLink from "next/link"
 
 export default function Home() {
   return (
@@ -38,21 +36,23 @@ export default function Home() {
           {announcements.map((item, index) => {
             return (
               <ListItem display={"inline-block"} key={index}>
-                <ProductCard
-                  good={
-                    true
-                  }
-                  image={item.cover_image}
-                  alt={item.model}
-                  brand={item.brand}
-                  model={item.model}
-                  description={item.description}
-                  owner={item.owner.name}
-                  userAvatar={""}
-                  km={item.km}
-                  year={item.year}
-                  price={item.price}
-                ></ProductCard>
+                <Link as={NextLink} href={`/product/${item.id}`}>
+                  <ProductCard
+                    good={
+                      true
+                    }
+                    image={item.cover_image}
+                    alt={item.model}
+                    brand={item.brand}
+                    model={item.model}
+                    description={item.description}
+                    owner={item.owner.name}
+                    userAvatar={""}
+                    km={item.km}
+                    year={item.year}
+                    price={item.price}
+                  ></ProductCard>
+                </Link>
               </ListItem>
             );
         })}
