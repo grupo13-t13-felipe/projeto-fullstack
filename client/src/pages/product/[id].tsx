@@ -1,4 +1,5 @@
 import Buttons from "@/components/button"
+import DefaultFooter from "@/components/footer"
 import HeaderProfile from "@/components/headers/headerProfile"
 import TextArea from "@/components/textArea"
 import { Box, Flex, HStack, Stack, Text } from "@chakra-ui/react"
@@ -119,7 +120,7 @@ const Dashboard = () => {
 
                 </Stack>
             </Flex>
-
+            <DefaultFooter/>
 
         </>
     )
