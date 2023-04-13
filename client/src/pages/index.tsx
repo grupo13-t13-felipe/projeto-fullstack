@@ -32,11 +32,11 @@ export default function Home() {
         <Box mx={'30px'} display={['none', 'none', 'block']}>
           <HomeFilter/>
         </Box>
-        <List spacing={"4em"} ml={"auto"} w={"75%"}>
+        <List border={"none"} width={"100%"} overflowX={"auto"} display={"flex"} flexWrap={["nowrap", "nowrap", "wrap"]} alignItems={"center"} gap={"16px"} ml={"0"} w={"75%"}>
           {announcements.map((item, index) => {
             return (
-              <ListItem display={"inline-block"} key={index}>
-                <Link as={NextLink} href={`/product/${item.id}`}>
+              <ListItem w={"312px"} display={"inline-block"} key={index}>
+                <Link _hover={{textDecoration: "none"}} as={NextLink} href={`/product/${item.id}`}>
                   <ProductCard
                     good={
                       (item.price / item.fip_price) <= 0.95
