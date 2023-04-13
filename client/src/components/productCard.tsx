@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardBody, CardFooter, Image, Stack, Heading, Text, Divider, ButtonGroup, Button, Avatar, HStack } from "@chakra-ui/react";
+import { Card, CardBody, CardFooter, Image, Stack, Heading, Text, Avatar, HStack } from "@chakra-ui/react";
 interface IProductCard {
   image: string;
   alt: string;
@@ -27,7 +27,7 @@ const ProductCard = ({
   good
 }: IProductCard) => {
   return (
-    <Card w="312px" h="352px" borderRadius={"0"} ml={"4em"}>
+    <Card boxShadow={"none"} w="312px" h="352px" borderRadius={"0"}>
       <CardBody padding={"1px"}>
         {good ? <Text
           position={"absolute"}
@@ -43,7 +43,7 @@ const ProductCard = ({
         >
           $
         </Text> : <></>}
-        <Image src={image} alt={alt} maxHeight={"152px"} m={"auto"} />
+        <Image src={image} alt={alt} maxHeight={"152px"} w={"100%"} objectFit={"cover"} />
         <Stack mt="6" spacing="1em">
           <Heading fontSize={"1em"} fontWeight={"600"} noOfLines={1}>
             {brand} - {model}
