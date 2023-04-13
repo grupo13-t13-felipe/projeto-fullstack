@@ -44,9 +44,9 @@ const Dashboard = () => {
     return (
         <>
             <HeaderProfile />
-            <Flex direction={['column', 'column', 'row']} justifyContent={'space-between'} alignItems={['center', 'center', 'initial']}>
-                <Box position={"absolute"} w={'100vw'} h={'40vh'} bg={'blue.400'} zIndex={'-1'}></Box>
-                <Stack ml={['15px', '15px', '25px', '35px ','auto']} mt={'20px'} width={['95vw', '95vw', '95w', '752px']} mr={'15px'}  >
+            <Flex direction={['column', 'column', 'row']} justifyContent={'space-between'} alignItems={['center', 'center', 'initial']} position={"relative"} zIndex={'-1'} bg={'grey.75'}>
+                <Box position={"absolute"} w={'100%'} h={'70vh'} bg={'blue.400'} zIndex={'-1'}></Box>
+                <Stack ml={['15px', '15px', '25px', '35px ','auto']} mt={'20px'} width={['95vw', '95vw', '95w', '752px']} mr={'15px'} mb={"30px"}  >
                     <Box bg={'grey.0'} borderRadius={'base'}  height={'355px'} display={'flex'} justifyContent={'center'} flexDir={'column'}>
                         <Box m={'auto'}>
                             <Image src={testecar.cover_image} width={600} alt={testecar.model} height={250}/>
@@ -84,7 +84,7 @@ const Dashboard = () => {
                         </HStack>
                         <Text color={'grey.300'} fontWeight={'normal'} fontSize={'sm'}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</Text>
                     </Stack>
-                    <Stack bg={'grey.0'} display={'flex'} justifyContent={'center'} spacing={6} borderRadius={'base'} p={'20px'}>
+                    <Stack bg={'grey.0'} display={'flex'} justifyContent={'center'} spacing={6} borderRadius={'base'} p={'20px'} >
                         <HStack>
                             <Box background={'green.400'} borderRadius={'150px'} color={'grey.0'} p={'5px'} ml={'10px'} fontSize={'sm'}>LS</Box>
                             <Text color={'grey.400'} fontWeight={'medium'} fontSize={'sm'}>Lavínia Silva</Text>
@@ -100,9 +100,9 @@ const Dashboard = () => {
                         </HStack>
                     </Stack>
                 </Stack>
-                <Stack mr={['10px', '10px', '25px', '35px', 'auto']} mt={'20px'} width={{base: '90vw'}} maxW={"440px"}>
+                <Stack mr={['10px', '10px', '25px', '35px', 'auto']} mt={'20px'} width={{base: '90vw'}} maxW={"440px"} mb={'30px'}>
                     <Stack bg={'grey.0'} mb={'20px'} height={'355px'} display={'flex'} flexDir={"column"} justifyContent={'center'} gap={'2em'}>
-                        <Text ml='44px'>Fotos</Text>
+                        <Text ml='44px' color={'grey.400'} fontSize={'xl'} fontWeight={'semibold'}>Fotos</Text>
                         <SimpleGrid columns={3} spacing={"14px"} pl={'44px'} pr={'44px'}>
                             <Box bgImage={testecar.cover_image} bgSize={'contain'} bgPos={'center'} bgRepeat={'no-repeat'} w={'100%'} minH={'90px'} h={'108px'}></Box>
                             <Box bgImage={testecar.cover_image} bgSize={'contain'} bgPos={'center'} bgRepeat={'no-repeat'} w={'100%'} minH={'90px'} h={'108px'}></Box>
@@ -113,7 +113,7 @@ const Dashboard = () => {
                         </SimpleGrid>
 
                     </Stack>
-                    <Stack bg={'grey.0'} py={'30px'} px={'70px'} alignItems={'center'} spacing={3} borderRadius={'base'}>
+                    <Stack bg={'grey.0'} py={'30px'} px={'70px'} alignItems={'center'} spacing={3} borderRadius={'base'} >
                         <Box background={'pink.400'} borderRadius={'50%'} color={'grey.0'} fontSize={'5xl'} p={'10px'}>LS</Box>
                         <Text color={'grey.400'} fontWeight={'semibold'} fontSize={'xl'}>Lavínia Silva</Text>
                         <Text color={'grey.300'} fontWeight={'normal'} fontSize={'md'} textAlign={'center'}>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's</Text>

@@ -22,7 +22,7 @@ const ProfileMenuList = () => {
 
 const HeaderProfile = () => {
   return (
-    <Flex justifyContent={'space-between'} mx={['20px', '20px', '26px', '30px', 'auto']} my={'10px'} maxW={'1200px'}>
+    <Flex justifyContent={'space-between'} mx={['20px', '20px', '26px', '30px', 'auto']} h={'80px'} maxW={'1200px'}>
       <HStack>
         <Text fontSize={'2xl'} fontWeight={'bold'} bgGradient='linear(to-r, #0B0D0D, #5126EA)'
         bgClip='text'>Motors </Text>
