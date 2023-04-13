@@ -2,7 +2,7 @@ import Buttons from "@/components/button"
 import DefaultFooter from "@/components/footer"
 import HeaderProfile from "@/components/headers/headerProfile"
 import TextArea from "@/components/textArea"
-import { Box, Flex, HStack, Stack, Text } from "@chakra-ui/react"
+import { Box, Flex, HStack, SimpleGrid, Stack, Text } from "@chakra-ui/react"
 import Image from "next/image"
 import { useRouter } from 'next/router'
 
@@ -44,10 +44,13 @@ const Dashboard = () => {
     return (
         <>
             <HeaderProfile />
-            <Flex direction={['column', 'column', 'row']} bg={'blue.400'} justifyContent={'space-between'} alignItems={['center', 'center', '']}>
-                <Stack ml={['10px', '10px', '50px', '100px']} mt={'20px'} width={['', '60%']} mr={'15px'}  >
-                    <Box bg={'grey.0'} display={'flex'} justifyContent={'center'} borderRadius={'base'} height={'350px'}>
-                        <Image src={testecar.cover_image} width={600} alt={testecar.model} height={250} />
+            <Flex direction={['column', 'column', 'row']} justifyContent={'space-between'} alignItems={['center', 'center', 'initial']}>
+                <Box position={"absolute"} w={'100vw'} h={'40vh'} bg={'blue.400'} zIndex={'-1'}></Box>
+                <Stack ml={['15px', '15px', '25px', '35px ','auto']} mt={'20px'} width={['95vw', '95vw', '95w', '752px']} mr={'15px'}  >
+                    <Box bg={'grey.0'} borderRadius={'base'}  height={'355px'} display={'flex'} justifyContent={'center'} flexDir={'column'}>
+                        <Box m={'auto'}>
+                            <Image src={testecar.cover_image} width={600} alt={testecar.model} height={250}/>
+                        </Box>
                     </Box>
                     <Stack bg={'grey.0'} display={'flex'} justifyContent={'center'} spacing={6} borderRadius={'base'} px={'20px'}>
                         <Text fontSize={'xl'} fontWeight={'semibold'} mb={'45px'} mt={'20px'}>{testecar.model}</Text>
@@ -97,17 +100,17 @@ const Dashboard = () => {
                         </HStack>
                     </Stack>
                 </Stack>
-                <Stack mr={['10px', '10px', '50px', '100px']} mt={'20px'} width={'40%'}>
-                    <Stack bg={'grey.0'} p={'20px'} mb={'20px'}>
-                        <Text>Fotos</Text>
-                        <Stack wrap={'wrap'} direction={'row'}>
-                            <Image src={testecar.cover_image} width={150} alt={testecar.model} height={100} />
-                            <Image src={testecar.cover_image} width={150} alt={testecar.model} height={100} />
-                            <Image src={testecar.cover_image} width={150} alt={testecar.model} height={100} />
-                            <Image src={testecar.cover_image} width={150} alt={testecar.model} height={100} />
-                            <Image src={testecar.cover_image} width={150} alt={testecar.model} height={100} />
-                            <Image src={testecar.cover_image} width={150} alt={testecar.model} height={100} />
-                        </Stack>
+                <Stack mr={['10px', '10px', '25px', '35px', 'auto']} mt={'20px'} width={{base: '90vw'}} maxW={"440px"}>
+                    <Stack bg={'grey.0'} mb={'20px'} height={'355px'} display={'flex'} flexDir={"column"} justifyContent={'center'} gap={'2em'}>
+                        <Text ml='44px'>Fotos</Text>
+                        <SimpleGrid columns={3} spacing={"14px"} pl={'44px'} pr={'44px'}>
+                            <Box bgImage={testecar.cover_image} bgSize={'contain'} bgPos={'center'} bgRepeat={'no-repeat'} w={'100%'} minH={'90px'} h={'108px'}></Box>
+                            <Box bgImage={testecar.cover_image} bgSize={'contain'} bgPos={'center'} bgRepeat={'no-repeat'} w={'100%'} minH={'90px'} h={'108px'}></Box>
+                            <Box bgImage={testecar.cover_image} bgSize={'contain'} bgPos={'center'} bgRepeat={'no-repeat'} w={'100%'} minH={'90px'} h={'108px'}></Box>
+                            <Box bgImage={testecar.cover_image} bgSize={'contain'} bgPos={'center'} bgRepeat={'no-repeat'} w={'100%'} minH={'90px'} h={'108px'}></Box>
+                            <Box bgImage={testecar.cover_image} bgSize={'contain'} bgPos={'center'} bgRepeat={'no-repeat'} w={'100%'} minH={'90px'} h={'108px'}></Box>
+                            <Box bgImage={testecar.cover_image} bgSize={'contain'} bgPos={'center'} bgRepeat={'no-repeat'} w={'100%'} minH={'90px'} h={'108px'}></Box>
+                        </SimpleGrid>
 
                     </Stack>
                     <Stack bg={'grey.0'} py={'30px'} px={'70px'} alignItems={'center'} spacing={3} borderRadius={'base'}>
