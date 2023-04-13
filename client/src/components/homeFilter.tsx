@@ -1,7 +1,7 @@
-import { Flex, HStack, List, ListItem, Text } from "@chakra-ui/react"
-import Buttons from "./button"
-import FilterList from "./filterList"
-
+import { Flex } from "@chakra-ui/react";
+import Buttons from "./button";
+import FilterList from "./filterList";
+import { InputFilter } from "./input";
 
 const HomeFilter = () => {
 
@@ -12,13 +12,13 @@ const HomeFilter = () => {
            <FilterList filterTitle={'Cor'} filterDetail01={'Branco'} filterDetail02={'Cinza'}/>
            <FilterList filterTitle={'Ano'} filterDetail01={'2023'} filterDetail02={'2022'}/>
            <FilterList filterTitle={'Combustível'} filterDetail01={'Diesel'} filterDetail02={'Etanol'}/>
-            <FilterList filterTitle={'Km'} filterDetail01={<Flex direction={'row'}>
-            <Buttons backgroundColor={'grey.150'} color={'grey.250'} radius={'0px'} valueButton={'mínimo'} margin={'0px 10px 0px 0px'}/>
-            <Buttons backgroundColor={'grey.150'} color={'grey.250'} radius={'0px'} valueButton={'máximo'} margin={'0px 10px 0px 0px'}/>
+            <FilterList filterTitle={'Km'} filterDetail01={<Flex direction={'row'} gap={"12px"}>
+            <InputFilter placeholder={"Mínimo"} />
+            <InputFilter placeholder={"Máximo"} />
             </Flex>} />
-            <FilterList filterTitle={'Preço'} filterDetail01={<Flex direction={'row'}>
-            <Buttons backgroundColor={'grey.150'} color={'grey.250'} radius={'0px'} valueButton={'mínimo'} margin={'0px 10px 0px 0px'}/>
-            <Buttons backgroundColor={'grey.150'} color={'grey.250'} radius={'0px'} valueButton={'máximo'} margin={'0px 10px 0px 0px'}/>
+            <FilterList filterTitle={'Preço'} filterDetail01={<Flex direction={'row'} gap={"12px"}>
+            <InputFilter placeholder={"Mínimo"} />
+            <InputFilter placeholder={"Máximo"} />
             </Flex>} />
         </Flex>
     )
