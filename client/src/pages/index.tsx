@@ -1,13 +1,13 @@
-import Head from 'next/head'
-import { Text, Image, Stack, HStack, Flex, Box, Menu, MenuButton, IconButton, MenuItem, MenuList, Link, VStack, ListItem, List } from '@chakra-ui/react'
-import DefaultFooter from '@/components/footer'
-import DefaultHeader from '@/components/headers/headerDefault'
-import Modals from '@/components/modal'
-import Buttons from '@/components/button'
-import HomeFilter from '@/components/homeFilter'
-import { announcements } from '@/mocks/announcements'
-import ProductCard from '@/components/productCard'
-import NextLink from "next/link"
+import Head from 'next/head';
+import { Text, Stack, Flex, Box, Link, VStack, ListItem, List } from '@chakra-ui/react';
+import DefaultFooter from '@/components/footer';
+import DefaultHeader from '@/components/headers/headerDefault';
+import Modals from '@/components/modal';
+import Buttons from '@/components/button';
+import HomeFilter from '@/components/homeFilter';
+import { announcements } from '@/mocks/announcements';
+import ProductCard from '@/components/productCard';
+import NextLink from "next/link";
 
 export default function Home() {
   return (
@@ -39,7 +39,7 @@ export default function Home() {
                 <Link as={NextLink} href={`/product/${item.id}`}>
                   <ProductCard
                     good={
-                      true
+                      (item.price / item.fip_price) <= 0.95
                     }
                     image={item.cover_image}
                     alt={item.model}
