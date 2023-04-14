@@ -26,7 +26,7 @@ const DefaultHeader = () => {
                   icon={ isOpen ?  <CloseIcon fontSize={'xs'}/> : <HamburgerIcon />}
                   variant='outline'
                 />
-                <MenuList w={"calc(100vw - 18px)"} border={'none'} borderRadius={'2px 0px 2px 0px'} >
+                <MenuList border={'none'} borderRadius={'2px 0px 2px 0px'} >
                   <MenuItem>
                     <Link color={"grey.300"} fontWeight={'medium'} href='/login' mb={'20px'}>{""}Fazer Login</Link>
                   </MenuItem>

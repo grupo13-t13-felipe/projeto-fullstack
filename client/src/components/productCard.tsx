@@ -27,11 +27,12 @@ const ProductCard = ({
   good
 }: IProductCard) => {
   return (
-    <Card boxShadow={"none"} w="312px" h="352px" borderRadius={"0"}>
+    <Card role="group" boxShadow={"none"} w="312px" h="352px" borderRadius={"0"}>
       <CardBody padding={"1px"}>
         {good ? <Text
           position={"absolute"}
-          left={"calc(100% - 17px)"}
+          left={"calc(100% - 19px)"}
+          top={"3px"}
           w="16px"
           h="27px"
           paddingRight={"1px"}
@@ -43,7 +44,7 @@ const ProductCard = ({
         >
           $
         </Text> : <></>}
-        <Image src={image} alt={alt} maxHeight={"152px"} w={"100%"} objectFit={"cover"} />
+        <Image src={image} alt={alt} maxHeight={"152px"} w={"100%"} objectFit={"cover"} border={"2px solid transparent"} _groupHover={{ borderColor: "blue.300" }} />
         <Stack mt="6" spacing="1em">
           <Heading fontSize={"1em"} fontWeight={"600"} noOfLines={1}>
             {brand} - {model}
