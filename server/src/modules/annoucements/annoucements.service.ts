@@ -38,12 +38,32 @@ export class AnnoucementsService {
     });
   }
 
-  async findAll(filteredQueries: AnnoucementFiltersDto) {
-    const willFilter = filteredQueries ? { where: filteredQueries } : undefined;
-    return await this.prisma.annoucement.findMany({
+  async findAll(
+    filteredQueries: AnnoucementFiltersDto,
+    limit: number,
+    page: number,
+  ) {
+    const filters = filteredQueries ? { where: filteredQueries } : undefined;
+    const take = limit ? limit : undefined;
+    const skip = page && limit ? page * limit : undefined;
+    const response = await this.prisma.annoucement.findMany({
       include: { gallery_images: true },
-      ...willFilter,
+      ...filters,
+      take,
+      skip,
     });
+    if (limit) {
+      const itemsCount = await this.prisma.annoucement.count({
+        ...filters,
+      });
+      return {
+        itemsCount,
+        pagesCount: Math.ceil(itemsCount / limit),
+        page: page ? page : 0,
+        data: response,
+      };
+    }
+    return response;
   }
 
   async findOne(id: string) {

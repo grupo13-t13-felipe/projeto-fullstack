@@ -44,8 +44,12 @@ export class AnnoucementsController {
   }
 
   @Get()
-  findAll(@Query() query: AnnoucementFiltersDto) {
-    return this.annoucementsService.findAll(query);
+  findAll(
+    @Query() query: AnnoucementFiltersDto,
+    @Query('limit') limit: string,
+    @Query('page') page: string,
+  ) {
+    return this.annoucementsService.findAll(query, +limit, +page);
   }
 
   @Get(':annoucement_id')
