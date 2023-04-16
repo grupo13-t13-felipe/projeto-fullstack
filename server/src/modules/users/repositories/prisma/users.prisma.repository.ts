@@ -2,13 +2,12 @@ import { PrismaService } from "src/database/prisma.service";
 import { CreateUserDto } from "../../dto/create-user.dto";
 import { UpdateUserDto } from "../../dto/update-user.dto";
 import { User } from "../../entities/user.entity";
-import { UsersRepository } from "../users.repository";
 import { Injectable } from "@nestjs/common";
 import { plainToInstance } from "class-transformer";
 import { CreateAddressDto } from "src/modules/address/dto/create-address.dto";
 
 @Injectable()
-export class UsersPrismaRepository implements UsersRepository {
+export class UsersPrismaRepository {
     constructor(private prisma: PrismaService) {}
     async create(userDto: CreateUserDto, addressDto: CreateAddressDto): Promise<User> {
         const address = await this.prisma.address.create({

@@ -1,15 +1,15 @@
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { UsersRepository } from './repositories/users.repository';
 import { CreateAddressDto } from '../address/dto/create-address.dto';
 import { PrismaService } from 'src/database/prisma.service';
+import { UsersPrismaRepository } from './repositories/prisma/users.prisma.repository';
 
 @Injectable()
 export class UsersService {
   constructor(
-    private usersRepository: UsersRepository,
-    private prisma: PrismaService
+    private prisma: PrismaService,
+    private prismaRepository: UsersPrismaRepository
   ) {}
   async create(createUserDto: CreateUserDto, createAddressDto: CreateAddressDto) {
     const findUser = await this.prisma.user.findFirst({
@@ -36,15 +36,15 @@ export class UsersService {
       })
     }
 
-    return this.usersRepository.create(createUserDto, createAddressDto);
+    return this.prismaRepository.create(createUserDto, createAddressDto);
   }
 
   findAll() {
-    return this.usersRepository.findAll();
+    return this.prismaRepository.findAll();
   }
 
   async findOne(id: string) {
-    const findUser = await this.usersRepository.findOne(id);
+    const findUser = await this.prismaRepository.findOne(id);
     if(!findUser) {
       throw new NotFoundException("user not found");
     }
@@ -52,12 +52,12 @@ export class UsersService {
   }
 
   async findByEmail(email: string) {
-    const findUser = await this.usersRepository.findByEmail(email);
+    const findUser = await this.prismaRepository.findByEmail(email);
     return findUser;
   }
 
   async update(id: string, updateUserDto: UpdateUserDto) {
-    const findUserToUpdate = await this.usersRepository.findOne(id);
+    const findUserToUpdate = await this.prismaRepository.findOne(id);
     if(!findUserToUpdate) {
       throw new NotFoundException("user not found");
     }
@@ -87,14 +87,14 @@ export class UsersService {
       })
     }
 
-    return this.usersRepository.update(id, updateUserDto);
+    return this.prismaRepository.update(id, updateUserDto);
   }
 
   async remove(id: string) {
-    const findUser = await this.usersRepository.findOne(id);
+    const findUser = await this.prismaRepository.findOne(id);
     if(!findUser) {
       throw new NotFoundException("user not found");
     }
-    return this.usersRepository.delete(id);
+    return this.prismaRepository.delete(id);
   }
 }
