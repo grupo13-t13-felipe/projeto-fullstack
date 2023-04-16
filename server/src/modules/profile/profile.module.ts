@@ -4,6 +4,8 @@ import { ProfileController } from './profile.controller';
 import { UsersModule } from '../users/users.module';
 import { JwtStrategy } from '../auth/strategies/jwt.strategy';
 import { PassportModule } from '@nestjs/passport';
+import { UsersPrismaRepository } from '../users/repositories/prisma/users.prisma.repository';
+import { PrismaService } from 'src/database/prisma.service';
 
 @Module({
   imports: [
@@ -11,6 +13,6 @@ import { PassportModule } from '@nestjs/passport';
     PassportModule,
   ],
   controllers: [ProfileController],
-  providers: [ProfileService, JwtStrategy]
+  providers: [ProfileService, PrismaService, UsersPrismaRepository, JwtStrategy]
 })
 export class ProfileModule {}

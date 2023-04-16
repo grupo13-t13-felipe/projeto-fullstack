@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common';
-import { UsersRepository } from '../users/repositories/users.repository';
+import { UsersPrismaRepository } from '../users/repositories/prisma/users.prisma.repository';
 
 @Injectable()
 export class ProfileService {
-    constructor(private usersRepository: UsersRepository) {}
+    constructor(private prismaRepository: UsersPrismaRepository) {}
 
     async findOne(id: string) {
-        const user = await this.usersRepository.findOne(id);
+        const user = await this.prismaRepository.findOne(id);
         return user;
     }
 }
