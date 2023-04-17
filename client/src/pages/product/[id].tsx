@@ -4,7 +4,7 @@ import HeaderProfile from "@/components/headers/headerProfile";
 import TextArea from "@/components/textArea";
 import api from "@/services/api";
 import { IAnnoucement } from "@/types/announcements";
-import { Box, Flex, HStack, SimpleGrid, Stack, Text } from "@chakra-ui/react";
+import { Box, Flex, HStack, SimpleGrid, Stack, Text, Avatar } from "@chakra-ui/react";
 import { GetServerSideProps, NextPage } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -12,16 +12,19 @@ import { IUser } from "@/types/user";
 
 export interface Props {
   annoucement: IAnnoucement
+  user: IUser
 }
 
-const Dashboard: NextPage<Props> = ({annoucement}) => {
+const Dashboard: NextPage<Props> = ({annoucement, user}) => {
   const router = useRouter();
   const { id } = router.query;
 
  
+
+ 
   return (
     <>
-      <HeaderProfile user={}/>
+      <HeaderProfile user={user}/>
       <Flex
         direction={"column"}
         justifyContent={"space-between"}
@@ -148,60 +151,21 @@ const Dashboard: NextPage<Props> = ({annoucement}) => {
                 Fotos
               </Text>
               <SimpleGrid columns={3} spacing={"14px"} pl={"44px"} pr={"44px"}>
-                <Box
-                  bgImage={annoucement.cover_image}
+              {annoucement.gallery_images.map((item, index) => {
+                return (
+                  <Box 
+                  bgImage={item.url}
                   bgSize={"contain"}
                   bgPos={"center"}
                   bgRepeat={"no-repeat"}
                   w={"100%"}
                   minH={"90px"}
                   h={"108px"}
-                ></Box>
-                <Box
-                  bgImage={annoucement.cover_image}
-                  bgSize={"contain"}
-                  bgPos={"center"}
-                  bgRepeat={"no-repeat"}
-                  w={"100%"}
-                  minH={"90px"}
-                  h={"108px"}
-                ></Box>
-                <Box
-                  bgImage={annoucement.cover_image}
-                  bgSize={"contain"}
-                  bgPos={"center"}
-                  bgRepeat={"no-repeat"}
-                  w={"100%"}
-                  minH={"90px"}
-                  h={"108px"}
-                ></Box>
-                <Box
-                  bgImage={annoucement.cover_image}
-                  bgSize={"contain"}
-                  bgPos={"center"}
-                  bgRepeat={"no-repeat"}
-                  w={"100%"}
-                  minH={"90px"}
-                  h={"108px"}
-                ></Box>
-                <Box
-                  bgImage={annoucement.cover_image}
-                  bgSize={"contain"}
-                  bgPos={"center"}
-                  bgRepeat={"no-repeat"}
-                  w={"100%"}
-                  minH={"90px"}
-                  h={"108px"}
-                ></Box>
-                <Box
-                  bgImage={annoucement.cover_image}
-                  bgSize={"contain"}
-                  bgPos={"center"}
-                  bgRepeat={"no-repeat"}
-                  w={"100%"}
-                  minH={"90px"}
-                  h={"108px"}
-                ></Box>
+                  >
+
+                  </Box>
+                )
+              })}
               </SimpleGrid>
             </Stack>
             <Stack
@@ -213,18 +177,8 @@ const Dashboard: NextPage<Props> = ({annoucement}) => {
               borderRadius={"base"}
               mr={['15px', '15px', '50px']}
             >
-              <Box
-                background={"pink.400"}
-                borderRadius={"50%"}
-                color={"grey.0"}
-                fontSize={"5xl"}
-                p={"10px"}
-              >
-                LS
-              </Box>
-              <Text color={"grey.400"} fontWeight={"semibold"} fontSize={"xl"}>
-                Lavínia Silva
-              </Text>
+              <Avatar name={user.name} size={'md'} ml={'10px'}/>{' '}
+              <Text color={"grey.400"} fontWeight={"semibold"} fontSize={"xl"}>{user.name}</Text>
               <Text
                 color={"grey.300"}
                 fontWeight={"normal"}
@@ -387,15 +341,18 @@ const Dashboard: NextPage<Props> = ({annoucement}) => {
 export const getServerSideProps: GetServerSideProps<Props> = async(ctx) => {
     
   api.defaults.headers.authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhYmlAbWFpbC5jb20iLCJzdWIiOiI2YmQ5NmQxYy04Y2JkLTQzNzAtYmZmMi0xYzBiZGI5YTMyZDYiLCJpYXQiOjE2ODE3NDU4MDQsImV4cCI6MTY4MTgzMjIwNH0.u1XOYxcE8rE10KHS78PM8N4T_FJVYC4NYopsyU1WdXs `
+  const idUser = "6bd96d1c-8cbd-4370-bff2-1c0bdb9a32d6"
   const id = ctx.params!.id
-  const response = await api.get(`/annoucements/${id}`)
-  const annoucement: IAnnoucement = response.data
+  const responseAn = await api.get(`/annoucements/${id}`)
+  const responseUser = await api.get(`/users/${idUser}`)
+  const annoucement: IAnnoucement = responseAn.data
+  const user: IUser = responseUser.data
 
-  console.log(annoucement)
-    
+      
   return {
       props: {
-        annoucement
+        annoucement,
+        user
       }
   }
 }
