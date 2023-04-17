@@ -48,8 +48,9 @@ export class AnnoucementsController {
     @Query() query: AnnoucementFiltersDto,
     @Query('limit') limit: string,
     @Query('page') page: string,
+    @Query('min_price') minPrice: string,
   ) {
-    return this.annoucementsService.findAll(query, +limit, +page);
+    return this.annoucementsService.findAll(query, +limit, +page, minPrice);
   }
 
   @Get(':annoucement_id')

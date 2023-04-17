@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException } from '@nestjs/common';
 import { CreateAnnoucementDto } from './dto/create-annoucement.dto';
 import { UpdateAnnoucementDto } from './dto/update-annoucement.dto';
 import { PrismaService } from 'src/database/prisma.service';
@@ -42,10 +42,11 @@ export class AnnoucementsService {
     filteredQueries: AnnoucementFiltersDto,
     limit: number,
     page: number,
+    minPrice: string,
   ) {
     const filters = filteredQueries ? { where: filteredQueries } : undefined;
     const take = limit ? limit : undefined;
-    const skip = page && limit ? page * limit : undefined;
+    const skip = page && limit ? (page - 1) * limit : undefined;
     const response = await this.prisma.annoucement.findMany({
       include: { gallery_images: true },
       ...filters,
@@ -56,10 +57,15 @@ export class AnnoucementsService {
       const itemsCount = await this.prisma.annoucement.count({
         ...filters,
       });
+      const pagesCount = Math.ceil(itemsCount / limit);
+      const pageToReturn = page ? page : 1;
+      if (page <= 0 || page > pagesCount) {
+        throw new HttpException('This page does not exists', 404);
+      }
       return {
         itemsCount,
-        pagesCount: Math.ceil(itemsCount / limit),
-        page: page ? page : 0,
+        pagesCount,
+        page: pageToReturn,
         data: response,
       };
     }
