@@ -98,7 +98,10 @@ export class AnnoucementsService {
       itemsCount,
       callback: async (take: number, skip: number) => {
         return await this.prisma.annoucement.findMany({
-          include: { gallery_images: true },
+          include: {
+            gallery_images: true,
+            owner: { select: { id: true, name: true } },
+          },
           ...filters,
           take,
           skip,
@@ -112,7 +115,10 @@ export class AnnoucementsService {
   async findOne(id: string) {
     return await this.prisma.annoucement.findFirst({
       where: { id },
-      include: { gallery_images: true },
+      include: {
+        gallery_images: true,
+        owner: { select: { id: true, name: true } },
+      },
     });
   }
 
