@@ -5,11 +5,13 @@ import DefaultHeader from '@/components/headers/headerDefault';
 import Modals from '@/components/modal';
 import Buttons from '@/components/button';
 import HomeFilter from '@/components/homeFilter';
-import { announcements } from '@/mocks/announcements';
 import ProductCard from '@/components/productCard';
 import NextLink from "next/link";
+import { GetServerSideProps, NextPage } from 'next';
+import { IAnnoucement, Props } from '@/types/announcements';
+import api from '@/services/api';
 
-export default function Home() {
+const Home: NextPage<Props> = ({announcements}) => {
   return (
     <>
       <Head>
@@ -33,7 +35,7 @@ export default function Home() {
             <HomeFilter/>
           </Box>
           <List border={"none"} width={["100%", "100%", "95%"]} maxW={["none", "none", "984px"]} overflowX={"auto"} display={"flex"} flexWrap={["nowrap", "nowrap", "wrap"]} alignItems={"center"} gap={["16px", "24px"]} ml={"0"} pb={"8px"}>
-            {announcements.map((item, index) => {
+            {announcements.map((item: any, index: any) => {
               return (
                 <ListItem w={"312px"} display={"inline-block"} key={index}>
                   <Link _hover={{textDecoration: "none"}} as={NextLink} href={`/product/${item.id}`}>
@@ -46,7 +48,7 @@ export default function Home() {
                       brand={item.brand}
                       model={item.model}
                       description={item.description}
-                      owner={item.owner.name}
+                      owner={'Teste'}
                       userAvatar={""}
                       km={item.km}
                       year={item.year}
@@ -72,3 +74,17 @@ export default function Home() {
     </>
   )
 }
+
+export const getServerSideProps: GetServerSideProps<Props> = async(ctx) => {
+    
+  const response = await api.get(`/annoucements`)
+  const announcements: IAnnoucement[] = response.data
+    
+  return {
+      props: {
+        announcements
+      }
+  }
+}
+
+export default Home

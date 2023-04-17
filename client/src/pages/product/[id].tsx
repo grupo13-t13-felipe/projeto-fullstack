@@ -2,48 +2,26 @@ import Buttons from "@/components/button";
 import DefaultFooter from "@/components/footer";
 import HeaderProfile from "@/components/headers/headerProfile";
 import TextArea from "@/components/textArea";
+import api from "@/services/api";
+import { IAnnoucement } from "@/types/announcements";
 import { Box, Flex, HStack, SimpleGrid, Stack, Text } from "@chakra-ui/react";
+import { GetServerSideProps, NextPage } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { IUser } from "@/types/user";
 
-const Dashboard = () => {
+export interface Props {
+  annoucement: IAnnoucement
+}
+
+const Dashboard: NextPage<Props> = ({annoucement}) => {
   const router = useRouter();
   const { id } = router.query;
 
-  const testecar = {
-    id: "3aeed3e3-719f-4b3a-87c3-3d962bf58292",
-    model: "C4 CACTUS Rip Curl 1.6 16V Flex Aut.",
-    brand: "Citroën",
-    year: 2022,
-    fuel: 1,
-    km: 76323,
-    color: "Cinza",
-    fip_price: 112077,
-    price: 102123,
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel urna et nisi luctus auctor eget vitae magna. Sed viverra ullamcorper nulla eu efficitur.",
-    cover_image: "/cars_images/CITROEN_C4_CACTUS_1.6.webp",
-    gallery_images: [
-      {
-        id: "3aeed3e3-719f-4b3a-87c3-3d962bf58211",
-        url: "/cars_images/Citroen-C4-Cactus-Rip-Curl-2.jpg",
-      },
-      {
-        id: "3aeed3e3-719f-4b3a-87c3-3d962bf58211",
-        url: "/cars_images/CITROEN_C4_CACTUS_1.6.webp",
-      },
-    ],
-    is_active: true,
-    created_at: "2023-04-11T07:56:23.430Z",
-    updated_at: "2023-04-11T07:56:23.430Z",
-    owner: {
-      id: "ff46341a-62b2-47c8-8d1f-fc87d7ec3f17",
-      name: "Lucas Magalhães",
-    },
-  };
+ 
   return (
     <>
-      <HeaderProfile />
+      <HeaderProfile user={}/>
       <Flex
         direction={"column"}
         justifyContent={"space-between"}
@@ -74,9 +52,9 @@ const Dashboard = () => {
             >
               <Box m={"auto"}>
                 <Image
-                  src={testecar.cover_image}
+                  src={annoucement.cover_image}
                   width={600}
-                  alt={testecar.model}
+                  alt={annoucement.model}
                   height={250}
                 />
               </Box>
@@ -95,7 +73,7 @@ const Dashboard = () => {
                 mb={"45px"}
                 mt={"20px"}
               >
-                {testecar.model}
+                {annoucement.model}
               </Text>
               <HStack justifyContent={"space-between"}>
                 <HStack>
@@ -107,7 +85,7 @@ const Dashboard = () => {
                     borderRadius={"4px"}
                     color={"blue.300"}
                   >
-                    {testecar.year}
+                    {annoucement.year}
                   </Text>
                   <Text
                     bg={"blue.100"}
@@ -117,11 +95,11 @@ const Dashboard = () => {
                     borderRadius={"4px"}
                     color={"blue.300"}
                   >
-                    {testecar.km} KM
+                    {annoucement.km} KM
                   </Text>
                 </HStack>
                 <Text fontSize={"md"} fontWeight={"medium"}>
-                  R$ {testecar.price}
+                  R$ {annoucement.price}
                 </Text>
               </HStack>
               <Box>
@@ -145,7 +123,7 @@ const Dashboard = () => {
                 Descrição
               </Text>
               <Text color={"grey.300"} fontWeight={"normal"} fontSize={"md"}>
-                {testecar.description}
+                {annoucement.description}
               </Text>
             </Stack>
           </Stack>
@@ -171,7 +149,7 @@ const Dashboard = () => {
               </Text>
               <SimpleGrid columns={3} spacing={"14px"} pl={"44px"} pr={"44px"}>
                 <Box
-                  bgImage={testecar.cover_image}
+                  bgImage={annoucement.cover_image}
                   bgSize={"contain"}
                   bgPos={"center"}
                   bgRepeat={"no-repeat"}
@@ -180,7 +158,7 @@ const Dashboard = () => {
                   h={"108px"}
                 ></Box>
                 <Box
-                  bgImage={testecar.cover_image}
+                  bgImage={annoucement.cover_image}
                   bgSize={"contain"}
                   bgPos={"center"}
                   bgRepeat={"no-repeat"}
@@ -189,7 +167,7 @@ const Dashboard = () => {
                   h={"108px"}
                 ></Box>
                 <Box
-                  bgImage={testecar.cover_image}
+                  bgImage={annoucement.cover_image}
                   bgSize={"contain"}
                   bgPos={"center"}
                   bgRepeat={"no-repeat"}
@@ -198,7 +176,7 @@ const Dashboard = () => {
                   h={"108px"}
                 ></Box>
                 <Box
-                  bgImage={testecar.cover_image}
+                  bgImage={annoucement.cover_image}
                   bgSize={"contain"}
                   bgPos={"center"}
                   bgRepeat={"no-repeat"}
@@ -207,7 +185,7 @@ const Dashboard = () => {
                   h={"108px"}
                 ></Box>
                 <Box
-                  bgImage={testecar.cover_image}
+                  bgImage={annoucement.cover_image}
                   bgSize={"contain"}
                   bgPos={"center"}
                   bgRepeat={"no-repeat"}
@@ -216,7 +194,7 @@ const Dashboard = () => {
                   h={"108px"}
                 ></Box>
                 <Box
-                  bgImage={testecar.cover_image}
+                  bgImage={annoucement.cover_image}
                   bgSize={"contain"}
                   bgPos={"center"}
                   bgRepeat={"no-repeat"}
@@ -405,5 +383,21 @@ const Dashboard = () => {
     </>
   );
 };
+
+export const getServerSideProps: GetServerSideProps<Props> = async(ctx) => {
+    
+  api.defaults.headers.authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhYmlAbWFpbC5jb20iLCJzdWIiOiI2YmQ5NmQxYy04Y2JkLTQzNzAtYmZmMi0xYzBiZGI5YTMyZDYiLCJpYXQiOjE2ODE3NDU4MDQsImV4cCI6MTY4MTgzMjIwNH0.u1XOYxcE8rE10KHS78PM8N4T_FJVYC4NYopsyU1WdXs `
+  const id = ctx.params!.id
+  const response = await api.get(`/annoucements/${id}`)
+  const annoucement: IAnnoucement = response.data
+
+  console.log(annoucement)
+    
+  return {
+      props: {
+        annoucement
+      }
+  }
+}
 
 export default Dashboard;
