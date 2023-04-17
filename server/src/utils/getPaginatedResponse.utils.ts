@@ -23,7 +23,7 @@ export async function getPaginatedResponse({
   return {
     itemsCount,
     pagesCount,
-    page: pageToReturn,
+    page: page || limit ? pageToReturn : null,
     data: response,
   };
 }
