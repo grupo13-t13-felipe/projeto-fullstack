@@ -1,27 +1,31 @@
-import { IsDateString, IsOptional, IsString } from 'class-validator';
+import { IsDateString, IsOptional, IsString, IsUUID } from 'class-validator';
 
 export class AnnoucementFiltersDto {
   @IsOptional()
   @IsString()
-  model: string;
+  model?: string;
 
   @IsOptional()
   @IsString()
-  brand: string;
+  brand?: string;
 
   @IsOptional()
   @IsDateString()
-  year: string;
+  year?: string;
 
   @IsOptional()
   @IsString()
-  fuel: string;
+  fuel?: string;
 
   @IsOptional()
   @IsString()
-  km: string;
+  km?: string;
 
   @IsOptional()
   @IsString()
-  color: string;
+  color?: string;
+
+  @IsOptional()
+  @IsUUID()
+  owner_id?: string;
 }
