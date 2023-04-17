@@ -1,21 +1,24 @@
 import {
-    FormControl, Text,
+    Flex, FlexProps, Text,
 } from '@chakra-ui/react';
 
-interface IFormProps {
+interface IFormProps extends FlexProps {
     children: React.ReactNode
-    formTitle: string;
+    formtitle: string;
 }
 
 const DefaultForm = (props: IFormProps) => {
     return (
-        <FormControl {...props} display={"flex"} flexDirection={"column"} maxWidth={"556px"} padding={["24px", "24px", "48px"]} bgColor={"white"} borderRadius={"4px"} gap={"24px"}>
+        <Flex {...props} display={"flex"} flexDirection={"column"} maxWidth={"556px"} w={"100%"} padding={["24px", "24px", "48px"]} bgColor={"white"} borderRadius={"4px"} gap={"24px"}>
             <Text fontSize={["18", "24px"]} fontWeight={"500"} marginBottom={"8px"}>
-                {props.formTitle}
+                {props.formtitle}
             </Text>
-            {props.children}
-        </FormControl>
+            <form>
+                {props.children}
+            </form>
+        </Flex>
     )
 }
 
 export default DefaultForm;
+

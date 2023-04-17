@@ -1,0 +1,7 @@
+.css-1w4zq80 > form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
