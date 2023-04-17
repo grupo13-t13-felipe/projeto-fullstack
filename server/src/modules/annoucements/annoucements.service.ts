@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpException } from '@nestjs/common';
 import { CreateAnnoucementDto } from './dto/create-annoucement.dto';
 import { UpdateAnnoucementDto } from './dto/update-annoucement.dto';
 import { PrismaService } from 'src/database/prisma.service';
@@ -6,6 +6,8 @@ import { User } from '../users/entities/user.entity';
 import { CreateGalleryImagesArrayDto } from '../gallery_images/dto/create-gallery_image.dto';
 import { GalleryImagesService } from '../gallery_images/gallery_images.service';
 import { AnnoucementFiltersDto } from './dto/annoucements-filters.dto';
+import { Annoucement, GalleryImage } from '@prisma/client';
+import { getPaginatedResponse } from 'src/utils/getPaginatedResponse.utils';
 
 @Injectable()
 export class AnnoucementsService {
@@ -38,18 +40,85 @@ export class AnnoucementsService {
     });
   }
 
-  async findAll(filteredQueries: AnnoucementFiltersDto) {
-    const willFilter = filteredQueries ? { where: filteredQueries } : undefined;
-    return await this.prisma.annoucement.findMany({
-      include: { gallery_images: true },
-      ...willFilter,
+  getAnnoucementFilters(filterQueries: AnnoucementFiltersDto) {
+    const filters: {
+      where: {
+        brand?: string;
+        model?: string;
+        color?: string;
+        year?: string;
+        fuel?: string;
+        price?: { lte: string; gte: string };
+        km?: { lte: string; gte: string };
+      };
+    } = filterQueries
+      ? {
+          where: {
+            brand: filterQueries?.brand,
+            model: filterQueries?.model,
+            color: filterQueries?.color,
+            year: filterQueries?.year,
+            fuel: filterQueries?.fuel,
+          },
+        }
+      : undefined;
+    if (filterQueries.min_price || filterQueries.max_price) {
+      filters.where = {
+        ...filters.where,
+        price: {
+          lte: filterQueries?.max_price,
+          gte: filterQueries?.min_price,
+        },
+      };
+    }
+    if (filterQueries.min_km || filterQueries.max_km) {
+      filters.where = {
+        ...filters.where,
+        km: {
+          lte: filterQueries?.max_km,
+          gte: filterQueries?.min_km,
+        },
+      };
+    }
+    return filters;
+  }
+
+  async findAll(
+    filterQueries: AnnoucementFiltersDto,
+    limit: number,
+    page: number,
+  ) {
+    const filters = this.getAnnoucementFilters(filterQueries);
+    const itemsCount = await this.prisma.annoucement.count({
+      ...filters,
     });
+    const response = await getPaginatedResponse({
+      limit,
+      page,
+      itemsCount,
+      callback: async (take: number, skip: number) => {
+        return await this.prisma.annoucement.findMany({
+          include: {
+            gallery_images: true,
+            owner: { select: { id: true, name: true } },
+          },
+          ...filters,
+          take,
+          skip,
+        });
+      },
+    });
+
+    return response;
   }
 
   async findOne(id: string) {
     return await this.prisma.annoucement.findFirst({
       where: { id },
-      include: { gallery_images: true },
+      include: {
+        gallery_images: true,
+        owner: { select: { id: true, name: true } },
+      },
     });
   }
 
