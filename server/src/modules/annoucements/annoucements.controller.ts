@@ -50,7 +50,7 @@ export class AnnoucementsController {
     @Query('page') page: string,
     @Query('min_price') minPrice: string,
   ) {
-    return this.annoucementsService.findAll(query, +limit, +page, minPrice);
+    return this.annoucementsService.findAll(query, +limit, +page);
   }
 
   @Get(':annoucement_id')

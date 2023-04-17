@@ -26,6 +26,22 @@ export class AnnoucementFiltersDto {
   color?: string;
 
   @IsOptional()
+  @IsString()
+  min_price?: string;
+
+  @IsOptional()
+  @IsString()
+  max_price?: string;
+
+  @IsOptional()
+  @IsString()
+  min_km?: string;
+
+  @IsOptional()
+  @IsString()
+  max_km?: string;
+
+  @IsOptional()
   @IsUUID()
   owner_id?: string;
 }
