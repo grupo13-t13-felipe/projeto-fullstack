@@ -1,11 +1,14 @@
-import {Flex, Text} from '@chakra-ui/react'
-
+import DefaultFooter from '@/components/footer';
+import DefaultHeader from '@/components/headers/headerDefault';
+import {Flex, Text} from '@chakra-ui/react';
 
 const Login = () => {
     return (
-        <Flex>
+        <>
+            <DefaultHeader />
             <Text>Página de Login</Text>
-        </Flex>
+            <DefaultFooter />
+        </>
     )
 }
 

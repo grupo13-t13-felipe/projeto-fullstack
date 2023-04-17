@@ -4,7 +4,7 @@ import { HamburgerIcon, CloseIcon} from '@chakra-ui/icons';
 const DefaultHeader = () => {
   
   return (
-      <Flex justifyContent={"space-between"} height={"60px"} mx={["24px", "55px", "55px"]}>
+      <Flex justifyContent={"space-between"} height={"60px"} px={["24px", "55px", "55px"]} borderBottom={"2px"} borderColor={"grey.100"}>
         <HStack>
           <Text fontSize={'2xl'} fontWeight={'bold'} bgGradient='linear(to-r, #0B0D0D, #5126EA)'
           bgClip='text'>Motors </Text>
