@@ -5,12 +5,12 @@ export interface IImage {
     annoucement_id: string
 }
 
-export interface IAnnoucementOwner {
+export interface IAnnouncementOwner {
     id: string,
     name: string
 }
 
-export interface IAnnoucement {
+export interface IAnnouncement {
     id: string,
     model: string,
     brand: string, 
@@ -27,10 +27,10 @@ export interface IAnnoucement {
 	updated_at: Date,
 	owner_id: string,
     gallery_images: IImage[],
-    owner: IAnnoucementOwner
+    owner: IAnnouncementOwner
 }
 
 export interface Props {
-    announcements: IAnnoucement[]
+    announcements: IAnnouncement[]
 }
 

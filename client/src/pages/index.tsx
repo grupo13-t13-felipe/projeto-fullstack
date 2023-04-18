@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Text, Stack, Flex, Box, Link, VStack, ListItem, List } from '@chakra-ui/react';
+import { Text, Stack, Flex, Box, Link, VStack, ListItem, List, Progress } from '@chakra-ui/react';
 import DefaultFooter from '@/components/footer';
 import DefaultHeader from '@/components/headers/headerDefault';
 import Modals from '@/components/modal';
@@ -7,12 +7,15 @@ import Buttons from '@/components/button';
 import HomeFilter from '@/components/homeFilter';
 import ProductCard from '@/components/productCard';
 import NextLink from "next/link";
-import { GetServerSideProps, NextPage } from 'next';
-import { IAnnoucement, Props } from '@/types/announcements';
-import api from '@/services/api';
+import { annoucementCtx } from '@/contexts/announcements.context';
 
-const Home: NextPage<Props> = ({announcements}) => {
+const Home = () => {
+
+  const {allAnnouncements, setAnnouncement, loading, setLoading} = annoucementCtx()
+      
+  
   return (
+
     <>
       <Head>
         <title>Motors Shop</title>
@@ -20,7 +23,16 @@ const Home: NextPage<Props> = ({announcements}) => {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/titleIcon" />
       </Head>
-      <DefaultHeader/>
+      { loading? 
+      <Flex height={'100vh'} justifyContent={'center'} alignItems={'center'}>
+        <Text color={'blue.400'} fontSize={'6xl'}>Loading....</Text> 
+      </Flex>
+        
+        : 
+
+      <>
+      
+        <DefaultHeader/>
       <Flex direction={'column'} height={'100%'}>
         <Stack bgGradient='linear(to-b, grey.150, grey.400)' alignItems={'center'} justifyContent={'center'}>
           <Box backgroundImage={'/Photo.svg'} display={'flex'}  filter='grayscale(80%)' backgroundPosition={'center'} width={'100%'} maxW={'1174px'} backgroundRepeat={'no-repeat'} height={['50vh', '50vh', '50vh']} justifyContent={'center'} >
@@ -35,7 +47,7 @@ const Home: NextPage<Props> = ({announcements}) => {
             <HomeFilter/>
           </Box>
           <List border={"none"} width={["100%", "100%", "95%"]} maxW={["none", "none", "984px"]} overflowX={"auto"} display={"flex"} flexWrap={["nowrap", "nowrap", "wrap"]} alignItems={"center"} gap={["16px", "24px"]} ml={"0"} pb={"8px"}>
-            {announcements.map((item: any, index: any) => {
+            {allAnnouncements.map((item: any, index: any) => {
               return (
                 <ListItem w={"312px"} display={"inline-block"} key={index}>
                   <Link _hover={{textDecoration: "none"}} as={NextLink} href={`/product/${item.id}`}>
@@ -48,7 +60,7 @@ const Home: NextPage<Props> = ({announcements}) => {
                       brand={item.brand}
                       model={item.model}
                       description={item.description}
-                      owner={'Teste'}
+                      owner={item.owner.name}
                       userAvatar={""}
                       km={item.km}
                       year={item.year}
@@ -71,20 +83,23 @@ const Home: NextPage<Props> = ({announcements}) => {
           </List>
       </Flex>
       <DefaultFooter/>
+      </>
+    }
     </>
   )
-}
+   }
 
-export const getServerSideProps: GetServerSideProps<Props> = async(ctx) => {
+
+// export const getServerSideProps: GetServerSideProps<Props> = async(ctx) => {
     
-  const response = await api.get(`/annoucements`)
-  const announcements: IAnnoucement[] = response.data
-    
-  return {
-      props: {
-        announcements
-      }
-  }
-}
+//   const response = await api.get(`/annoucements`)
+//   const announcements: IAnnouncement[] = response.data.data
+      
+//   return {
+//       props: {
+//         announcements
+//       }
+//   }
+// }
 
 export default Home

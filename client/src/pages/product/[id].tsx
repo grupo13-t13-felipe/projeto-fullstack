@@ -3,7 +3,7 @@ import DefaultFooter from "@/components/footer";
 import HeaderProfile from "@/components/headers/headerProfile";
 import TextArea from "@/components/textArea";
 import api from "@/services/api";
-import { IAnnoucement } from "@/types/announcements";
+import { IAnnouncement } from "@/types/announcements";
 import { Box, Flex, HStack, SimpleGrid, Stack, Text, Avatar } from "@chakra-ui/react";
 import { GetServerSideProps, NextPage } from "next";
 import Image from "next/image";
@@ -11,11 +11,11 @@ import { useRouter } from "next/router";
 import { IUser } from "@/types/user";
 
 export interface Props {
-  annoucement: IAnnoucement
+  announcement: IAnnouncement
   user: IUser
 }
 
-const Dashboard: NextPage<Props> = ({annoucement, user}) => {
+const Dashboard: NextPage<Props> = ({announcement, user}) => {
   const router = useRouter();
   const { id } = router.query;
 
@@ -55,9 +55,9 @@ const Dashboard: NextPage<Props> = ({annoucement, user}) => {
             >
               <Box m={"auto"}>
                 <Image
-                  src={annoucement.cover_image}
+                  src={announcement.cover_image}
                   width={600}
-                  alt={annoucement.model}
+                  alt={announcement.model}
                   height={250}
                 />
               </Box>
@@ -76,7 +76,7 @@ const Dashboard: NextPage<Props> = ({annoucement, user}) => {
                 mb={"45px"}
                 mt={"20px"}
               >
-                {annoucement.model}
+                {announcement.model}
               </Text>
               <HStack justifyContent={"space-between"}>
                 <HStack>
@@ -88,7 +88,7 @@ const Dashboard: NextPage<Props> = ({annoucement, user}) => {
                     borderRadius={"4px"}
                     color={"blue.300"}
                   >
-                    {annoucement.year}
+                    {announcement.year}
                   </Text>
                   <Text
                     bg={"blue.100"}
@@ -98,11 +98,11 @@ const Dashboard: NextPage<Props> = ({annoucement, user}) => {
                     borderRadius={"4px"}
                     color={"blue.300"}
                   >
-                    {annoucement.km} KM
+                    {announcement.km} KM
                   </Text>
                 </HStack>
                 <Text fontSize={"md"} fontWeight={"medium"}>
-                  R$ {annoucement.price}
+                  R$ {announcement.price}
                 </Text>
               </HStack>
               <Box>
@@ -126,7 +126,7 @@ const Dashboard: NextPage<Props> = ({annoucement, user}) => {
                 Descrição
               </Text>
               <Text color={"grey.300"} fontWeight={"normal"} fontSize={"md"}>
-                {annoucement.description}
+                {announcement.description}
               </Text>
             </Stack>
           </Stack>
@@ -151,9 +151,10 @@ const Dashboard: NextPage<Props> = ({annoucement, user}) => {
                 Fotos
               </Text>
               <SimpleGrid columns={3} spacing={"14px"} pl={"44px"} pr={"44px"}>
-              {annoucement.gallery_images.map((item, index) => {
+              {announcement.gallery_images.map((item, index) => {
                 return (
                   <Box 
+                  key={index}
                   bgImage={item.url}
                   bgSize={"contain"}
                   bgPos={"center"}
@@ -340,18 +341,18 @@ const Dashboard: NextPage<Props> = ({annoucement, user}) => {
 
 export const getServerSideProps: GetServerSideProps<Props> = async(ctx) => {
     
-  api.defaults.headers.authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhYmlAbWFpbC5jb20iLCJzdWIiOiI2YmQ5NmQxYy04Y2JkLTQzNzAtYmZmMi0xYzBiZGI5YTMyZDYiLCJpYXQiOjE2ODE3NDU4MDQsImV4cCI6MTY4MTgzMjIwNH0.u1XOYxcE8rE10KHS78PM8N4T_FJVYC4NYopsyU1WdXs `
+  api.defaults.headers.authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhYmlAbWFpbC5jb20iLCJzdWIiOiI2YmQ5NmQxYy04Y2JkLTQzNzAtYmZmMi0xYzBiZGI5YTMyZDYiLCJpYXQiOjE2ODE4MjM1MTMsImV4cCI6MTY4MTkwOTkxM30.Uyy3h9_WzrHe9nXEiKWOfVpidIpGIqN3Ow1mg5OG6GU `
   const idUser = "6bd96d1c-8cbd-4370-bff2-1c0bdb9a32d6"
   const id = ctx.params!.id
   const responseAn = await api.get(`/annoucements/${id}`)
   const responseUser = await api.get(`/users/${idUser}`)
-  const annoucement: IAnnoucement = responseAn.data
+  const announcement: IAnnouncement = responseAn.data
   const user: IUser = responseUser.data
 
       
   return {
       props: {
-        annoucement,
+        announcement,
         user
       }
   }
