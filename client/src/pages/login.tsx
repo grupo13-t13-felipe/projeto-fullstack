@@ -3,7 +3,6 @@ import DefaultFooter from '@/components/footer';
 import DefaultForm from '@/components/form';
 import {Button, Flex, Text, Link} from '@chakra-ui/react';
 import { InputForm } from '@/components/input';
-import NextLink from "next/link";
 
 const Login = () => {
     return (
