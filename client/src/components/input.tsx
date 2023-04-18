@@ -1,4 +1,10 @@
-import { Input } from '@chakra-ui/react'
+import { FormControl, FormControlProps, FormLabel, Input } from '@chakra-ui/react'
+
+interface InputFormProps extends FormControlProps {
+    labeltext: string;
+    inputtype: string;
+    inputplaceholder: string;
+}
 
 const InputArea = ({ nameInput, placeHolder, fontSize, width, heigth, focusBorderColor, margin }: any) => {
     return (
@@ -17,4 +23,15 @@ const InputFilter = ({placeholder, onClick}: any) => {
     )
 }
 
-export { InputArea, InputFilter };
+const InputForm = (props: InputFormProps) => {
+    return (
+        <FormControl {...props}>
+            <FormLabel>
+                {props.labeltext}
+            </FormLabel>
+            <Input h={"48px"} _focusVisible={{boxShadow: "0 0 0 1px var(--chakra-colors-blue-400)"}} _focus={{borderColor: "blue.400"}} type={props.inputtype} placeholder={props.inputplaceholder} />
+        </FormControl>
+    )
+}
+
+export { InputArea, InputFilter, InputForm };
