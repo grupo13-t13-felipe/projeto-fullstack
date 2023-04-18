@@ -102,13 +102,13 @@ export class AnnoucementsService {
             gallery_images: true,
             owner: { select: { id: true, name: true } },
           },
+
           ...filters,
           take,
           skip,
         });
       },
     });
-
     return response;
   }
 
