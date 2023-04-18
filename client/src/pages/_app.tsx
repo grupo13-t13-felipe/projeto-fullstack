@@ -4,7 +4,7 @@ import type { AppProps } from 'next/app'
 import '@fontsource/lexend'
 import "@/styles/menuList.css"
 import { AnnouncementProvider } from '@/contexts/announcements.context'
-
+import "@/styles/formStyle.css"
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
@@ -13,7 +13,5 @@ export default function App({ Component, pageProps }: AppProps) {
         <Component {...pageProps} />
       </AnnouncementProvider>
     </ChakraProvider>
- 
-   
   )
 }
