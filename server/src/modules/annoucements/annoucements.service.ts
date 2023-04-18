@@ -48,12 +48,14 @@ export class AnnoucementsService {
         color?: string;
         year?: string;
         fuel?: string;
+        owner_id?: string;
         price?: { lte: string; gte: string };
         km?: { lte: string; gte: string };
       };
     } = filterQueries
       ? {
           where: {
+            owner_id: filterQueries?.owner_id,
             brand: filterQueries?.brand,
             model: filterQueries?.model,
             color: filterQueries?.color,
