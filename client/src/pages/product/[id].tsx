@@ -4,33 +4,39 @@ import HeaderProfile from "@/components/headers/headerProfile";
 import TextArea from "@/components/textArea";
 import api from "@/services/api";
 import { IAnnouncement } from "@/types/announcements";
-import { Box, Flex, HStack, SimpleGrid, Stack, Text, Avatar } from "@chakra-ui/react";
+import {
+  Box,
+  Flex,
+  HStack,
+  SimpleGrid,
+  Stack,
+  Text,
+  Avatar,
+} from "@chakra-ui/react";
 import { GetServerSideProps, NextPage } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
 import { IUser } from "@/types/user";
+import Modals from "@/components/modal";
 
 export interface Props {
-  announcement: IAnnouncement
-  user: IUser
+  announcement: IAnnouncement;
+  user: IUser;
 }
 
-const Dashboard: NextPage<Props> = ({announcement, user}) => {
+const Dashboard: NextPage<Props> = ({ announcement, user }) => {
   const router = useRouter();
   const { id } = router.query;
 
- 
-
- 
   return (
     <>
-      <HeaderProfile user={user}/>
+      <HeaderProfile user={user} />
       <Flex
         direction={"column"}
         justifyContent={"space-between"}
         alignItems={["center", "center", "initial"]}
         position={"relative"}
-        zIndex={"-1"}
+        zIndex={"-10"}
         bg={"grey.75"}
       >
         <Box
@@ -38,13 +44,19 @@ const Dashboard: NextPage<Props> = ({announcement, user}) => {
           w={"100%"}
           h={"60vh"}
           bg={"blue.400"}
-          zIndex={"-1"}
+          zIndex={"-9"}
         ></Box>
         <Stack
           direction={["column", "column", "row"]}
-          mr={['15px', '15px', '50px']}
+          mr={["15px", "15px", "50px"]}
         >
-          <Stack ml={['15px', '15px', '50px']} mt={'20px'} width={['100%', '100%', '60%']} mr={'15px'} mb={"30px"}>
+          <Stack
+            ml={["15px", "15px", "50px"]}
+            mt={"20px"}
+            width={["100%", "100%", "60%"]}
+            mr={"15px"}
+            mb={"30px"}
+          >
             <Box
               bg={"grey.0"}
               borderRadius={"base"}
@@ -130,11 +142,11 @@ const Dashboard: NextPage<Props> = ({announcement, user}) => {
               </Text>
             </Stack>
           </Stack>
-          <Stack width={['100%', '100%', '40%']} >
+          <Stack width={["100%", "100%", "40%"]}>
             <Stack
               bg={"grey.0"}
               mb={"20px"}
-              mt={'20px'}
+              mt={"20px"}
               height={"355px"}
               display={"flex"}
               flexDir={"column"}
@@ -151,22 +163,30 @@ const Dashboard: NextPage<Props> = ({announcement, user}) => {
                 Fotos
               </Text>
               <SimpleGrid columns={3} spacing={"14px"} pl={"44px"} pr={"44px"}>
-              {announcement.gallery_images.map((item, index) => {
-                return (
-                  <Box 
-                  key={index}
-                  bgImage={item.url}
-                  bgSize={"contain"}
-                  bgPos={"center"}
-                  bgRepeat={"no-repeat"}
-                  w={"100%"}
-                  minH={"90px"}
-                  h={"108px"}
-                  >
+                {announcement.gallery_images.map((item, index) => {
+                  console.log('oi')
+                  return (
 
-                  </Box>
-                )
-              })}
+                    <Modals
+                      nameButton={
+                        <Box
+                        key={index}
+                        bgImage={item.url}
+                        bgSize={"contain"}
+                        bgPos={"center"}
+                        bgRepeat={"no-repeat"}
+                        w={"100%"}
+                        minH={"90px"}
+                        h={"108px"}
+                        ></Box>
+                      }
+                      backgroundColor={"transparent"}
+                      modalContent={item.url}
+                      key={index}
+                      // zIndex={"-11"}
+                    />
+                  );
+                })}
               </SimpleGrid>
             </Stack>
             <Stack
@@ -176,10 +196,12 @@ const Dashboard: NextPage<Props> = ({announcement, user}) => {
               alignItems={"center"}
               spacing={3}
               borderRadius={"base"}
-              mr={['15px', '15px', '50px']}
+              mr={["15px", "15px", "50px"]}
             >
-              <Avatar name={user.name} size={'md'} ml={'10px'}/>{' '}
-              <Text color={"grey.400"} fontWeight={"semibold"} fontSize={"xl"}>{user.name}</Text>
+              <Avatar name={user.name} size={"md"} ml={"10px"} />{" "}
+              <Text color={"grey.400"} fontWeight={"semibold"} fontSize={"xl"}>
+                {user.name}
+              </Text>
               <Text
                 color={"grey.300"}
                 fontWeight={"normal"}
@@ -199,7 +221,13 @@ const Dashboard: NextPage<Props> = ({announcement, user}) => {
           </Stack>
         </Stack>
 
-        <Stack ml={['15px', '15px', '50px']} mt={'20px'} mr={['15px', '15px', '50px']} mb={"30px"} width={['100%', '100%', '57%']}>
+        <Stack
+          ml={["15px", "15px", "50px"]}
+          mt={"20px"}
+          mr={["15px", "15px", "50px"]}
+          mb={"30px"}
+          width={["100%", "100%", "57%"]}
+        >
           <Stack
             bg={"grey.0"}
             display={"flex"}
@@ -339,23 +367,21 @@ const Dashboard: NextPage<Props> = ({announcement, user}) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps<Props> = async(ctx) => {
-    
-  api.defaults.headers.authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhYmlAbWFpbC5jb20iLCJzdWIiOiI2YmQ5NmQxYy04Y2JkLTQzNzAtYmZmMi0xYzBiZGI5YTMyZDYiLCJpYXQiOjE2ODE4MjM1MTMsImV4cCI6MTY4MTkwOTkxM30.Uyy3h9_WzrHe9nXEiKWOfVpidIpGIqN3Ow1mg5OG6GU `
-  const idUser = "6bd96d1c-8cbd-4370-bff2-1c0bdb9a32d6"
-  const id = ctx.params!.id
-  const responseAn = await api.get(`/annoucements/${id}`)
-  const responseUser = await api.get(`/users/${idUser}`)
-  const announcement: IAnnouncement = responseAn.data
-  const user: IUser = responseUser.data
+export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
+  api.defaults.headers.authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhYmlAbWFpbC5jb20iLCJzdWIiOiI2YmQ5NmQxYy04Y2JkLTQzNzAtYmZmMi0xYzBiZGI5YTMyZDYiLCJpYXQiOjE2ODE4MjM1MTMsImV4cCI6MTY4MTkwOTkxM30.Uyy3h9_WzrHe9nXEiKWOfVpidIpGIqN3Ow1mg5OG6GU `;
+  const idUser = "6bd96d1c-8cbd-4370-bff2-1c0bdb9a32d6";
+  const id = ctx.params!.id;
+  const responseAn = await api.get(`/annoucements/${id}`);
+  const responseUser = await api.get(`/users/${idUser}`);
+  const announcement: IAnnouncement = responseAn.data;
+  const user: IUser = responseUser.data;
 
-      
   return {
-      props: {
-        announcement,
-        user
-      }
-  }
-}
+    props: {
+      announcement,
+      user,
+    },
+  };
+};
 
 export default Dashboard;
