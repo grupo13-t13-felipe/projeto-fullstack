@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Text, Stack, Flex, Box, Link, VStack, ListItem, List, Progress } from '@chakra-ui/react';
+import { Text, Stack, Flex, Box, Link, VStack, ListItem, List } from '@chakra-ui/react';
 import DefaultFooter from '@/components/footer';
 import DefaultHeader from '@/components/headers/headerDefault';
 import Modals from '@/components/modal';
@@ -90,16 +90,5 @@ const Home = () => {
    }
 
 
-// export const getServerSideProps: GetServerSideProps<Props> = async(ctx) => {
-    
-//   const response = await api.get(`/annoucements`)
-//   const announcements: IAnnouncement[] = response.data.data
-      
-//   return {
-//       props: {
-//         announcements
-//       }
-//   }
-// }
 
 export default Home
