@@ -2,48 +2,29 @@ import Buttons from "@/components/button";
 import DefaultFooter from "@/components/footer";
 import HeaderProfile from "@/components/headers/headerProfile";
 import TextArea from "@/components/textArea";
-import { Box, Flex, HStack, SimpleGrid, Stack, Text } from "@chakra-ui/react";
+import api from "@/services/api";
+import { IAnnouncement } from "@/types/announcements";
+import { Box, Flex, HStack, SimpleGrid, Stack, Text, Avatar } from "@chakra-ui/react";
+import { GetServerSideProps, NextPage } from "next";
 import Image from "next/image";
 import { useRouter } from "next/router";
+import { IUser } from "@/types/user";
 
-const Dashboard = () => {
+export interface Props {
+  announcement: IAnnouncement
+  user: IUser
+}
+
+const Dashboard: NextPage<Props> = ({announcement, user}) => {
   const router = useRouter();
   const { id } = router.query;
 
-  const testecar = {
-    id: "3aeed3e3-719f-4b3a-87c3-3d962bf58292",
-    model: "C4 CACTUS Rip Curl 1.6 16V Flex Aut.",
-    brand: "Citroën",
-    year: 2022,
-    fuel: 1,
-    km: 76323,
-    color: "Cinza",
-    fip_price: 112077,
-    price: 102123,
-    description:
-      "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed vel urna et nisi luctus auctor eget vitae magna. Sed viverra ullamcorper nulla eu efficitur.",
-    cover_image: "/cars_images/CITROEN_C4_CACTUS_1.6.webp",
-    gallery_images: [
-      {
-        id: "3aeed3e3-719f-4b3a-87c3-3d962bf58211",
-        url: "/cars_images/Citroen-C4-Cactus-Rip-Curl-2.jpg",
-      },
-      {
-        id: "3aeed3e3-719f-4b3a-87c3-3d962bf58211",
-        url: "/cars_images/CITROEN_C4_CACTUS_1.6.webp",
-      },
-    ],
-    is_active: true,
-    created_at: "2023-04-11T07:56:23.430Z",
-    updated_at: "2023-04-11T07:56:23.430Z",
-    owner: {
-      id: "ff46341a-62b2-47c8-8d1f-fc87d7ec3f17",
-      name: "Lucas Magalhães",
-    },
-  };
+ 
+
+ 
   return (
     <>
-      <HeaderProfile />
+      <HeaderProfile user={user}/>
       <Flex
         direction={"column"}
         justifyContent={"space-between"}
@@ -74,9 +55,9 @@ const Dashboard = () => {
             >
               <Box m={"auto"}>
                 <Image
-                  src={testecar.cover_image}
+                  src={announcement.cover_image}
                   width={600}
-                  alt={testecar.model}
+                  alt={announcement.model}
                   height={250}
                 />
               </Box>
@@ -95,7 +76,7 @@ const Dashboard = () => {
                 mb={"45px"}
                 mt={"20px"}
               >
-                {testecar.model}
+                {announcement.model}
               </Text>
               <HStack justifyContent={"space-between"}>
                 <HStack>
@@ -107,7 +88,7 @@ const Dashboard = () => {
                     borderRadius={"4px"}
                     color={"blue.300"}
                   >
-                    {testecar.year}
+                    {announcement.year}
                   </Text>
                   <Text
                     bg={"blue.100"}
@@ -117,11 +98,11 @@ const Dashboard = () => {
                     borderRadius={"4px"}
                     color={"blue.300"}
                   >
-                    {testecar.km} KM
+                    {announcement.km} KM
                   </Text>
                 </HStack>
                 <Text fontSize={"md"} fontWeight={"medium"}>
-                  R$ {testecar.price}
+                  R$ {announcement.price}
                 </Text>
               </HStack>
               <Box>
@@ -145,7 +126,7 @@ const Dashboard = () => {
                 Descrição
               </Text>
               <Text color={"grey.300"} fontWeight={"normal"} fontSize={"md"}>
-                {testecar.description}
+                {announcement.description}
               </Text>
             </Stack>
           </Stack>
@@ -170,60 +151,22 @@ const Dashboard = () => {
                 Fotos
               </Text>
               <SimpleGrid columns={3} spacing={"14px"} pl={"44px"} pr={"44px"}>
-                <Box
-                  bgImage={testecar.cover_image}
+              {announcement.gallery_images.map((item, index) => {
+                return (
+                  <Box 
+                  key={index}
+                  bgImage={item.url}
                   bgSize={"contain"}
                   bgPos={"center"}
                   bgRepeat={"no-repeat"}
                   w={"100%"}
                   minH={"90px"}
                   h={"108px"}
-                ></Box>
-                <Box
-                  bgImage={testecar.cover_image}
-                  bgSize={"contain"}
-                  bgPos={"center"}
-                  bgRepeat={"no-repeat"}
-                  w={"100%"}
-                  minH={"90px"}
-                  h={"108px"}
-                ></Box>
-                <Box
-                  bgImage={testecar.cover_image}
-                  bgSize={"contain"}
-                  bgPos={"center"}
-                  bgRepeat={"no-repeat"}
-                  w={"100%"}
-                  minH={"90px"}
-                  h={"108px"}
-                ></Box>
-                <Box
-                  bgImage={testecar.cover_image}
-                  bgSize={"contain"}
-                  bgPos={"center"}
-                  bgRepeat={"no-repeat"}
-                  w={"100%"}
-                  minH={"90px"}
-                  h={"108px"}
-                ></Box>
-                <Box
-                  bgImage={testecar.cover_image}
-                  bgSize={"contain"}
-                  bgPos={"center"}
-                  bgRepeat={"no-repeat"}
-                  w={"100%"}
-                  minH={"90px"}
-                  h={"108px"}
-                ></Box>
-                <Box
-                  bgImage={testecar.cover_image}
-                  bgSize={"contain"}
-                  bgPos={"center"}
-                  bgRepeat={"no-repeat"}
-                  w={"100%"}
-                  minH={"90px"}
-                  h={"108px"}
-                ></Box>
+                  >
+
+                  </Box>
+                )
+              })}
               </SimpleGrid>
             </Stack>
             <Stack
@@ -235,18 +178,8 @@ const Dashboard = () => {
               borderRadius={"base"}
               mr={['15px', '15px', '50px']}
             >
-              <Box
-                background={"pink.400"}
-                borderRadius={"50%"}
-                color={"grey.0"}
-                fontSize={"5xl"}
-                p={"10px"}
-              >
-                LS
-              </Box>
-              <Text color={"grey.400"} fontWeight={"semibold"} fontSize={"xl"}>
-                Lavínia Silva
-              </Text>
+              <Avatar name={user.name} size={'md'} ml={'10px'}/>{' '}
+              <Text color={"grey.400"} fontWeight={"semibold"} fontSize={"xl"}>{user.name}</Text>
               <Text
                 color={"grey.300"}
                 fontWeight={"normal"}
@@ -405,5 +338,24 @@ const Dashboard = () => {
     </>
   );
 };
+
+export const getServerSideProps: GetServerSideProps<Props> = async(ctx) => {
+    
+  api.defaults.headers.authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhYmlAbWFpbC5jb20iLCJzdWIiOiI2YmQ5NmQxYy04Y2JkLTQzNzAtYmZmMi0xYzBiZGI5YTMyZDYiLCJpYXQiOjE2ODE4MjM1MTMsImV4cCI6MTY4MTkwOTkxM30.Uyy3h9_WzrHe9nXEiKWOfVpidIpGIqN3Ow1mg5OG6GU `
+  const idUser = "6bd96d1c-8cbd-4370-bff2-1c0bdb9a32d6"
+  const id = ctx.params!.id
+  const responseAn = await api.get(`/annoucements/${id}`)
+  const responseUser = await api.get(`/users/${idUser}`)
+  const announcement: IAnnouncement = responseAn.data
+  const user: IUser = responseUser.data
+
+      
+  return {
+      props: {
+        announcement,
+        user
+      }
+  }
+}
 
 export default Dashboard;

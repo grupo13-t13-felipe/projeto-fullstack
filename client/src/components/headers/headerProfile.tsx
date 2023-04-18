@@ -1,5 +1,7 @@
-import { Box, Flex, Text, HStack, MenuButton, Menu, MenuList, MenuItem, IconButton, Link } from "@chakra-ui/react";
+import { Box, Flex, Text, HStack, MenuButton, Menu, MenuList, MenuItem, IconButton, Link, Avatar } from "@chakra-ui/react";
 import { HamburgerIcon} from '@chakra-ui/icons'
+import { IUser } from "@/types/user";
+
 
 const ProfileMenuList = () => {
   return (
@@ -20,7 +22,7 @@ const ProfileMenuList = () => {
   );
 }
 
-const HeaderProfile = () => {
+const HeaderProfile = ({user}: IUser | any) => {
   return (
     <Flex justifyContent={'space-between'} mx={['20px', '20px', '26px', '30px', 'auto']} h={'80px'} maxW={'1200px'}>
       <HStack>
@@ -30,16 +32,15 @@ const HeaderProfile = () => {
         bgClip='text'>Shop</Text>
       </HStack>
       <HStack borderLeft={'1px'} borderColor={'grey.200'}>
-          <Box background={'blue.400'} borderRadius={'50%'} color={'grey.0'} p={'5px'} ml={'10px'}>
-              JS
-          </Box>
+        <Avatar name={user.name} size={'md'} ml={'10px'}/>{' '}
+        
         <Box display={['none', 'none', 'block']}>
           <Menu >
           <MenuButton
             as={Link}
             aria-label='Options'
             variant='outline'
-          >Nome Pessoa</MenuButton>
+          >{user.name}</MenuButton>
           {ProfileMenuList()}
         </Menu>
         </Box>
@@ -51,7 +52,7 @@ const HeaderProfile = () => {
             aria-label='Options'
             icon={<HamburgerIcon />}
             variant='outline'
-          >Nome Pessoa</MenuButton>
+          >{user.name}</MenuButton>
           {ProfileMenuList()}
         </Menu>
         </Box>
@@ -60,5 +61,6 @@ const HeaderProfile = () => {
   </Flex>
   );
 };
+
 
 export default HeaderProfile;
