@@ -21,6 +21,7 @@ import { User } from '../users/entities/user.entity';
 import { CreateGalleryImagesArrayDto } from '../gallery_images/dto/create-gallery_image.dto';
 import { AnnoucementExistsGuard } from './guards/annoucement-exists.guard';
 import { AnnoucementFiltersDto } from './dto/annoucements-filters.dto';
+import { IsAnnoucementOwnerGuard } from './guards/is-annoucement-owner.guard';
 
 interface AuthRequest extends req {
   user: User;
@@ -54,13 +55,13 @@ export class AnnoucementsController {
   }
 
   @Get(':annoucement_id')
-  @UseGuards(JwtAuthGuard, AnnoucementExistsGuard)
+  @UseGuards(JwtAuthGuard, AnnoucementExistsGuard, IsAnnoucementOwnerGuard)
   findOne(@Param('annoucement_id') annoucement_id: string) {
     return this.annoucementsService.findOne(annoucement_id);
   }
 
   @Patch(':annoucement_id')
-  @UseGuards(JwtAuthGuard, AnnoucementExistsGuard)
+  @UseGuards(JwtAuthGuard, AnnoucementExistsGuard, IsAnnoucementOwnerGuard)
   update(
     @Param('annoucement_id') annoucement_id: string,
     @Body() updateAnnoucementDto: UpdateAnnoucementDto,
@@ -72,7 +73,7 @@ export class AnnoucementsController {
   }
 
   @Delete(':annoucement_id')
-  @UseGuards(JwtAuthGuard, AnnoucementExistsGuard)
+  @UseGuards(JwtAuthGuard, AnnoucementExistsGuard, IsAnnoucementOwnerGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('annoucement_id') annoucement_id: string) {
     return this.annoucementsService.remove(annoucement_id);

@@ -11,14 +11,13 @@ import {
   HttpStatus,
 } from '@nestjs/common';
 import { GalleryImagesService } from './gallery_images.service';
-import {
-  CreateGalleryImagesArrayDto,
-  GalleryImageDto,
-} from './dto/create-gallery_image.dto';
+import { GalleryImageDto } from './dto/create-gallery_image.dto';
 import { AnnoucementExistsGuard } from '../annoucements/guards/annoucement-exists.guard';
 import { ImageExistsGuard } from './guards/image-exists.guard';
 import { UpdateGalleryImageDto } from './dto/update-gallery_image.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { IsImageOwnerGuard } from './guards/is-image-owner.guard';
+import { IsAnnoucementOwnerGuard } from '../annoucements/guards/is-annoucement-owner.guard';
 
 @Controller()
 export class GalleryImagesController {
@@ -31,7 +30,7 @@ export class GalleryImagesController {
   }
 
   @Post('annoucements/:annoucement_id/gallery-images')
-  @UseGuards(JwtAuthGuard, AnnoucementExistsGuard)
+  @UseGuards(JwtAuthGuard, AnnoucementExistsGuard, IsAnnoucementOwnerGuard)
   create(
     @Param('annoucement_id') annoucement_id: string,
     @Body() galleryImageDto: GalleryImageDto,
@@ -40,7 +39,7 @@ export class GalleryImagesController {
   }
 
   @Patch('gallery-images/:image_id')
-  @UseGuards(JwtAuthGuard, ImageExistsGuard)
+  @UseGuards(JwtAuthGuard, ImageExistsGuard, IsImageOwnerGuard)
   update(
     @Param('image_id') image_id: string,
     @Body() updateGalleryImageDto: UpdateGalleryImageDto,
@@ -49,7 +48,7 @@ export class GalleryImagesController {
   }
 
   @Delete('gallery-images/:image_id')
-  @UseGuards(JwtAuthGuard, ImageExistsGuard)
+  @UseGuards(JwtAuthGuard, ImageExistsGuard, IsImageOwnerGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   remove(@Param('image_id') image_id: string) {
     return this.galleryImagesService.remove(image_id);
