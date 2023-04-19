@@ -10,7 +10,6 @@ const TextArea = ({ headerTitle, placeHolder, width, heigth, fontSize, border }:
                 height={heigth}
                 fontSize={fontSize}
                 border={border}
-
             />
         </>
     )
