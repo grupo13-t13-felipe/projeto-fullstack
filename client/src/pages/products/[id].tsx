@@ -361,11 +361,11 @@ const Dashboard: NextPage<Props> = ({ announcement, user }) => {
 export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
   const cookies = nookies.get(ctx)
   api.defaults.headers.authorization = `Bearer ${cookies['karsToken']} `;
-  const myUser = cookies['karsUser']
+  const myUser = JSON.parse(cookies["karsUser"])
+  const userId = myUser.id 
   const id = ctx.params!.id;
-  console.log(id)
   const responseAn = await api.get(`/annoucements/${id}`);
-  const responseUser = await api.get(`/users/6bd96d1c-8cbd-4370-bff2-1c0bdb9a32d6`);
+  const responseUser = await api.get(`/users/${userId}`);
   const announcement: IAnnouncement = responseAn.data;
   const user: IUser = responseUser.data;
 
