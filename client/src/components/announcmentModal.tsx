@@ -115,7 +115,7 @@ const AnnouncementModal = ({
         ></InputForm>
 
         {galleryImage.map((item: any, index: any) => (
-          <InputForm
+          <InputForm key={index}
             labeltext={`${index + 1}º Imagem da Galeria`}
             inputtype={"text"}
             inputplaceholder={"https://image.com"}

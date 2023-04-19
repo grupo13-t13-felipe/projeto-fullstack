@@ -25,13 +25,17 @@ const Home = () => {
         <link rel="icon" href="/titleIcon" />
       </Head>
       { loading? 
-      <AnnouncementModal/>
+
+      <Flex justifyContent={'center'} alignItems={'center'}>
+        <Text color={'blue.400'} fontSize={'6xl'}>Loading...</Text>
+      </Flex>
         
         : 
 
-      <>
+        <>
       
         <DefaultHeader/>
+        <AnnouncementModal/>
       <Flex direction={'column'} height={'100%'}>
         <Stack bgGradient='linear(to-b, grey.150, grey.400)' alignItems={'center'} justifyContent={'center'}>
           <Box backgroundImage={'/Photo.svg'} display={'flex'}  filter='grayscale(80%)' backgroundPosition={'center'} width={'100%'} maxW={'1174px'} backgroundRepeat={'no-repeat'} height={['50vh', '50vh', '50vh']} justifyContent={'center'} >
@@ -49,7 +53,7 @@ const Home = () => {
             {allAnnouncements.map((item: any, index: any) => {
               return (
                 <ListItem w={"312px"} display={"inline-block"} key={index}>
-                  <Link _hover={{textDecoration: "none"}} as={NextLink} href={`/product/${item.id}`}>
+                  <Link _hover={{textDecoration: "none"}} as={NextLink} href={`/products/${item.id}`}>
                     <ProductCard
                       good={
                         (item.price / item.fip_price) <= 0.95
