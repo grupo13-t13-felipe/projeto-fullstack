@@ -6,6 +6,7 @@ interface InputFormProps extends FormControlProps {
     inputplaceholder: string;
     inputregister: any;
     errors: string | undefined;
+    isRequired?: boolean;
 }
 
 const InputArea = ({ nameInput, placeHolder, fontSize, width, heigth, focusBorderColor, margin }: any) => {

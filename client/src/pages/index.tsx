@@ -8,6 +8,7 @@ import HomeFilter from '@/components/homeFilter';
 import ProductCard from '@/components/productCard';
 import NextLink from "next/link";
 import { annoucementCtx } from '@/contexts/announcements.context';
+import AnnouncementModal from '@/components/announcmentModal';
 
 const Home = () => {
 
@@ -24,9 +25,7 @@ const Home = () => {
         <link rel="icon" href="/titleIcon" />
       </Head>
       { loading? 
-      <Flex height={'100vh'} justifyContent={'center'} alignItems={'center'}>
-        <Text color={'blue.400'} fontSize={'6xl'}>Loading....</Text> 
-      </Flex>
+      <AnnouncementModal/>
         
         : 
 
