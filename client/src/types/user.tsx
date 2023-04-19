@@ -11,3 +11,26 @@ export interface IUser {
 export interface Props {
     user: IUser
 }
+
+export interface IUserLogin {
+    email: string;
+    password: string;
+}
+
+export interface IUserCreate {
+	name: string;
+	email: string;
+	cpf: string;
+	phone: string;
+	password: string;
+	confirm_password: string;
+	description: string;
+	is_seller: boolean;
+	birth_date: string;
+	cep: string;
+	state: string;
+	city: string;
+	street: string;
+	number: string;
+	complement: string;
+}
