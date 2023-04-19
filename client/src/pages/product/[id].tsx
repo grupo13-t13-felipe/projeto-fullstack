@@ -11,10 +11,9 @@ import {
   SimpleGrid,
   Stack,
   Text,
-  Avatar,
+  Avatar, Image
 } from "@chakra-ui/react";
 import { GetServerSideProps, NextPage } from "next";
-import Image from "next/image";
 import { useRouter } from "next/router";
 import { IUser } from "@/types/user";
 import Modals from "@/components/modal";
@@ -35,40 +34,30 @@ const Dashboard: NextPage<Props> = ({ announcement, user }) => {
         direction={"column"}
         justifyContent={"space-between"}
         alignItems={["center", "center", "initial"]}
-        position={"relative"}
-        zIndex={"-10"}
-        bg={"grey.75"}
+        bgGradient={'linear(to-b, blue.400 0px 500px, grey.75 500px 100%)'}
       >
-        <Box
-          position={"absolute"}
-          w={"100%"}
-          h={"60vh"}
-          bg={"blue.400"}
-          zIndex={"-9"}
-        ></Box>
         <Stack
           direction={["column", "column", "row"]}
           mr={["15px", "15px", "50px"]}
         >
           <Stack
-            ml={["15px", "15px", "50px"]}
             mt={"20px"}
-            width={["100%", "100%", "60%"]}
+            width={["", "", "60%"]}
             mr={"15px"}
+            ml={['32px', '32px', '70px']}
             mb={"30px"}
           >
             <Box
               bg={"grey.0"}
               borderRadius={"base"}
-              height={"355px"}
+              p={['10px', '10px' ,'30px']}
               display={"flex"}
               justifyContent={"center"}
               flexDir={"column"}
             >
-              <Box m={"auto"}>
+              <Box m={"auto"} display={'flex'}>
                 <Image
                   src={announcement.cover_image}
-                  width={600}
                   alt={announcement.model}
                   height={250}
                 />
@@ -150,11 +139,12 @@ const Dashboard: NextPage<Props> = ({ announcement, user }) => {
               height={"355px"}
               display={"flex"}
               flexDir={"column"}
-              justifyContent={"center"}
+              justifyContent={"flex-start"}
               gap={"2em"}
               borderRadius={"base"}
             >
               <Text
+               mt={'20px'}
                 ml="44px"
                 color={"grey.400"}
                 fontSize={"xl"}
@@ -181,9 +171,10 @@ const Dashboard: NextPage<Props> = ({ announcement, user }) => {
                         ></Box>
                       }
                       backgroundColor={"transparent"}
-                      modalContent={item.url}
+                      modalContent={
+                        <Image src={item.url}/>
+                      }
                       key={index}
-                      // zIndex={"-11"}
                     />
                   );
                 })}
@@ -222,11 +213,11 @@ const Dashboard: NextPage<Props> = ({ announcement, user }) => {
         </Stack>
 
         <Stack
-          ml={["15px", "15px", "50px"]}
+          ml={["15px", "15px", "70px"]}
           mt={"20px"}
           mr={["15px", "15px", "50px"]}
           mb={"30px"}
-          width={["100%", "100%", "57%"]}
+          width={["100%", "100%", "51%", '54%', '57%']}
         >
           <Stack
             bg={"grey.0"}
@@ -368,7 +359,7 @@ const Dashboard: NextPage<Props> = ({ announcement, user }) => {
 };
 
 export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
-  api.defaults.headers.authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhYmlAbWFpbC5jb20iLCJzdWIiOiI2YmQ5NmQxYy04Y2JkLTQzNzAtYmZmMi0xYzBiZGI5YTMyZDYiLCJpYXQiOjE2ODE4MjM1MTMsImV4cCI6MTY4MTkwOTkxM30.Uyy3h9_WzrHe9nXEiKWOfVpidIpGIqN3Ow1mg5OG6GU `;
+  api.defaults.headers.authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhYmlAbWFpbC5jb20iLCJzdWIiOiI2YmQ5NmQxYy04Y2JkLTQzNzAtYmZmMi0xYzBiZGI5YTMyZDYiLCJpYXQiOjE2ODE5MDQyMTIsImV4cCI6MTY4MTk5MDYxMn0.HWU0YzsXNIAbK7igecNyGyd8MEEq3xNP155j6rQRpUQ `;
   const idUser = "6bd96d1c-8cbd-4370-bff2-1c0bdb9a32d6";
   const id = ctx.params!.id;
   const responseAn = await api.get(`/annoucements/${id}`);
