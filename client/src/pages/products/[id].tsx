@@ -17,6 +17,7 @@ import { GetServerSideProps, NextPage } from "next";
 import { useRouter } from "next/router";
 import { IUser } from "@/types/user";
 import Modals from "@/components/modal";
+import nookies from 'nookies'
 
 export interface Props {
   announcement: IAnnouncement;
@@ -154,7 +155,6 @@ const Dashboard: NextPage<Props> = ({ announcement, user }) => {
               </Text>
               <SimpleGrid columns={3} spacing={"14px"} pl={"44px"} pr={"44px"}>
                 {announcement.gallery_images.map((item, index) => {
-                  console.log('oi')
                   return (
 
                     <Modals
@@ -359,11 +359,13 @@ const Dashboard: NextPage<Props> = ({ announcement, user }) => {
 };
 
 export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
-  api.defaults.headers.authorization = `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImdhYmlAbWFpbC5jb20iLCJzdWIiOiI2YmQ5NmQxYy04Y2JkLTQzNzAtYmZmMi0xYzBiZGI5YTMyZDYiLCJpYXQiOjE2ODE5MDQyMTIsImV4cCI6MTY4MTk5MDYxMn0.HWU0YzsXNIAbK7igecNyGyd8MEEq3xNP155j6rQRpUQ `;
-  const idUser = "6bd96d1c-8cbd-4370-bff2-1c0bdb9a32d6";
+  const cookies = nookies.get(ctx)
+  api.defaults.headers.authorization = `Bearer ${cookies['karsToken']} `;
+  const myUser = JSON.parse(cookies["karsUser"])
+  const userId = myUser.id 
   const id = ctx.params!.id;
   const responseAn = await api.get(`/annoucements/${id}`);
-  const responseUser = await api.get(`/users/${idUser}`);
+  const responseUser = await api.get(`/users/${userId}`);
   const announcement: IAnnouncement = responseAn.data;
   const user: IUser = responseUser.data;
 
