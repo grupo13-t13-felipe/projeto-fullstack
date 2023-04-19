@@ -5,13 +5,16 @@ import '@fontsource/lexend'
 import "@/styles/menuList.css"
 import { AnnouncementProvider } from '@/contexts/announcements.context'
 import "@/styles/formStyle.css"
+import { UserContextProvider } from '@/contexts/users.context'
 
 export default function App({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider theme={customTheme}>
-      <AnnouncementProvider>
-        <Component {...pageProps} />
-      </AnnouncementProvider>
+      <UserContextProvider>
+        <AnnouncementProvider>
+          <Component {...pageProps} />
+        </AnnouncementProvider>
+      </UserContextProvider>
     </ChakraProvider>
   )
 }

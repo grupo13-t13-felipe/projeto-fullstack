@@ -8,6 +8,7 @@ import HomeFilter from '@/components/homeFilter';
 import ProductCard from '@/components/productCard';
 import NextLink from "next/link";
 import { annoucementCtx } from '@/contexts/announcements.context';
+import AnnouncementModal from '@/components/announcmentModal';
 
 const Home = () => {
 
@@ -24,9 +25,7 @@ const Home = () => {
         <link rel="icon" href="/titleIcon" />
       </Head>
       { loading? 
-      <Flex height={'100vh'} justifyContent={'center'} alignItems={'center'}>
-        <Text color={'blue.400'} fontSize={'6xl'}>Loading....</Text> 
-      </Flex>
+      <AnnouncementModal/>
         
         : 
 
@@ -46,7 +45,7 @@ const Home = () => {
           <Box mx={'30px'} display={['none', 'none', 'block']}>
             <HomeFilter/>
           </Box>
-          <List border={"none"} width={["100%", "100%", "95%"]} maxW={["none", "none", "984px"]} overflowX={"auto"} display={"flex"} flexWrap={["nowrap", "nowrap", "wrap"]} alignItems={"center"} gap={["16px", "24px"]} ml={"0"} pb={"8px"}>
+          <List border={"none"} width={["100%", "100%", "95%"]} maxW={["none", "none", "984px"]} overflowX={"auto"} display={"flex"} flexWrap={["nowrap", "nowrap", "wrap"]} alignItems={"flex-start"} gap={["16px", "24px"]} ml={"0"} pb={"8px"}>
             {allAnnouncements.map((item: any, index: any) => {
               return (
                 <ListItem w={"312px"} display={"inline-block"} key={index}>

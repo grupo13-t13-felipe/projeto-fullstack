@@ -1,9 +1,12 @@
-import { FormControl, FormControlProps, FormLabel, Input } from '@chakra-ui/react'
+import { FormControl, FormControlProps, FormErrorMessage, FormLabel, Input } from '@chakra-ui/react'
 
 interface InputFormProps extends FormControlProps {
     labeltext: string;
     inputtype: string;
     inputplaceholder: string;
+    inputregister: any;
+    errors: string | undefined;
+    isRequired?: boolean;
 }
 
 const InputArea = ({ nameInput, placeHolder, fontSize, width, heigth, focusBorderColor, margin }: any) => {
@@ -29,7 +32,11 @@ const InputForm = (props: InputFormProps) => {
             <FormLabel>
                 {props.labeltext}
             </FormLabel>
-            <Input h={"48px"} _focusVisible={{boxShadow: "0 0 0 1px var(--chakra-colors-blue-400)"}} _focus={{borderColor: "blue.400"}} type={props.inputtype} placeholder={props.inputplaceholder} />
+            <Input {...props.inputregister} h={"48px"} _focusVisible={{boxShadow: "0 0 0 1px var(--chakra-colors-blue-400)"}} _focus={{borderColor: "blue.400"}} type={props.inputtype} placeholder={props.inputplaceholder} />
+            <FormErrorMessage mt={"4px"} position={"absolute"}>
+                {props.errors}
+            </FormErrorMessage>
+
         </FormControl>
     )
 }
