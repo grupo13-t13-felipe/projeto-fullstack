@@ -18,6 +18,7 @@ import { useRouter } from "next/router";
 import { IUser } from "@/types/user";
 import Modals from "@/components/modal";
 import nookies from 'nookies'
+import { annoucementCtx } from "@/contexts/announcements.context";
 
 export interface Props {
   announcement: IAnnouncement;
@@ -27,6 +28,7 @@ export interface Props {
 const Dashboard: NextPage<Props> = ({ announcement, user }) => {
   const router = useRouter();
   const { id } = router.query;
+  const { getOwnerById, ownerId } = annoucementCtx()
 
   return (
     <>
@@ -51,7 +53,7 @@ const Dashboard: NextPage<Props> = ({ announcement, user }) => {
             <Box
               bg={"grey.0"}
               borderRadius={"base"}
-              p={['10px', '10px' ,'30px']}
+              p={['10px', '10px', '30px']}
               display={"flex"}
               justifyContent={"center"}
               flexDir={"column"}
@@ -145,7 +147,7 @@ const Dashboard: NextPage<Props> = ({ announcement, user }) => {
               borderRadius={"base"}
             >
               <Text
-               mt={'20px'}
+                mt={'20px'}
                 ml="44px"
                 color={"grey.400"}
                 fontSize={"xl"}
@@ -160,19 +162,19 @@ const Dashboard: NextPage<Props> = ({ announcement, user }) => {
                     <Modals
                       nameButton={
                         <Box
-                        key={index}
-                        bgImage={item.url}
-                        bgSize={"contain"}
-                        bgPos={"center"}
-                        bgRepeat={"no-repeat"}
-                        w={"100%"}
-                        minH={"90px"}
-                        h={"108px"}
+                          key={index}
+                          bgImage={item.url}
+                          bgSize={"contain"}
+                          bgPos={"center"}
+                          bgRepeat={"no-repeat"}
+                          w={"100%"}
+                          minH={"90px"}
+                          h={"108px"}
                         ></Box>
                       }
                       backgroundColor={"transparent"}
                       modalContent={
-                        <Image src={item.url}/>
+                        <Image src={item.url} />
                       }
                       key={index}
                     />
@@ -207,6 +209,7 @@ const Dashboard: NextPage<Props> = ({ announcement, user }) => {
                 color={"grey.0"}
                 fontSize={"md"}
                 valueButton={"Ver todos os anuncios"}
+                onClick={() => getOwnerById(ownerId)}
               />
             </Stack>
           </Stack>
@@ -353,6 +356,7 @@ const Dashboard: NextPage<Props> = ({ announcement, user }) => {
           </Stack>
         </Stack>
       </Flex>
+      <Text>{ }</Text>
       <DefaultFooter />
     </>
   );
@@ -362,7 +366,8 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
   const cookies = nookies.get(ctx)
   api.defaults.headers.authorization = `Bearer ${cookies['karsToken']} `;
   const myUser = JSON.parse(cookies["karsUser"])
-  const userId = myUser.id 
+  const userId = myUser.id
+  console.log(myUser)
   const id = ctx.params!.id;
   const responseAn = await api.get(`/annoucements/${id}`);
   const responseUser = await api.get(`/users/${userId}`);

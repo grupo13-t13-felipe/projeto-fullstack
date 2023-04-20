@@ -1,20 +1,21 @@
 export interface IUser {
-    id: string,
-    name: string,
-    email: string, 
-    cpf: string,
+	id: string,
+	name: string,
+	email: string,
+	cpf: string,
 	phone: string,
 	description: string,
-    birth_date: string,
+	birth_date: string,
+	is_seller?: boolean
 }
 
 export interface Props {
-    user: IUser
+	user: IUser
 }
 
 export interface IUserLogin {
-    email: string;
-    password: string;
+	email: string;
+	password: string;
 }
 
 export interface IUserCreate {
