@@ -1,9 +1,17 @@
 import { Box, Flex, Text, HStack, MenuButton, Menu, MenuList, MenuItem, IconButton, Link, Avatar } from "@chakra-ui/react";
 import { HamburgerIcon} from '@chakra-ui/icons'
 import { IUser } from "@/types/user";
+import { useContext } from "react";
+import { UserContext } from "@/contexts/users.context";
+
+interface IHeaderProfile {
+  userLog: string
+}
 
 
 const ProfileMenuList = () => {
+  const {user} = useContext(UserContext)
+  
   return (
     <MenuList>
       <MenuItem>
@@ -12,9 +20,8 @@ const ProfileMenuList = () => {
       <MenuItem>
         <Link href="">{""}Editar endereço</Link>
       </MenuItem>
-      <MenuItem>
-        <Link href="">{""}Meus anúncios</Link>
-      </MenuItem>
+      {user?.is_seller? <MenuItem><Link href="">{""}Meus anúncios</Link> </MenuItem> : <></> }
+     
       <MenuItem>
         <Link href="/login">{""}Sair</Link>
       </MenuItem>
@@ -22,7 +29,8 @@ const ProfileMenuList = () => {
   );
 }
 
-const HeaderProfile = ({user}: IUser | any) => {
+const HeaderProfile = ({userLog}: IHeaderProfile) => {
+  
   return (
     <Flex justifyContent={'space-between'} mx={['20px', '20px', '26px', '30px', 'auto']} h={'80px'} maxW={'1200px'}>
       <HStack>
@@ -32,7 +40,7 @@ const HeaderProfile = ({user}: IUser | any) => {
         bgClip='text'>Shop</Text>
       </HStack>
       <HStack borderLeft={'1px'} borderColor={'grey.200'}>
-        <Avatar name={user.name} size={'md'} ml={'10px'}/>{' '}
+        <Avatar name={userLog} size={'md'} ml={'10px'}/>{' '}
         
         <Box display={['none', 'none', 'block']}>
           <Menu >
@@ -40,7 +48,7 @@ const HeaderProfile = ({user}: IUser | any) => {
             as={Link}
             aria-label='Options'
             variant='outline'
-          >{user.name}</MenuButton>
+          >{userLog}</MenuButton>
           {ProfileMenuList()}
         </Menu>
         </Box>
@@ -52,7 +60,7 @@ const HeaderProfile = ({user}: IUser | any) => {
             aria-label='Options'
             icon={<HamburgerIcon />}
             variant='outline'
-          >{user.name}</MenuButton>
+          >{userLog}</MenuButton>
           {ProfileMenuList()}
         </Menu>
         </Box>
