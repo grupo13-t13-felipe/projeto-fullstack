@@ -18,7 +18,7 @@ interface IUserContext {
 
 export const UserContext = createContext({} as IUserContext)
 
-export const UserContextProvider = ({children}: IUserContextProvider) => {
+export const UserContextProvider = ({ children }: IUserContextProvider) => {
     const router = useRouter()
     const [user, setUser] = useState<IUser | null>(null)
     const toast = useToast()
@@ -26,12 +26,12 @@ export const UserContextProvider = ({children}: IUserContextProvider) => {
     useEffect(() => {
         const loadUser = async () => {
             const cookie = parseCookies()
-            
-            if(cookie.karsToken) {
+
+            if (cookie.karsToken) {
                 api.defaults.headers.authorization = `Bearer ${cookie.karsToken}`
 
                 try {
-                    const {data} = await api.get("/profile")
+                    const { data } = await api.get("/profile")
                     console.log("Usuario com token valido")
                     setUser(data)
                     router.push("/")
@@ -43,18 +43,18 @@ export const UserContextProvider = ({children}: IUserContextProvider) => {
 
         loadUser()
     }, [])
-    
+
     const loginUser = async (dataForm: IUserLogin) => {
         try {
-            const {data} = await api.post("/login", dataForm)
-            const {token, user} = data
-            
+            const { data } = await api.post("/login", dataForm)
+            const { token, user } = data
+
             api.defaults.headers.authorization = `Bearer ${token}`
-            
+
             setCookie(null, "karsToken", token, { maxAge: 3600 * 24, path: "/" })
             setCookie(null, "karsUser", JSON.stringify(user), { maxAge: 3600 * 24, path: "/" })
             setUser(user)
-            
+
             router.push("/")
         } catch (err) {
             toast({
@@ -64,9 +64,9 @@ export const UserContextProvider = ({children}: IUserContextProvider) => {
                 isClosable: true,
                 render: () => {
                     return (
-                    <Box borderRadius={"4px"} color={"grey.50"} p={3} bg={"red.700"} fontWeight={"500"}>
-                        Ops!! Verifique seus dados e tente novamente!
-                    </Box>
+                        <Box borderRadius={"4px"} color={"grey.50"} p={3} bg={"red.700"} fontWeight={"500"}>
+                            Ops!! Verifique seus dados e tente novamente!
+                        </Box>
                     )
                 }
             })
@@ -91,7 +91,7 @@ export const UserContextProvider = ({children}: IUserContextProvider) => {
     }
 
     return (
-        <UserContext.Provider value={{loginUser, createUser, logoutUser, user}}>
+        <UserContext.Provider value={{ loginUser, createUser, logoutUser, user }}>
             {children}
         </UserContext.Provider>
     )
