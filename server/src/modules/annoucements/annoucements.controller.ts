@@ -55,7 +55,7 @@ export class AnnoucementsController {
   }
 
   @Get(':annoucement_id')
-  @UseGuards(JwtAuthGuard, AnnoucementExistsGuard, IsAnnoucementOwnerGuard)
+  @UseGuards(JwtAuthGuard, AnnoucementExistsGuard)
   findOne(@Param('annoucement_id') annoucement_id: string) {
     return this.annoucementsService.findOne(annoucement_id);
   }
