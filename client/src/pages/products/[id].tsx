@@ -32,7 +32,7 @@ const Dashboard: NextPage<Props> = ({ announcement, user }) => {
 
   return (
     <>
-      <HeaderProfile user={user} />
+      <HeaderProfile userLog={user.name} />
       <Flex
         direction={"column"}
         justifyContent={"space-between"}
@@ -365,12 +365,10 @@ const Dashboard: NextPage<Props> = ({ announcement, user }) => {
 export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
   const cookies = nookies.get(ctx)
   api.defaults.headers.authorization = `Bearer ${cookies['karsToken']} `;
-  const myUser = JSON.parse(cookies["karsUser"])
-  const userId = myUser.id
-  console.log(myUser)
+  const idUser = JSON.parse(cookies["karsUserId"])
   const id = ctx.params!.id;
   const responseAn = await api.get(`/annoucements/${id}`);
-  const responseUser = await api.get(`/users/${userId}`);
+  const responseUser = await api.get(`/users/${idUser}`);
   const announcement: IAnnouncement = responseAn.data;
   const user: IUser = responseUser.data;
 

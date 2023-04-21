@@ -8,13 +8,18 @@ import HomeFilter from '@/components/homeFilter';
 import ProductCard from '@/components/productCard';
 import NextLink from "next/link";
 import { annoucementCtx } from '@/contexts/announcements.context';
-import AnnouncementModal from '@/components/announcmentModal';
+import nookies, { parseCookies } from 'nookies'
+import HeaderProfile from '@/components/headers/headerProfile';
+import { useContext } from 'react';
+import { UserContext } from '@/contexts/users.context';
 
 const Home = () => {
 
   const { allAnnouncements, setAnnouncement, loading, setLoading, setOwnerId } = annoucementCtx()
+  const {user} = useContext(UserContext)
 
-
+   
+  
   return (
 
     <>
@@ -31,10 +36,8 @@ const Home = () => {
         </Flex>
 
         :
-
         <>
-
-          <DefaultHeader />
+        {user? <HeaderProfile userLog={user.name}/> : <DefaultHeader /> }
           <Flex direction={'column'} height={'100%'}>
             <Stack bgGradient='linear(to-b, grey.150, grey.400)' alignItems={'center'} justifyContent={'center'}>
               <Box backgroundImage={'/Photo.svg'} display={'flex'} filter='grayscale(80%)' backgroundPosition={'center'} width={'100%'} maxW={'1174px'} backgroundRepeat={'no-repeat'} height={['50vh', '50vh', '50vh']} justifyContent={'center'} >
