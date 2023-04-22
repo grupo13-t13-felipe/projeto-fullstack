@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from "@hookform/resolvers/yup";
 import DefaultFooter from '@/components/footer'
 import DefaultForm from '@/components/form'
@@ -16,7 +16,7 @@ const Register = () => {
 
     const {createUser} = useContext(UserContext)
 
-    const {register, handleSubmit, formState: {errors}} = useForm<IUserCreate>({
+    const {register, handleSubmit, formState: {errors}, control} = useForm<IUserCreate>({
         resolver: yupResolver(createUserSchema)
     })
 
@@ -59,13 +59,13 @@ const Register = () => {
                         <FormLabel>
                             Tipo de conta
                         </FormLabel>
-                        <RadioButton  />
+                        <RadioButton control={control} />
                     </FormControl>
 
                     <InputForm errors={errors.password?.message} isInvalid={!!errors.password?.message} inputregister={{...register("password")}} isRequired labeltext={"Senha"} inputplaceholder={"Digitar senha"} inputtype={"password"} />
                     <InputForm errors={errors.confirm_password?.message} isInvalid={!!errors.confirm_password?.message} inputregister={{...register("confirm_password")}} isRequired labeltext={"Confirmar senha"} inputplaceholder={"Digitar senha"} inputtype={"password"} />
 
-                    <Button type={"submit"} mb={"12px"} w={"100%"} h={"48px"} color={"white"} fontWeight={"500"} bgColor={"blue.300"} border={"1px solid blue.300"} _hover={{borderColor: "blue.400", bgColor: "blue.400"}}>Finalizar Cadastro</Button>
+                    <Button mb={"12px"} w={"100%"} h={"48px"} color={"white"} fontWeight={"500"} bgColor={"blue.300"} border={"1px solid blue.300"} _hover={{borderColor: "blue.400", bgColor: "blue.400"}} type={"submit"}>Finalizar Cadastro</Button>
                 </DefaultForm>
             </Flex>
             <DefaultFooter />

@@ -71,7 +71,7 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 
     useEffect(() => {
         getAllAnnouncements()
-    }, [allAnnouncements, loading])
+    }, [])
 
 
     return (

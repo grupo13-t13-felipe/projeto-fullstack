@@ -77,11 +77,26 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
     }
 
     const createUser = async (dataForm: IUserCreate) => {
+        console.log(dataForm)
+
         try {
-            console.log(dataForm)
-            // await api.post("/users", dataForm)
-            // router.push("/login")
+            await api.post("/users", dataForm)
+
+            router.push("/login")
         } catch (err) {
+            toast({
+                title: "error",
+                variant: "solid",
+                position: "top-right",
+                isClosable: true,
+                render: () => {
+                    return (
+                        <Box borderRadius={"4px"} color={"grey.50"} p={3} bg={"red.700"} fontWeight={"500"}>
+                            Ops!! Verifique seus dados e tente novamente!
+                        </Box>
+                    )
+                }
+            })
             console.log(err)
         }
     }

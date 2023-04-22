@@ -8,7 +8,6 @@ import HomeFilter from '@/components/homeFilter';
 import ProductCard from '@/components/productCard';
 import NextLink from "next/link";
 import { annoucementCtx } from '@/contexts/announcements.context';
-import nookies, { parseCookies } from 'nookies'
 import HeaderProfile from '@/components/headers/headerProfile';
 import { useContext } from 'react';
 import { UserContext } from '@/contexts/users.context';
