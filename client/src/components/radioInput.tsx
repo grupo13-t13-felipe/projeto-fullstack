@@ -1,61 +1,58 @@
-import { Box, HStack, RadioProps, useRadio, useRadioGroup } from '@chakra-ui/react'
+import { Box, HStack } from '@chakra-ui/react';
+import { Controller } from 'react-hook-form';
 
-const RadioCard = (props: RadioProps) => {
-    const { getInputProps, getRadioProps } = useRadio(props)
-
-    const input = getInputProps()
-    const checkbox = getRadioProps()
-
-    return (
-        <Box as='label' w={"100%"}>
-        <input {...input} />
-        <Box
-            {...checkbox}
-            cursor="pointer"
-            borderWidth="2px"
-            borderRadius="4px"
-            boxShadow="md"
+const RadioCard = ({ label, value, control, name }: any) => {
+  return (
+    <Controller
+      name={name}
+      control={control}
+      render={({ field: { onChange, value: fieldValue } }) => (
+        <Box as='label'>
+          <input
+            type='radio'
+            value={value}
+            onChange={(e) => onChange(e.target.value)}
+            checked={fieldValue === value}
+          />
+          <Box
+            cursor='pointer'
+            borderWidth='2px'
+            borderRadius='4px'
+            boxShadow='md'
             _checked={{
-            bg: "blue.300",
-            color: "white",
-            borderColor: "blue.300",
-            }}
-            _focus={{
-            boxShadow: "0 0 0 1px var(--chakra-colors-blue-300)",
+                bg: "blue.300",
+                color: "white",
+                borderColor: "blue.300"
             }}
             px={5}
+            w={"100%"}
             h={"48px"}
             display={"flex"}
             justifyContent={"center"}
             alignItems={"center"}
-        >
-            {props.children}
+            bg={fieldValue === value ? 'blue.300' : 'white'}
+            color={fieldValue === value ? 'white' : 'black'}
+            _hover={{
+              bg: 'blue.400',
+              color: 'white',
+            }}
+          >
+            {label}
+          </Box>
         </Box>
-        </Box>
-    )
-}
+      )}
+    />
+  );
+};
 
-
-const RadioButton = () => {
-    const options = ["Comprador", "Anunciante"]
-
-    const { getRootProps, getRadioProps } = useRadioGroup({
-        name: "is_seller",
-        defaultValue: "Comprador",
-        onChange: console.log,
-    })
-
-    const group = getRootProps()
-
+const RadioButton = ({control}: any) => {
+    const options = [{label: "Vendedor", value: "true"}, {label: "Comprador", value: "false"}]
 
     return (
-        <HStack {...group}>
-        {options.map((value) => {
-            const radio = getRadioProps({ value })
+        <HStack>
+        {options.map(({label, value}) => {
             return (
-            <RadioCard key={value} {...radio}>
-                {value}
-            </RadioCard>
+            <RadioCard key={label} label={label} value={value} control={control} name="is_seller" />
             )
         })}
         </HStack>

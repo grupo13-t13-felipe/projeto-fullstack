@@ -7,7 +7,6 @@ import {
   IsNotEmpty,
   MinLength,
   MaxLength,
-  Length,
 } from 'class-validator';
 
 export class CreateUserDto {
@@ -22,8 +21,8 @@ export class CreateUserDto {
 
   @IsString()
   @IsNotEmpty()
-  @MinLength(8)
-  @MaxLength(8)
+  @MinLength(11)
+  @MaxLength(11)
   cpf: string;
 
   @IsString()
