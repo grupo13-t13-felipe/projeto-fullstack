@@ -7,8 +7,9 @@ const RadioCard = ({ label, value, control, name }: any) => {
       name={name}
       control={control}
       render={({ field: { onChange, value: fieldValue } }) => (
-        <Box as='label'>
+        <Box w={"100%"} as='label'>
           <input
+            hidden
             type='radio'
             value={value}
             onChange={(e) => onChange(e.target.value)}
@@ -19,11 +20,6 @@ const RadioCard = ({ label, value, control, name }: any) => {
             borderWidth='2px'
             borderRadius='4px'
             boxShadow='md'
-            _checked={{
-                bg: "blue.300",
-                color: "white",
-                borderColor: "blue.300"
-            }}
             px={5}
             w={"100%"}
             h={"48px"}
@@ -32,9 +28,11 @@ const RadioCard = ({ label, value, control, name }: any) => {
             alignItems={"center"}
             bg={fieldValue === value ? 'blue.300' : 'white'}
             color={fieldValue === value ? 'white' : 'black'}
+            borderColor={fieldValue === value ? "blue.300" : "inherit"}
             _hover={{
               bg: 'blue.400',
               color: 'white',
+              borderColor: "blue.400"
             }}
           >
             {label}
