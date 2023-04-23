@@ -77,8 +77,6 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
     }
 
     const createUser = async (dataForm: IUserCreate) => {
-        console.log(dataForm)
-
         try {
             await api.post("/users", dataForm)
 
