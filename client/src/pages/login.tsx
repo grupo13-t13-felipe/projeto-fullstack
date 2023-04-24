@@ -21,7 +21,7 @@ const Login = () => {
     return (
         <>
             <DefaultHeader />
-            <Flex h={["calc(100vh - 60px - 149px)", "calc(100vh - 60px - 149px)", "calc(100vh - 60px - 120px)"]} justifyContent={"center"} alignItems={"center"} bgColor={"grey.50"} p={"16px"}>
+            <Flex minH={"600px"} h={["calc(100vh - 60px - 149px)", "calc(100vh - 60px - 149px)", "calc(100vh - 60px - 120px)"]} justifyContent={"center"} alignItems={"center"} bgColor={"grey.50"} p={"16px"}>
                 <DefaultForm submithandler={handleSubmit(loginUser)} formtitle="Login">
                     <InputForm errors={errors.email?.message} isInvalid={!!errors.email?.message} inputregister={{...register("email")}} isRequired mb={"12px"} labeltext={"Email"} inputplaceholder={"Digitar email"} inputtype={"text"} />
                     <InputForm errors={errors.password?.message} isInvalid={!!errors.password?.message} inputregister={{...register("password")}} isRequired labeltext={"Senha"} inputplaceholder={"Digitar senha"} inputtype={"password"} />
