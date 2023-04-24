@@ -21,7 +21,7 @@ const DefaultFooter = () => {
         <Text color={"grey.0"} fontSize={"xs"} w={["initial", "inital", "217px"]}>
           &copy; 2023 - Todos os direitos reservados
         </Text>
-        <LinkBox w={["0px", "0px", "217px"]} display={"flex"} justifyContent={"flex-end"}>
+        <LinkBox w={["unset", "unset", "217px"]} display={"flex"} justifyContent={"flex-end"}>
           <Link href={"#top"}>
             <ChevronUpIcon color={"grey.0"} backgroundColor={"grey.400"} w={"40px"} height={"40px"} borderRadius={"4px"} />
           </Link>
