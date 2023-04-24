@@ -16,7 +16,6 @@ const Home = () => {
 
   const { allAnnouncements, setAnnouncement, loading, setLoading, setOwnerId } = annoucementCtx()
   const {user} = useContext(UserContext)
-
    
   
   return (
@@ -36,7 +35,7 @@ const Home = () => {
 
         :
         <>
-        {user? <HeaderProfile userLog={user.name}/> : <DefaultHeader /> }
+        {user? <HeaderProfile/> : <DefaultHeader /> }
           <Flex direction={'column'} height={'100%'}>
             <Stack bgGradient='linear(to-b, grey.150, grey.400)' alignItems={'center'} justifyContent={'center'}>
               <Box backgroundImage={'/Photo.svg'} display={'flex'} filter='grayscale(80%)' backgroundPosition={'center'} width={'100%'} maxW={'1174px'} backgroundRepeat={'no-repeat'} height={['50vh', '50vh', '50vh']} justifyContent={'center'} >
