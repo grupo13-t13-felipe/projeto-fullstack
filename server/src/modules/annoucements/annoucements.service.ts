@@ -85,6 +85,34 @@ export class AnnoucementsService {
     return filters;
   }
 
+  async getAllAnnoucementFilterTypes() {
+    const allAnnoucements = await this.prisma.annoucement.findMany();
+
+    const brand = allAnnoucements
+      .map((annoucement) => annoucement.brand)
+      .filter((value, index, self) => self.indexOf(value) === index);
+    const model = allAnnoucements
+      .map((annoucement) => annoucement.model)
+      .filter((value, index, self) => self.indexOf(value) === index);
+    const color = allAnnoucements
+      .map((annoucement) => annoucement.color)
+      .filter((value, index, self) => self.indexOf(value) === index);
+    const year = allAnnoucements
+      .map((annoucement) => annoucement.year)
+      .filter((value, index, self) => self.indexOf(value) === index);
+    const fuel = allAnnoucements
+      .map((annoucement) => annoucement.fuel)
+      .filter((value, index, self) => self.indexOf(value) === index);
+
+    return {
+      brand,
+      model,
+      color,
+      year,
+      fuel,
+    };
+  }
+
   async findAll(
     filterQueries: AnnoucementFiltersDto,
     limit: number,
