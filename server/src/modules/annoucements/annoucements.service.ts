@@ -104,6 +104,7 @@ export class AnnoucementsService {
             gallery_images: true,
             owner: { select: { id: true, name: true } },
           },
+          orderBy: { created_at: "desc" },
 
           ...filters,
           take,

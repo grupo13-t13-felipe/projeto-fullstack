@@ -15,6 +15,8 @@ interface AnnouncementProviderData {
     ownerId: string | undefined
     setOwnerId: React.Dispatch<React.SetStateAction<string | undefined>>
     owner: IAnnouncementOwner | undefined
+    paginationPage: number
+    setPaginationPage: React.Dispatch<React.SetStateAction<number>>
 }
 
 export interface IProviderProps {
@@ -26,6 +28,7 @@ const AnnouncementContext = createContext<AnnouncementProviderData>({} as Announ
 export const AnnouncementProvider = ({ children }: IProviderProps) => {
     const router = useRouter()
     const [allAnnouncements, setAnnouncement] = useState()
+    const [paginationPage, setPaginationPage] = useState(1)
     const [loading, setLoading] = useState(true)
     const [announcementsByOwner, setAnnouncementsByOwner] = useState<IAnnouncement[] | undefined>()
     const [ownerId, setOwnerId] = useState<string>()
@@ -35,8 +38,8 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
     async function getAllAnnouncements() {
 
         try {
-            const { data } = await api.get("/annoucements")
-            setAnnouncement(data.data)
+            const { data } = await api.get(`/annoucements?limit=12&page=${paginationPage}`)
+            setAnnouncement(data)
             setLoading(false)
         }
         catch (error) {
@@ -71,11 +74,11 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 
     useEffect(() => {
         getAllAnnouncements()
-    }, [])
+    }, [paginationPage])
 
 
     return (
-        <AnnouncementContext.Provider value={{ allAnnouncements, setAnnouncement, loading, setLoading, announcementsByOwner, getOwnerById, ownerId, setOwnerId, owner }}>
+        <AnnouncementContext.Provider value={{ allAnnouncements, setAnnouncement, loading, setLoading, announcementsByOwner, getOwnerById, ownerId, setOwnerId, owner, paginationPage, setPaginationPage }}>
             {children}
         </AnnouncementContext.Provider>
     )
