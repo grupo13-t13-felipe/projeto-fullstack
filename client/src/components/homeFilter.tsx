@@ -1,63 +1,36 @@
 import { Button, Flex, List, ListItem, Text } from "@chakra-ui/react";
 import { InputFilter } from "./input";
 import { annoucementCtx } from "@/contexts/announcements.context";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const HomeFilter = () => {
-	const { allFilterAnnouncements, setAllFilterAnnouncements } =
+	const { getAllAnnoucementFilterTypes, filterData, setFilterData } =
 		annoucementCtx();
-	const arrayFuel: Array<[]> = [];
-	allFilterAnnouncements.map((item: any) => {
-		arrayFuel.push(item.fuel);
-	});
-	const newArrayFuel = arrayFuel.filter(
-		(el, i) => arrayFuel.indexOf(el) === i
-	);
 
-	const arrayBrand: Array<[]> = [];
-	allFilterAnnouncements.map((item: any) => {
-		arrayBrand.push(item.brand);
-	});
-	const newArrayBrand = arrayBrand.filter(
-		(el, i) => arrayBrand.indexOf(el) === i
-	);
+	const [brand, setBrand] = useState<string[]>([]);
+	const [model, setModel] = useState<string[]>([]);
+	const [color, setColor] = useState<string[]>([]);
+	const [year, setYear] = useState<string[]>([]);
+	const [fuel, setFuel] = useState<string[]>([]);
 
-	const arrayModel: Array<[]> = [];
-	allFilterAnnouncements.map((item: any) => {
-		arrayModel.push(item.model);
-	});
-	const newArrayModel = arrayModel.filter(
-		(el, i) => arrayModel.indexOf(el) === i
-	);
-
-	const arrayColor: Array<[]> = [];
-	allFilterAnnouncements.map((item: any) => {
-		arrayColor.push(item.color);
-	});
-	const newArrayColor = arrayColor.filter(
-		(el, i) => arrayColor.indexOf(el) === i
-	);
-
-	const arrayYear: Array<[]> = [];
-	allFilterAnnouncements.map((item: any) => {
-		arrayYear.push(item.year);
-	});
-	const newArrayYear = arrayYear.filter(
-		(el, i) => arrayYear.indexOf(el) === i
-	);
-
-	const [getBrand, setGetBrand] = useState();
-	const [getModel, setGetModel] = useState();
-	const [getColor, setGetColor] = useState();
-	const [getYear, setGetYear] = useState();
-	const [getFuel, setGetFuel] = useState();
+	useEffect(() => {
+		load();
+		async function load() {
+			const data = await getAllAnnoucementFilterTypes();
+			setBrand(data.brand);
+			setModel(data.model);
+			setColor(data.color);
+			setYear(data.year);
+			setFuel(data.fuel);
+		}
+	}, []);
 
 	const objectFilter = {
-		brand: getBrand,
-		model: getModel,
-		color: getColor,
-		year: getYear,
-		fuel: getFuel,
+		brand: brand,
+		model: model,
+		color: color,
+		year: year,
+		fuel: fuel,
 	};
 
 	const sumFilter = () => {};
@@ -75,10 +48,10 @@ const HomeFilter = () => {
 					mt={"10px"}>
 					Marca
 				</Text>
-				{newArrayBrand.map((item: any, index: any) => {
+				{brand.map((item: any, index: any) => {
 					return (
 						<ListItem
-							onClick={() => setGetBrand(item)}
+							onClick={() => setBrand(item)}
 							color={"grey.250"}
 							fontSize={["md", "lg", "lg", "xl"]}
 							fontWeight={"normal"}>
@@ -95,10 +68,10 @@ const HomeFilter = () => {
 					mt={"10px"}>
 					Modelo
 				</Text>
-				{newArrayModel.map((item: any, index: any) => {
+				{model.map((item: any, index: any) => {
 					return (
 						<ListItem
-							onClick={() => setGetModel(item)}
+							onClick={() => setModel(item)}
 							color={"grey.250"}
 							fontSize={["md", "lg", "lg", "xl"]}
 							fontWeight={"normal"}>
@@ -115,10 +88,10 @@ const HomeFilter = () => {
 					mt={"10px"}>
 					Cor
 				</Text>
-				{newArrayColor.map((item: any, index: any) => {
+				{color.map((item: any, index: any) => {
 					return (
 						<ListItem
-							onClick={() => setGetColor(item)}
+							onClick={() => setColor(item)}
 							color={"grey.250"}
 							fontSize={["md", "lg", "lg", "xl"]}
 							fontWeight={"normal"}>
@@ -135,10 +108,10 @@ const HomeFilter = () => {
 					mt={"10px"}>
 					Ano
 				</Text>
-				{newArrayYear.map((item: any, index: any) => {
+				{year.map((item: any, index: any) => {
 					return (
 						<ListItem
-							onClick={() => setGetYear(item)}
+							onClick={() => setYear(item)}
 							color={"grey.250"}
 							fontSize={["md", "lg", "lg", "xl"]}
 							fontWeight={"normal"}>
@@ -155,10 +128,10 @@ const HomeFilter = () => {
 					mt={"10px"}>
 					Combustível
 				</Text>
-				{newArrayFuel.map((item: any, index: any) => {
+				{fuel.map((item: any, index: any) => {
 					return (
 						<ListItem
-							onClick={() => setGetFuel(item)}
+							onClick={() => setFuel(item)}
 							color={"grey.250"}
 							fontSize={["md", "lg", "lg", "xl"]}
 							fontWeight={"normal"}>

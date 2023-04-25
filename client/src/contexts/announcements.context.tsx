@@ -15,8 +15,8 @@ interface AnnouncementProviderData {
 	setAllAnnouncements: React.Dispatch<
 		React.SetStateAction<IAnnouncement[] | any>
 	>;
-	allFilterAnnouncements: IAnnouncement[];
-	setAllFilterAnnouncements: React.Dispatch<
+	allFilteredAnnouncements: IAnnouncement[];
+	setAllFilteredAnnouncements: React.Dispatch<
 		React.SetStateAction<IAnnouncement[] | any>
 	>;
 	loading: boolean;
@@ -26,6 +26,17 @@ interface AnnouncementProviderData {
 	ownerId: string | undefined;
 	setOwnerId: React.Dispatch<React.SetStateAction<string | undefined>>;
 	owner: IAnnouncementOwner | undefined;
+	getAllAnnoucementFilterTypes: () => Promise<IFilters>;
+	filterData: IFilters | undefined;
+	setFilterData: React.Dispatch<React.SetStateAction<IFilters | undefined>>;
+}
+
+interface IFilters {
+	brand: string[];
+	model: string[];
+	color: string[];
+	year: string[];
+	fuel: string[];
 }
 
 export interface IProviderProps {
@@ -39,7 +50,10 @@ const AnnouncementContext = createContext<AnnouncementProviderData>(
 export const AnnouncementProvider = ({ children }: IProviderProps) => {
 	const router = useRouter();
 	const [allAnnouncements, setAllAnnouncements] = useState();
-	const [allFilterAnnouncements, setAllFilterAnnouncements] = useState([]);
+	const [allFilteredAnnouncements, setAllFilteredAnnouncements] = useState(
+		[]
+	);
+	const [filterData, setFilterData] = useState<IFilters | undefined>();
 	const [loading, setLoading] = useState(true);
 	const [announcementsByOwner, setAnnouncementsByOwner] = useState<
 		IAnnouncement[] | undefined
@@ -56,6 +70,12 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 		} catch (error) {
 			console.log(error);
 		}
+	}
+
+	async function getAllAnnoucementFilterTypes() {
+		const { data } = await api.get<IFilters>("/annoucements/filters");
+		console.log(data);
+		return data;
 	}
 
 	async function getAllAnnouncementsByIdOwner(ownerId: string) {
@@ -91,8 +111,8 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 			value={{
 				allAnnouncements,
 				setAllAnnouncements,
-				allFilterAnnouncements,
-				setAllFilterAnnouncements,
+				allFilteredAnnouncements,
+				setAllFilteredAnnouncements,
 				loading,
 				setLoading,
 				announcementsByOwner,
@@ -100,6 +120,9 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 				ownerId,
 				setOwnerId,
 				owner,
+				getAllAnnoucementFilterTypes,
+				filterData,
+				setFilterData,
 			}}>
 			{children}
 		</AnnouncementContext.Provider>
