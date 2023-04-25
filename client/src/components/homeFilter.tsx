@@ -1,11 +1,12 @@
-import { Flex, List, ListItem, Text } from "@chakra-ui/react";
+import { Button, Flex, List, ListItem, Text } from "@chakra-ui/react";
 import { InputFilter } from "./input";
 import { annoucementCtx } from "@/contexts/announcements.context";
+import { useState } from "react";
 
 
 const HomeFilter = () => {
 
-    const {allAnnouncements} = annoucementCtx()
+    const {allAnnouncements, setAnnouncement} = annoucementCtx()
     const arrayFuel: Array<[]> = []
     allAnnouncements.map((item: any) => {
         arrayFuel.push(item.fuel)
@@ -36,17 +37,36 @@ const HomeFilter = () => {
     })
     const newArrayYear = arrayYear.filter((el, i) => arrayYear.indexOf(el) === i)
 
-          
+    const [getBrand, setGetBrand] = useState()
+    const [getModel, setGetModel] = useState()
+    const [getColor, setGetColor] = useState()
+    const [getYear, setGetYear] = useState()
+    const [getFuel, setGetFuel] = useState()
+
+   
+    const objectFilter = {brand: getBrand, model: getModel, color: getColor, year: getYear, fuel: getFuel}
+
+    const sumFilter = () => {
+
+    }
+
+    console.log(objectFilter)
+
+
+    
+       
+              
 
     return (
         <Flex direction={'column'}>
           <List>
 
+           <Button onClick={() => sumFilter()}>Soma</Button>
           <Text color={'grey.500'} fontSize={['xl', '2xl','2xl', '3xl']} fontWeight={'semibold'} mb={'10px'} mt={'10px'}>Marca</Text>
             {
                 newArrayBrand.map((item: any, index: any) => {
                    return (
-                        <ListItem color={'grey.250'} fontSize={['md', 'lg','lg','xl']} fontWeight={'normal'}>{item[0].toUpperCase() + item.substring(1)}</ListItem>
+                        <ListItem onClick={() => setGetBrand(item)} color={'grey.250'} fontSize={['md', 'lg','lg','xl']} fontWeight={'normal'}>{item[0].toUpperCase() + item.substring(1)}</ListItem>
                    )
                 })
             }
@@ -55,7 +75,7 @@ const HomeFilter = () => {
             {
                 newArrayModel.map((item: any, index: any) => {
                    return (
-                        <ListItem color={'grey.250'} fontSize={['md', 'lg','lg','xl']} fontWeight={'normal'}>{item[0].toUpperCase() + item.substring(1)}</ListItem>
+                        <ListItem onClick={() => setGetModel(item)} color={'grey.250'} fontSize={['md', 'lg','lg','xl']} fontWeight={'normal'}>{item[0].toUpperCase() + item.substring(1)}</ListItem>
                    )
                 })
             }
@@ -64,7 +84,7 @@ const HomeFilter = () => {
             {
                 newArrayColor.map((item: any, index: any) => {
                    return (
-                        <ListItem color={'grey.250'} fontSize={['md', 'lg','lg','xl']} fontWeight={'normal'}>{item[0].toUpperCase() + item.substring(1)}</ListItem>
+                        <ListItem  onClick={() => setGetColor(item)} color={'grey.250'} fontSize={['md', 'lg','lg','xl']} fontWeight={'normal'}>{item[0].toUpperCase() + item.substring(1)}</ListItem>
                    )
                 })
             }
@@ -73,7 +93,7 @@ const HomeFilter = () => {
             {
                 newArrayYear.map((item: any, index: any) => {
                    return (
-                        <ListItem color={'grey.250'} fontSize={['md', 'lg','lg','xl']} fontWeight={'normal'}>{item}</ListItem>
+                        <ListItem onClick={() => setGetYear(item)} color={'grey.250'} fontSize={['md', 'lg','lg','xl']} fontWeight={'normal'}>{item}</ListItem>
                    )
                 })
             }
@@ -82,7 +102,7 @@ const HomeFilter = () => {
             {
                 newArrayFuel.map((item: any, index: any) => {
                    return (
-                        <ListItem color={'grey.250'} fontSize={['md', 'lg','lg','xl']} fontWeight={'normal'}>{item[0].toUpperCase() + item.substring(1)}</ListItem>
+                        <ListItem onClick={() => setGetFuel(item)} color={'grey.250'} fontSize={['md', 'lg','lg','xl']} fontWeight={'normal'}>{item[0].toUpperCase() + item.substring(1)}</ListItem>
                    )
                 })
             }
