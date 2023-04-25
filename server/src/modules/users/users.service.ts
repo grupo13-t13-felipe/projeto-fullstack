@@ -1,16 +1,22 @@
+/* eslint-disable prettier/prettier */
 import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateAddressDto } from '../address/dto/create-address.dto';
 import { PrismaService } from 'src/database/prisma.service';
 import { UsersPrismaRepository } from './repositories/prisma/users.prisma.repository';
+import { MailService } from 'src/utils/mail.service';
+import { randomUUID } from "node:crypto";
+import { hashSync } from 'bcryptjs';
+import "dotenv/config"
 
 @Injectable()
 export class UsersService {
   constructor(
     private prisma: PrismaService,
-    private prismaRepository: UsersPrismaRepository
-  ) {}
+    private prismaRepository: UsersPrismaRepository,
+    private mailService: MailService
+  ) { }
   async create(createUserDto: CreateUserDto, createAddressDto: CreateAddressDto) {
     const findUser = await this.prisma.user.findFirst({
       where: {
@@ -26,11 +32,11 @@ export class UsersService {
         phone: true,
       },
     });
-    
-    if(findUser) {
+
+    if (findUser) {
       const keys = ["email", "cpf", "phone"]
       keys.forEach(key => {
-        if(findUser[key] == createUserDto[key]) {
+        if (findUser[key] == createUserDto[key]) {
           throw new ConflictException(`this ${key} already in use`)
         }
       })
@@ -45,7 +51,7 @@ export class UsersService {
 
   async findOne(id: string) {
     const findUser = await this.prismaRepository.findOne(id);
-    if(!findUser) {
+    if (!findUser) {
       throw new NotFoundException("user not found");
     }
     return findUser;
@@ -58,7 +64,7 @@ export class UsersService {
 
   async update(id: string, updateUserDto: UpdateUserDto) {
     const findUserToUpdate = await this.prismaRepository.findOne(id);
-    if(!findUserToUpdate) {
+    if (!findUserToUpdate) {
       throw new NotFoundException("user not found");
     }
 
@@ -77,11 +83,11 @@ export class UsersService {
         phone: true,
       },
     });
-    
-    if(findUser && findUser.id !== id) {
+
+    if (findUser && findUser.id !== id) {
       const keys = ["email", "cpf", "phone"]
       keys.forEach(key => {
-        if(findUser[key] === updateUserDto[key]) {
+        if (findUser[key] === updateUserDto[key]) {
           throw new ConflictException(`this ${key} already in use`)
         }
       })
@@ -92,9 +98,54 @@ export class UsersService {
 
   async remove(id: string) {
     const findUser = await this.prismaRepository.findOne(id);
-    if(!findUser) {
+    if (!findUser) {
       throw new NotFoundException("user not found");
     }
     return this.prismaRepository.delete(id);
+  }
+
+  async sendResetEmailPassword(email: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { email },
+    })
+
+    if (!user) {
+      throw new NotFoundException('User not found')
+    }
+
+    const resetToken = randomUUID()
+
+    await this.prisma.user.update({
+      where: { email },
+      data: {
+        reset_token: resetToken,
+      }
+    })
+
+    const resetPasswordTemplate = this.mailService.resetPassword(email, user.name, resetToken)
+
+    await this.mailService.sendEmail(resetPasswordTemplate)
+  }
+
+  async resetPassword(password: string, resetToken: string) {
+    const user = await this.prisma.user.findFirst({
+      where: {
+        reset_token: resetToken,
+      }
+    })
+
+    if (!user) {
+      throw new NotFoundException('User not found')
+    }
+
+    await this.prisma.user.update({
+      where: {
+        id: user.id
+      },
+      data: {
+        password: hashSync(password, 10),
+        reset_token: undefined
+      }
+    })
   }
 }
