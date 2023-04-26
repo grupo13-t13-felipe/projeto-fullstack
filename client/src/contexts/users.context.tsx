@@ -22,6 +22,7 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
     const router = useRouter()
     const [user, setUser] = useState<IUser | null>(null)
     const toast = useToast()
+    const [previousPath, setPreviousPath] = useState("/");
 
     useEffect(() => {
         const loadUser = async () => {
@@ -44,6 +45,12 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
         loadUser()
     }, [])
 
+    useEffect(() => {
+        if (router.asPath !== router.route) {
+          setPreviousPath(router.asPath);
+        }
+      }, [router.asPath]);
+  
     const loginUser = async (dataForm: IUserLogin) => {
         try {
             const { data } = await api.post("/login", dataForm)
@@ -57,7 +64,7 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
             setCookie(null, "karsUserId", JSON.stringify(user.id), { maxAge: 3600 * 24, path: "/" })
             setUser(user)
 
-            router.push("/")
+            router.push(previousPath)
         } catch (err) {
             toast({
                 title: "error",
@@ -79,7 +86,6 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
     const createUser = async (dataForm: IUserCreate) => {
         try {
             await api.post("/users", dataForm)
-
             router.push("/login")
         } catch (err) {
             toast({
