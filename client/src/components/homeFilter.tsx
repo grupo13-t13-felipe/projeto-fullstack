@@ -1,41 +1,116 @@
 import { Button, Flex, List, ListItem, Text } from "@chakra-ui/react";
 import { InputFilter } from "./input";
-import { annoucementCtx } from "@/contexts/announcements.context";
-import { useEffect, useState } from "react";
+import {
+	IFilters,
+	ISelectedFilter,
+	annoucementCtx,
+} from "@/contexts/announcements.context";
+import api from "@/services/api";
+import { IAnnouncement } from "@/types/announcements";
+import { useEffect, useRef } from "react";
 
 const HomeFilter = () => {
-	const { getAllAnnoucementFilterTypes, filterData, setFilterData } =
-		annoucementCtx();
+	const {
+		filterData,
+		actualFilters,
+		setActualFilters,
+		selectedFilters,
+		setSelectedFilters,
+		setAllAnnouncements,
+		getAllAnnouncements,
+	} = annoucementCtx();
 
-	const [brand, setBrand] = useState<string[]>([]);
-	const [model, setModel] = useState<string[]>([]);
-	const [color, setColor] = useState<string[]>([]);
-	const [year, setYear] = useState<string[]>([]);
-	const [fuel, setFuel] = useState<string[]>([]);
+	const inputKmMinValue = useRef<HTMLInputElement>(null);
+	const inputKmMaxValue = useRef<HTMLInputElement>(null);
+	const inputPriceMinValue = useRef<HTMLInputElement>(null);
+	const inputPriceMaxValue = useRef<HTMLInputElement>(null);
+
+	async function clearFilters() {
+		setActualFilters(filterData);
+		setSelectedFilters({});
+		getAllAnnouncements();
+
+		//não funciona
+		if (inputKmMinValue.current) inputKmMinValue.current.value = "";
+		if (inputKmMaxValue.current) inputKmMaxValue.current.value = "";
+		if (inputPriceMinValue.current) inputPriceMinValue.current.value = "";
+		if (inputPriceMaxValue.current) inputPriceMaxValue.current.value = "";
+	}
+
+	function getAllAnnoucementFilterTypes(
+		allAnnoucements: IAnnouncement[]
+	): IFilters {
+		const finalObj: IFilters = {
+			brand: [],
+			model: [],
+			color: [],
+			year: [],
+			fuel: [],
+		};
+		finalObj.brand = allAnnoucements
+			.map((annoucement) => annoucement.brand)
+			.filter((value, index, self) => self.indexOf(value) === index);
+		finalObj.model = allAnnoucements
+			.map((annoucement) => annoucement.model)
+			.filter((value, index, self) => self.indexOf(value) === index);
+		finalObj.color = allAnnoucements
+			.map((annoucement) => annoucement.color)
+			.filter((value, index, self) => self.indexOf(value) === index);
+		finalObj.year = allAnnoucements
+			.map((annoucement) => annoucement.year)
+			.filter((value, index, self) => self.indexOf(value) === index);
+		finalObj.fuel = allAnnoucements
+			.map((annoucement) => annoucement.fuel)
+			.filter((value, index, self) => self.indexOf(value) === index);
+
+		return finalObj;
+	}
+
+	function toSearch(selectedFilters: ISelectedFilter) {
+		let toSearchStr: any = [];
+		Object.keys(selectedFilters).forEach((key, i) => {
+			const value = Object.values(selectedFilters);
+			toSearchStr.push(`${key}=${value[i]}`);
+		});
+		if (toSearchStr.length > 0) {
+			toSearchStr.unshift("?");
+			toSearchStr = toSearchStr.join("&");
+		}
+		return toSearchStr;
+	}
+
+	async function clickOnFilter(e: any, type: string, item: string) {
+		setSelectedFilters({ ...selectedFilters, [type]: item });
+	}
 
 	useEffect(() => {
-		load();
-		async function load() {
-			const data = await getAllAnnoucementFilterTypes();
-			setBrand(data.brand);
-			setModel(data.model);
-			setColor(data.color);
-			setYear(data.year);
-			setFuel(data.fuel);
+		if (Object.keys(selectedFilters).length > 0) {
+			console.log(selectedFilters);
+			const searchParameter: string = toSearch(selectedFilters);
+			console.log(searchParameter);
+			load(searchParameter);
 		}
-	}, []);
+		async function load(searchParameter: string) {
+			const { data } = await api.get(`annoucements${searchParameter}`);
 
-	const objectFilter = {
-		brand: brand,
-		model: model,
-		color: color,
-		year: year,
-		fuel: fuel,
+			const newFilters = getAllAnnoucementFilterTypes(data.data);
+
+			setActualFilters(newFilters);
+			setAllAnnouncements(data.data);
+		}
+	}, [selectedFilters]);
+
+	const FilterList = ({ item, type }: any) => {
+		return (
+			<ListItem
+				color={"grey.250"}
+				fontSize={["md", "lg", "lg", "xl"]}
+				fontWeight={"normal"}
+				onClick={(e) => clickOnFilter(e, type, item)}>
+				{item[0].toUpperCase() + item.substring(1)}
+			</ListItem>
+		);
 	};
-
-	const sumFilter = () => {};
-
-	console.log(objectFilter);
 
 	return (
 		<Flex direction={"column"}>
@@ -48,15 +123,9 @@ const HomeFilter = () => {
 					mt={"10px"}>
 					Marca
 				</Text>
-				{brand.map((item: any, index: any) => {
+				{actualFilters?.brand.map((item: string, index: number) => {
 					return (
-						<ListItem
-							onClick={() => setBrand(item)}
-							color={"grey.250"}
-							fontSize={["md", "lg", "lg", "xl"]}
-							fontWeight={"normal"}>
-							{item[0].toUpperCase() + item.substring(1)}
-						</ListItem>
+						<FilterList item={item} key={index} type={"brand"} />
 					);
 				})}
 
@@ -68,15 +137,9 @@ const HomeFilter = () => {
 					mt={"10px"}>
 					Modelo
 				</Text>
-				{model.map((item: any, index: any) => {
+				{actualFilters?.model.map((item: any, index: any) => {
 					return (
-						<ListItem
-							onClick={() => setModel(item)}
-							color={"grey.250"}
-							fontSize={["md", "lg", "lg", "xl"]}
-							fontWeight={"normal"}>
-							{item[0].toUpperCase() + item.substring(1)}
-						</ListItem>
+						<FilterList item={item} key={index} type={"model"} />
 					);
 				})}
 
@@ -88,15 +151,9 @@ const HomeFilter = () => {
 					mt={"10px"}>
 					Cor
 				</Text>
-				{color.map((item: any, index: any) => {
+				{actualFilters?.color.map((item: any, index: any) => {
 					return (
-						<ListItem
-							onClick={() => setColor(item)}
-							color={"grey.250"}
-							fontSize={["md", "lg", "lg", "xl"]}
-							fontWeight={"normal"}>
-							{item[0].toUpperCase() + item.substring(1)}
-						</ListItem>
+						<FilterList item={item} key={index} type={"color"} />
 					);
 				})}
 
@@ -108,16 +165,8 @@ const HomeFilter = () => {
 					mt={"10px"}>
 					Ano
 				</Text>
-				{year.map((item: any, index: any) => {
-					return (
-						<ListItem
-							onClick={() => setYear(item)}
-							color={"grey.250"}
-							fontSize={["md", "lg", "lg", "xl"]}
-							fontWeight={"normal"}>
-							{item}
-						</ListItem>
-					);
+				{actualFilters?.year.map((item: any, index: any) => {
+					return <FilterList item={item} key={index} type={"year"} />;
 				})}
 
 				<Text
@@ -128,16 +177,8 @@ const HomeFilter = () => {
 					mt={"10px"}>
 					Combustível
 				</Text>
-				{fuel.map((item: any, index: any) => {
-					return (
-						<ListItem
-							onClick={() => setFuel(item)}
-							color={"grey.250"}
-							fontSize={["md", "lg", "lg", "xl"]}
-							fontWeight={"normal"}>
-							{item[0].toUpperCase() + item.substring(1)}
-						</ListItem>
-					);
+				{actualFilters?.fuel.map((item: any, index: any) => {
+					return <FilterList item={item} key={index} type={"fuel"} />;
 				})}
 			</List>
 
@@ -151,8 +192,16 @@ const HomeFilter = () => {
 					Km
 				</Text>
 				<Flex direction={"row"} gap={"12px"}>
-					<InputFilter placeholder={"Mínimo"} />
-					<InputFilter placeholder={"Máximo"} />
+					<InputFilter
+						placeholder={"Mínimo"}
+						ref={inputKmMinValue}
+						type={"min_km"}
+					/>
+					<InputFilter
+						placeholder={"Máximo"}
+						ref={inputKmMaxValue}
+						type={"max_km"}
+					/>
 				</Flex>
 			</List>
 			<List>
@@ -165,10 +214,25 @@ const HomeFilter = () => {
 					Preço
 				</Text>
 				<Flex direction={"row"} gap={"12px"}>
-					<InputFilter placeholder={"Mínimo"} />
-					<InputFilter placeholder={"Máximo"} />
+					<InputFilter
+						placeholder={"Mínimo"}
+						ref={inputPriceMinValue}
+						type={"min_price"}
+					/>
+					<InputFilter
+						placeholder={"Máximo"}
+						ref={inputPriceMaxValue}
+						type={"max_price"}
+					/>
 				</Flex>
 			</List>
+			<Button
+				marginTop={"22px"}
+				onClick={() => {
+					clearFilters();
+				}}>
+				Limpar
+			</Button>
 		</Flex>
 	);
 };
