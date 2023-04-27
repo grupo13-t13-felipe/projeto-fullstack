@@ -148,7 +148,7 @@ export class AnnoucementsService {
       where: { id },
       include: {
         gallery_images: true,
-        owner: { select: { id: true, name: true } },
+        owner: { select: { id: true, name: true, description: true } },
       },
     });
   }
