@@ -52,11 +52,9 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
             api.defaults.headers.authorization = `Bearer ${token}`
 
             setCookie(null, "karsToken", token, { maxAge: 3600 * 24, path: "/" })
-            setCookie(null, "karsUserData", JSON.stringify(user), { maxAge: 3600 * 24, path: "/" })
-            setCookie(null, "karsUserName", JSON.stringify(user.name), { maxAge: 3600 * 24, path: "/" })
+            setCookie(null, "karsUser", JSON.stringify(user), { maxAge: 3600 * 24, path: "/" })
             setCookie(null, "karsUserId", JSON.stringify(user.id), { maxAge: 3600 * 24, path: "/" })
-            setUser(user)
-
+            
             router.push("/")
         } catch (err) {
             toast({
@@ -102,6 +100,7 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
     const logoutUser = () => {
         destroyCookie(null, "karsToken")
         destroyCookie(null, "karsUser")
+        destroyCookie(null, "karsUserId")
         setUser(null)
     }
 

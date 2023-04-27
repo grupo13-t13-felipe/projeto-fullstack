@@ -10,7 +10,7 @@ export interface IUser {
 }
 
 export interface Props {
-	user: IUser
+	user: IUser | null
 }
 
 export interface IUserLogin {
