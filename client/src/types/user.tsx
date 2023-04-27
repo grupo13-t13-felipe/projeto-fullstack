@@ -35,3 +35,12 @@ export interface IUserCreate {
 	number: string;
 	complement: string;
 }
+
+export interface IUserEdite {
+	name?: string;
+	email?: string;
+	cpf?: string;
+	phone?: string;
+	description?: string;
+	birth_date?: string;
+}

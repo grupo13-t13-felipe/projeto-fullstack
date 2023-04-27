@@ -8,7 +8,7 @@ import {
 	VStack,
 	ListItem,
 	List,
-	Button,
+	Button, Progress
 } from "@chakra-ui/react";
 import DefaultFooter from "@/components/footer";
 import DefaultHeader from "@/components/headers/headerDefault";
@@ -49,10 +49,11 @@ const Home = () => {
 				<link rel="icon" href="/titleIcon" />
 			</Head>
 			{loading ? (
-				<Flex justifyContent={"center"} alignItems={"center"}>
+				<Flex justifyContent={"center"} alignItems={"center"} h={'100vh'}>
 					<Text color={"blue.400"} fontSize={"6xl"}>
 						Loading...
 					</Text>
+					<Progress size='xs' isIndeterminate />
 				</Flex>
 			) : (
 				<>
@@ -166,24 +167,24 @@ const Home = () => {
 							display={["flex", "flex", "none"]}
 							alignItems={"center"}>
 							<Modals
-								modalTitle={"Filtro"}
-								modalContent={<HomeFilter />}
-								modalButtons={
-									<Buttons
+									modalTitle={"Filtro"}
+									modalContent={<HomeFilter />}
+									modalButtons={<Buttons
 										backgroundColor={"blue.400"}
 										color={"grey.0"}
-										valueButton={"Ver anúncios"}
-									/>
-								}
-								nameButton={"Filtros"}
-								titlesColor={"grey.400"}
-								sizeTitle={"md"}
-								footerDirection={"center"}
-								footerWidth={"100%"}
-								modalButtonColor={"grey.0"}
-								modalButtonBg={"blue.400"}
-								buttonWidth={"90%"}
-							/>
+										valueButton={"Ver anúncios"} />}
+									nameButton={"Filtros"}
+									titlesColor={"grey.400"}
+									sizeTitle={"md"}
+									footerDirection={"center"}
+									footerWidth={"100%"}
+									modalButtonColor={"grey.0"}
+									modalButtonBg={"blue.400"}
+									buttonWidth={"90%"} isOpen={false} onOpen={function (): void {
+										throw new Error("Function not implemented.");
+									} } onClose={function (): void {
+										throw new Error("Function not implemented.");
+									} } buttonRadius={""} buttonBorder={""} buttonBorderColor={""}							/>
 						</Stack>
 						<Box
 							mb={"16px"}

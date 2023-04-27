@@ -1,7 +1,7 @@
 import { createContext, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import api from "@/services/api";
-import { IUser, IUserCreate, IUserLogin } from "@/types/user";
+import { IUser, IUserCreate, IUserEdite, IUserLogin } from "@/types/user";
 import { setCookie, parseCookies, destroyCookie } from "nookies";
 import { Box, Button, Flex, Text, ToastId, useToast } from "@chakra-ui/react";
 
@@ -14,6 +14,8 @@ interface IUserContext {
     createUser: (dataForm: IUserCreate) => void;
     logoutUser: () => void;
     user: IUser | null;
+    editeUser: (dataForm: IUserEdite) => void;
+    deleteUser: () => void
 }
 
 export const UserContext = createContext({} as IUserContext)
@@ -161,6 +163,42 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
         }
     }
 
+    const editeUser = async (dataForm: IUserEdite) => {
+
+        const cookie = parseCookies()
+
+            if (cookie.karsToken) {
+                api.defaults.headers.authorization = `Bearer ${cookie.karsToken}`
+        try {
+            await api.post(`/users/${cookie.karsUserId}`, dataForm)
+            
+            router.reload()
+        } catch (err) {
+            
+            console.log(err)
+        }
+        }
+    }
+
+    const deleteUser = async () => {
+
+        const cookie = parseCookies()
+
+            if (cookie.karsToken) {
+                api.defaults.headers.authorization = `Bearer ${cookie.karsToken}`
+        try {
+            await api.post(`/users/${cookie.karsUserId}`)
+            
+            router.reload()
+        } catch (err) {
+            
+            console.log(err)
+        }
+    }
+}
+
+    
+
     const logoutUser = () => {
         destroyCookie(null, "karsToken")
         destroyCookie(null, "karsUser")
@@ -169,7 +207,7 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
     }
 
     return (
-        <UserContext.Provider value={{ loginUser, createUser, logoutUser, user }}>
+        <UserContext.Provider value={{ loginUser, createUser, logoutUser, user, editeUser, deleteUser }}>
             {children}
         </UserContext.Provider>
     )

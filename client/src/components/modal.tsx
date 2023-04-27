@@ -17,8 +17,8 @@ interface IModals {
     modalTitle: string, 
     titlesColor: string, 
     modalContent: JSX.Element,
-    modalButtons: string, 
-    nameButton: string, 
+    modalButtons: any, 
+    nameButton: any, 
     sizeTitle: string, 
     footerDirection: string, 
     footerWidth: string, 
@@ -27,7 +27,7 @@ interface IModals {
     buttonWidth: string, 
     buttonRadius: string, 
     buttonBorder: string, 
-    buttonBorderColor: string
+    buttonBorderColor: string,
 }
 
 const Modals = ({ isOpen, onOpen, onClose, modalTitle, titlesColor, modalContent, modalButtons, nameButton, sizeTitle, footerDirection, footerWidth, modalButtonColor, modalButtonBg, buttonWidth, buttonRadius, buttonBorder, buttonBorderColor }: IModals) => {
