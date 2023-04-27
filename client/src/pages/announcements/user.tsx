@@ -19,21 +19,15 @@ const Advertiser = () => {
             {
                 loading ? <Text>Loading...</Text> :
                     <>
-                        <HeaderProfile user={user} />
+                        <HeaderProfile/>
 
                         <Flex
                             direction={"column"}
-                            position={"relative"}
-                            zIndex={"1"}
-                            bg={"grey.75"}
+                            justifyContent={"space-between"}
+                            alignItems={["center", "center", "initial"]}
+                            bgGradient={'linear(to-b, blue.400 0px 500px, grey.75 500px 100%)'}
                         >
-                            <Box
-                                position={"absolute"}
-                                w={"100%"}
-                                h={"30vh"}
-                                bg={"blue.400"}
-                                zIndex={"-1"}
-                            ></Box>
+                        
                             <Flex
                                 minH={"450px"}
                                 align={"center"}

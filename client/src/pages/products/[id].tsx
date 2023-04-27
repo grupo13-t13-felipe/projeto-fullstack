@@ -32,7 +32,7 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
 
   return (
     <>
-        {user? <HeaderProfile userLog={user.name}/> : <DefaultHeader /> }
+        {user? <HeaderProfile/> : <DefaultHeader /> }
       <Flex
         direction={"column"}
         justifyContent={"space-between"}
