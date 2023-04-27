@@ -1,22 +1,13 @@
-import { AnnouncementContext } from "@/contexts/announcements.context";
+import { annoucementCtx } from "@/contexts/announcements.context";
 import {
-	ComponentWithAs,
 	FormControl,
 	FormControlProps,
 	FormErrorMessage,
 	FormLabel,
 	Input,
-	InputProps,
 } from "@chakra-ui/react";
 
-import { debounce } from "lodash";
-import {
-	forwardRef,
-	useCallback,
-	useContext,
-	useEffect,
-	useState,
-} from "react";
+import { forwardRef, useEffect, useState } from "react";
 
 interface InputFormProps extends FormControlProps {
 	labeltext: string;
@@ -59,34 +50,39 @@ interface IInputFilterProps {
 
 const InputFilter = forwardRef<HTMLInputElement, IInputFilterProps>(
 	({ placeholder, type }, ref) => {
-		const { setSelectedFilters, selectedFilters } =
-			useContext(AnnouncementContext);
+		const { setSelectedFilters, selectedFilters } = annoucementCtx();
 		const [onChangeValue, setOnChangeValue] = useState("");
-
-		const handleInputChange = useCallback(
-			debounce((inputValue, event) => {
-				setSelectedFilters({ ...selectedFilters, [type]: inputValue });
-			}, 1000),
-			[]
-		);
+		const [mounted, setMounted] = useState(false);
 
 		const handleChange = (event: any) => {
 			const inputValue = event.target.value;
-			setOnChangeValue(inputValue);
-			handleInputChange(inputValue, event);
+			const regexOnlyNumber = /^[0-9]+$/g;
+			event.target.value.replace(regexOnlyNumber, "");
+			if (regexOnlyNumber.test(inputValue)) {
+				setOnChangeValue(inputValue);
+			}
 		};
+
 		useEffect(() => {
-			return () => {
-				handleInputChange.cancel();
-			};
-		}, [handleInputChange]);
+			if (mounted) {
+				const timeOutId = setTimeout(() => {
+					setSelectedFilters({
+						...selectedFilters,
+						[type]: onChangeValue,
+					});
+				}, 500);
+				return () => clearTimeout(timeOutId);
+			} else {
+				setMounted(true);
+			}
+		}, [onChangeValue]);
 
 		return (
 			<>
 				<Input
 					placeholder={placeholder}
-					value={onChangeValue}
 					onChange={handleChange}
+					value={onChangeValue}
 					backgroundColor={"grey.150"}
 					color={"grey.400"}
 					fontWeight={"bold"}
