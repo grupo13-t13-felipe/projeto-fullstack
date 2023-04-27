@@ -10,9 +10,29 @@ import {
 } from '@chakra-ui/react'
 import Buttons from './button';
 
-const Modals = ({ modalTitle, titlesColor, modalContent, modalButtons, nameButton, sizeTitle, footerDirection, footerWidth, modalButtonColor, modalButtonBg, buttonWidth, buttonRadius, buttonBorder, buttonBorderColor }: any) => {
+interface IModals {
+    isOpen: boolean, 
+    onOpen: ()=>void, 
+    onClose: ()=>void, 
+    modalTitle: string, 
+    titlesColor: string, 
+    modalContent: JSX.Element,
+    modalButtons: string, 
+    nameButton: string, 
+    sizeTitle: string, 
+    footerDirection: string, 
+    footerWidth: string, 
+    modalButtonColor: string, 
+    modalButtonBg: string, 
+    buttonWidth: string, 
+    buttonRadius: string, 
+    buttonBorder: string, 
+    buttonBorderColor: string
+}
 
-    const { isOpen, onOpen, onClose } = useDisclosure()
+const Modals = ({ isOpen, onOpen, onClose, modalTitle, titlesColor, modalContent, modalButtons, nameButton, sizeTitle, footerDirection, footerWidth, modalButtonColor, modalButtonBg, buttonWidth, buttonRadius, buttonBorder, buttonBorderColor }: IModals) => {
+
+    // const { isOpen, onOpen, onClose } = useDisclosure()
     return (
         <>
             <Buttons onClick={onOpen} valueButton={nameButton} color={modalButtonColor}backgroundColor={modalButtonBg} width={buttonWidth} radius={buttonRadius} border={buttonBorder} borderColor={buttonBorderColor} />
@@ -21,7 +41,7 @@ const Modals = ({ modalTitle, titlesColor, modalContent, modalButtons, nameButto
                 <ModalOverlay />
                 <ModalContent>
                     <ModalHeader color={titlesColor} fontSize={sizeTitle}>{modalTitle}</ModalHeader>
-                    <ModalCloseButton />
+                    <ModalCloseButton/>
                     <ModalBody>
                         {
                             modalContent

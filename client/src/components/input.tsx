@@ -19,12 +19,13 @@ import {
 } from "react";
 
 interface InputFormProps extends FormControlProps {
-	labeltext: string;
-	inputtype: string;
-	inputplaceholder: string;
-	inputregister: any;
-	errors: string | undefined;
-	isRequired?: boolean;
+    labeltext: string;
+    inputtype: string;
+    inputplaceholder: string;
+    inputregister: any;
+    errors: string | undefined;
+    isRequired?: boolean;
+    id?: string
 }
 
 const InputArea = ({
@@ -108,7 +109,7 @@ const InputForm = (props: InputFormProps) => {
 		<FormControl {...props}>
 			<FormLabel>{props.labeltext}</FormLabel>
 			<Input
-				{...props.inputregister}
+				id={props.id} {...props.inputregister}
 				h={"48px"}
 				_focusVisible={{
 					boxShadow: "0 0 0 1px var(--chakra-colors-blue-400)",

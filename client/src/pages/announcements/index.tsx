@@ -1,5 +1,6 @@
 import AnnouncementModal from "@/components/announcmentModal";
 import DefaultFooter from "@/components/footer";
+import DefaultHeader from "@/components/headers/headerDefault";
 import HeaderProfile from "@/components/headers/headerProfile";
 import ProductCard from "@/components/productCard";
 import { annoucementCtx } from "@/contexts/announcements.context";
@@ -19,7 +20,7 @@ const Advertiser = () => {
             {
                 loading ? <Text>Loading...</Text> :
                     <>
-                        <HeaderProfile />
+                        {user ? <HeaderProfile userLog={user.name} /> : <DefaultHeader />}
 
                         <Flex
                             direction={"column"}
