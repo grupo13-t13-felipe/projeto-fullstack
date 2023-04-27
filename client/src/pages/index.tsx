@@ -1,5 +1,5 @@
 import Head from 'next/head';
-import { Text, Stack, Flex, Box, Link, VStack, ListItem, List } from '@chakra-ui/react';
+import { Text, Stack, Flex, Box, Link, VStack, ListItem, List, Button } from '@chakra-ui/react';
 import DefaultFooter from '@/components/footer';
 import DefaultHeader from '@/components/headers/headerDefault';
 import Modals from '@/components/modal';
@@ -14,9 +14,8 @@ import { UserContext } from '@/contexts/users.context';
 
 const Home = () => {
 
-  const { allAnnouncements, setAnnouncement, loading, setLoading, setOwnerId } = annoucementCtx()
+  const { allAnnouncements, setAnnouncement, loading, setLoading, setOwnerId, paginationPage, setPaginationPage } = annoucementCtx()
   const {user} = useContext(UserContext)
-   
   
   return (
 
@@ -50,7 +49,7 @@ const Home = () => {
                 <HomeFilter />
               </Box>
               <List border={"none"} width={["100%", "100%", "95%"]} maxW={["none", "none", "984px"]} overflowX={"auto"} display={"flex"} flexWrap={["nowrap", "nowrap", "wrap"]} alignItems={"flex-start"} gap={["16px", "24px"]} ml={"0"} pb={"8px"}>
-                {allAnnouncements.map((item: any, index: any) => {
+                {allAnnouncements.data.map((item: any, index: any) => {
                   return (
                     <ListItem w={"312px"} display={"inline-block"} key={index}>
                       <Link _hover={{ textDecoration: "none" }} as={NextLink} href={`/products/${item.id}`} onClick={() => setOwnerId(item.owner.id)} >
@@ -79,11 +78,13 @@ const Home = () => {
               <Modals modalTitle={'Filtro'} modalContent={
                 <HomeFilter />} modalButtons={<Buttons backgroundColor={'blue.400'} color={"grey.0"} valueButton={"Ver anúncios"} />} nameButton={"Filtros"} titlesColor={'grey.400'} sizeTitle={'md'} footerDirection={'center'} footerWidth={'100%'} modalButtonColor={'grey.0'} modalButtonBg={'blue.400'} buttonWidth={'90%'} />
             </Stack>
-            <List mb={"20px"} display={'flex'} justifyContent={'center'}>
-              <ListItem mr={'20px'}><Link href="#" color={'blue.400'}>Anterior ❮ </Link></ListItem>
-              <Text mr={'20px'} color={'grey.250'}>2 de 3</Text>
-              <ListItem><Link href="#" color={'blue.400'}> Seguinte ❯ </Link></ListItem>
-            </List>
+            <Box mb={"16px"} display={"flex"} justifyContent={"center"} alignItems={"center"} gap={"6px"} fontWeight={"600"} fontSize={["16px", "18px"]}>
+              <Button fontSize={["16px", "18px"]} bgColor={"transparent"} color={"blue.300"} _hover={{bgColor: "transparent", color: "blue.400"}} isDisabled={paginationPage <= 1} onClick={() => setPaginationPage(paginationPage - 1)}>Anterior ❮</Button>
+              <Text fontWeight={"600"} color={"grey.250"}>{paginationPage}</Text>
+              <Text color={"grey.200"}>de</Text>
+              <Text color={"grey.200"}>{allAnnouncements.pagesCount}</Text>
+              <Button fontSize={["16px", "18px"]} bgColor={"transparent"} color={"blue.300"} _hover={{bgColor: "transparent", color: "blue.400"}} isDisabled={paginationPage == allAnnouncements.pagesCount} onClick={() => setPaginationPage(paginationPage + 1)}>Seguinte ❯ </Button>
+            </Box>
           </Flex>
           <DefaultFooter />
         </>
@@ -91,7 +92,5 @@ const Home = () => {
     </>
   )
 }
-
-
 
 export default Home

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import {
   Controller,
   Get,
@@ -20,7 +21,7 @@ import { AccountOwnerGuard } from './guards/account-owner.guard';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(private readonly usersService: UsersService) { }
 
   @Post()
   @UseInterceptors(ClassSerializerInterceptor)
@@ -58,5 +59,21 @@ export class UsersController {
   @UseInterceptors(ClassSerializerInterceptor)
   remove(@Param('id') id: string) {
     return this.usersService.remove(id);
+  }
+
+  @HttpCode(200)
+  @Post('resetPassword')
+  async sendEmailResetPassword(@Body('email') email: string) {
+    await this.usersService.sendResetEmailPassword(email)
+    return { message: 'token send' }
+  }
+
+  @Patch('resetPassword/:token')
+  async resetPassword(
+    @Param('token') token: string,
+    @Body('password') password: string,
+  ) {
+    await this.usersService.resetPassword(password, token)
+    return { message: 'password change with sucess' }
   }
 }

@@ -34,6 +34,9 @@ interface AnnouncementProviderData {
 	selectedFilters: ISelectedFilter;
 	setSelectedFilters: React.Dispatch<React.SetStateAction<ISelectedFilter>>;
 	getAllAnnouncements: () => Promise<void>;
+  paginationPage: number
+  setPaginationPage: React.Dispatch<React.SetStateAction<number>>
+  
 }
 
 export interface IFilters {
@@ -53,6 +56,7 @@ export interface ISelectedFilter {
 	max_km?: string;
 	min_price?: string;
 	max_price?: string;
+
 }
 
 export interface IProviderProps {
@@ -64,15 +68,33 @@ export const AnnouncementContext = createContext<AnnouncementProviderData>(
 );
 
 export const AnnouncementProvider = ({ children }: IProviderProps) => {
-	const router = useRouter();
-	const [allAnnouncements, setAllAnnouncements] = useState();
-	const [allFilteredAnnouncements, setAllFilteredAnnouncements] = useState(
+
+    const router = useRouter()
+    const [allAnnouncements, setAllAnnouncements] = useState();
+    const [allFilteredAnnouncements, setAllFilteredAnnouncements] = useState(
 		[]
 	);
+    const [paginationPage, setPaginationPage] = useState(1)
+    const [loading, setLoading] = useState(true)
+    const [announcementsByOwner, setAnnouncementsByOwner] = useState<IAnnouncement[] | undefined>()
+    const [ownerId, setOwnerId] = useState<string>()
+    const [owner, setOwner] = useState<IAnnouncementOwner>()
+    const [filterData, setFilterData] = useState<IFilters | undefined>();
+	  const [actualFilters, setActualFilters] = useState<IFilters | undefined>();
+	  const [selectedFilters, setSelectedFilters] = useState<ISelectedFilter>({});
+    const { user } = useContext(UserContext)
 
-	const [filterData, setFilterData] = useState<IFilters | undefined>();
-	const [actualFilters, setActualFilters] = useState<IFilters | undefined>();
-	const [selectedFilters, setSelectedFilters] = useState<ISelectedFilter>({});
+    async function getAllAnnouncements() {
+
+        try {
+            const { data } = await api.get(`/annoucements?limit=12&page=${paginationPage}`)
+            setAllAnnouncements(data)
+            setLoading(false)
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
 
 	const [loading, setLoading] = useState(true);
 	const [announcementsByOwner, setAnnouncementsByOwner] = useState<
@@ -80,16 +102,6 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 	>();
 	const [ownerId, setOwnerId] = useState<string>();
 	const [owner, setOwner] = useState<IAnnouncementOwner>();
-
-	async function getAllAnnouncements() {
-		try {
-			const { data } = await api.get("/annoucements");
-			setAllAnnouncements(data.data);
-			setLoading(false);
-		} catch (error) {
-			console.log(error);
-		}
-	}
 
 	async function getAllAnnoucementFilterTypes() {
 		const { data } = await api.get<IFilters>("/annoucements/filters");
@@ -128,7 +140,7 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 			setFilterData(data);
 			setActualFilters(data);
 		}
-	}, []);
+	}, [paginationPage]);
 
 	return (
 		<AnnouncementContext.Provider
@@ -150,6 +162,8 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 				selectedFilters,
 				setSelectedFilters,
 				getAllAnnouncements,
+        paginationPage, 
+        setPaginationPage
 			}}>
 			{children}
 		</AnnouncementContext.Provider>
