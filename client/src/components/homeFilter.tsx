@@ -96,7 +96,7 @@ const HomeFilter = () => {
 			const newFilters = getAllAnnoucementFilterTypes(data.data);
 
 			setActualFilters(newFilters);
-			setAllAnnouncements(data.data);
+			setAllAnnouncements(data);
 		}
 	}, [selectedFilters]);
 
