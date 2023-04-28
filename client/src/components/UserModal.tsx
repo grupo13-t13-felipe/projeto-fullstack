@@ -1,76 +1,135 @@
 import {
-    Modal,
-    ModalOverlay,
-    ModalContent,
-    ModalHeader,
-    ModalFooter,
-    ModalBody,
-    ModalCloseButton, Button, useDisclosure, FormControl,
-    FormLabel,
-    FormErrorMessage,
-    Input, Text
-  } from '@chakra-ui/react'
-import DefaultForm from './form'
-import { useForm } from 'react-hook-form';
+  Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  Button,
+  useDisclosure,
+  FormControl,
+  FormLabel,
+  Input,
+  Text,
+  Textarea,
+} from "@chakra-ui/react";
+import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useContext } from 'react';
-import { UserContext } from '@/contexts/users.context';
-import { IUserEdite } from '@/types/user';
-import { editeUserSchema } from '@/schemas/user.schema';
-import { InputForm } from './input';
-import TextArea from './textArea';
+import { useContext } from "react";
+import { UserContext } from "@/contexts/users.context";
+import { IUserEdite } from "@/types/user";
+import { editeUserSchema } from "@/schemas/user.schema";
+import { string } from "yup";
+import removeEmptyStrings from "@/utils/removeEmptyStrings";
 
+const UserModal = () => {
+  const { editeUser, deleteUser, user } = useContext(UserContext);
 
-  const UserModal = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IUserEdite>({
+    resolver: yupResolver(editeUserSchema),
+  });
 
-    const {editeUser, deleteUser} = useContext(UserContext)
+  const onFormSubmit = (formData: IUserEdite) => {
+    const data = removeEmptyStrings(formData);
 
-    const {register, handleSubmit, formState: {errors},} = useForm<IUserEdite>({
-        resolver: yupResolver(editeUserSchema)
-    })
+    editeUser(data);
+    console.log(formData);
+  };
 
-    const { isOpen, onOpen, onClose } = useDisclosure()
-  
-    return (
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+  return (
     <>
       <Button onClick={onOpen}>Editar Perfil</Button>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Editar Perfil</ModalHeader>
-            <ModalCloseButton />
+          <ModalHeader mt={"30px"} fontSize={["md", "lg", "xl"]}>
+            Editar Perfil
+          </ModalHeader>
+          <ModalCloseButton />
           <ModalBody>
-            <DefaultForm submithandler={handleSubmit(editeUser)} formtitle="">
-            <Text mb={"16px"} w={"100%"} textAlign={"left"}>Informações pessoais</Text>
-                <InputForm errors={errors.name?.message} isInvalid={!!errors.name?.message} inputregister={{...register("name")}} mb={"12px"} labeltext={"Nome"} inputplaceholder={"Ex: Samuel Leão"} inputtype={"text"} />
-                <InputForm errors={errors.email?.message} isInvalid={!!errors.email?.message} inputregister={{...register("email")}} mb={"12px"} labeltext={"Email"} inputplaceholder={"Ex: samuel@kenzie.com.br"} inputtype={"email"} />
-                <InputForm errors={errors.cpf?.message} isInvalid={!!errors.cpf?.message} inputregister={{...register("cpf")}} labeltext={"CPF"} inputplaceholder={"000.000.000-00"} mb={"12px"} inputtype={"string"} />
-                <InputForm errors={errors.phone?.message} isInvalid={!!errors.phone?.message} inputregister={{...register("phone")}} mb={"12px"} labeltext={"Celular"} inputplaceholder={"(DDD) 90000-0000"} inputtype={"string"} />
-                <InputForm errors={errors.birth_date?.message} isInvalid={!!errors.birth_date?.message} inputregister={{...register("birth_date")}} mb={"12px"} labeltext={"Data de nascimento"} inputplaceholder={"00/00/00"} inputtype={"date"} />
-                <FormControl mb={"34px"} isInvalid={!!errors.description?.message}>
-                <FormLabel>Descrição</FormLabel>
-                <TextArea {...register("description")} resize={"none"} placeholder={"Digitar descrição"} h={"48px"} _focusVisible={{boxShadow: "0 0 0 1px var(--chakra-colors-blue-400)"}} mb={"0px"} _focus={{borderColor: "blue.400"}} />
-                        <FormErrorMessage mt={"4px"} position={"absolute"}>
-                            {errors.description?.message}
-                        </FormErrorMessage>
-                    </FormControl>
-
-            </DefaultForm>
-            
+            <Text
+              mb={"16px"}
+              w={"100%"}
+              textAlign={"left"}
+              color={"grey.500"}
+              fontSize={["sm", "md", "lg"]}
+            >
+              Informações pessoais
+            </Text>
+            <FormControl id="name">
+              <FormLabel fontSize={["sm", "sm", "md"]} color={"grey.400"}>
+                Nome
+              </FormLabel>
+              <Input
+                type="text"
+                {...register("name")}
+                defaultValue={user?.name}
+                mb={"20px"}
+              />
+            </FormControl>
+            <FormControl id="email">
+              <FormLabel fontSize={["sm", "sm", "md"]} color={"grey.400"}>
+                Email
+              </FormLabel>
+              <Input
+                type="email"
+                {...register("email")}
+                defaultValue={user?.email}
+                mb={"20px"}
+              />
+            </FormControl>
+            <FormControl id="cpf">
+              <FormLabel fontSize={["sm", "sm", "md"]} color={"grey.400"}>CPF</FormLabel>
+              <Input
+                type="text"
+                {...register("cpf")}
+                defaultValue={user?.cpf}
+                mb={"20px"}
+              />
+            </FormControl>
+            <FormControl id="phone">
+              <FormLabel fontSize={["sm", "sm", "md"]} color={"grey.400"}>Celular</FormLabel>
+              <Input
+                type="text"
+                {...register("phone")}
+                defaultValue={user?.phone}
+                mb={"20px"}
+              />
+            </FormControl>
+            <FormControl id="birth_date">
+              <FormLabel fontSize={["sm", "sm", "md"]} color={"grey.400"}>Data de nascimento</FormLabel>
+              <Input type="date" {...register("birth_date")} mb={"20px"}/>
+            </FormControl>
+            <FormControl id="description">
+              <FormLabel fontSize={["sm", "sm", "md"]} color={"grey.400"}>Descrição</FormLabel>
+              <Textarea
+                {...register("description")}
+                defaultValue={user?.description}
+              />
+            </FormControl>
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
+            <Button backgroundColor={'grey.125'} color={'grey.300'} fontWeight={'semibold'} fontSize={['sm', 'sm', 'md']} mr={3} onClick={onClose}>
               Cancelar
             </Button>
-            <Button variant='ghost'>Excluir Perfil</Button>
-            <Button variant='ghost'>Salvar alterações</Button>
+            <Button backgroundColor={'red.200'} color={'red.700'} fontWeight={'semibold'} fontSize={['sm', 'sm', 'md']} mr={3} onClick={() => deleteUser()}>Excluir Perfil</Button>
+            <Button backgroundColor={'blue.300'} color={'grey.0'} fontWeight={'medium'} fontSize={['sm', 'sm', 'md']} type={"submit"} onClick={handleSubmit(onFormSubmit)}>
+              Salvar alterações
+            </Button>
           </ModalFooter>
         </ModalContent>
       </Modal>
     </>
-  )
-  }
+  );
+};
 
-  export default UserModal
+export default UserModal;

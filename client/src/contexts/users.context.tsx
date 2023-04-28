@@ -4,6 +4,7 @@ import api from "@/services/api";
 import { IUser, IUserCreate, IUserEdite, IUserLogin } from "@/types/user";
 import { setCookie, parseCookies, destroyCookie } from "nookies";
 import { Box, Button, Flex, Text, ToastId, useToast } from "@chakra-ui/react";
+import nookies from 'nookies'
 
 interface IUserContextProvider {
     children: React.ReactNode
@@ -165,37 +166,77 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
 
     const editeUser = async (dataForm: IUserEdite) => {
 
-        const cookie = parseCookies()
-
-            if (cookie.karsToken) {
-                api.defaults.headers.authorization = `Bearer ${cookie.karsToken}`
-        try {
-            await api.patch(`/users/${cookie.karsUserId}`, dataForm)
-            
+        const cookie = nookies.get()
+        
+        api.defaults.headers.authorization = `Bearer ${cookie['karsToken']}`
+        api.patch(`/users/${user?.id}`, dataForm)
+        .then ((response) => {
+            toast({
+                title: 'sucess',
+                variant: 'solid',
+                position: 'top-right',
+                isClosable: true,
+                render: () => (
+                    <Box color={'grey.50'} p={3} bg={'green.700'} fontWeight={'bold'} borderRadius={'md'}>
+                      Atualização realizada com sucesso!
+                    </Box>
+                  ),
+            })
             router.reload()
-        } catch (err) {
-            
-            console.log(err)
-        }
-        }
-    }
+        })
+        .catch((err) => {
+            toast({
+                title: 'error',
+                variant:'solid',
+                position: 'top-right',
+                isClosable: true,
+                render: () => (
+                    <Box color={'grey.50'} p={3} bg={'red.700'} fontWeight={'bold'} borderRadius={'md'}>
+                      Erro na atualização, confira suas informações!
+                    </Box>
+                  ),
+            })
+        })
+               
+       }
 
     const deleteUser = async () => {
-
-        const cookie = parseCookies()
-
-            if (cookie.karsToken) {
-                api.defaults.headers.authorization = `Bearer ${cookie.karsToken}`
-        try {
-            await api.delete(`/users/${cookie.karsUserId}`)
-            
-            router.reload()
-        } catch (err) {
-            
-            console.log(err)
-        }
+        const cookie = nookies.get()
+        
+        api.defaults.headers.authorization = `Bearer ${cookie['karsToken']}`
+        api.delete(`/users/${user?.id}`)
+        .then((response) => {
+            toast({
+                title: 'sucess',
+                variant: 'solid',
+                position: 'top-right',
+                isClosable: true,
+                render: () => (
+                    <Box color={'gray.50'} p={3} bg={'green.700'} fontWeight={'bold'} borderRadius={'md'}>
+                      Perfil excluído com sucesso !
+                    </Box>
+                  ),
+            })
+            destroyCookie(null, "karsToken")
+            destroyCookie(null, "karsUser")
+            destroyCookie(null, "karsUserId")
+            setUser(null)
+            router.push("/")
+        })
+        .catch((err) => {
+            toast({
+                title: 'error',
+                variant:'solid',
+                position: 'top-right',
+                isClosable: true,
+                render: () => (
+                    <Box color={'gray.50'} p={3} bg={'red.700'} fontWeight={'bold'} borderRadius={'md'}>
+                      Não foi possível excluir seu perfil!
+                    </Box>
+                  )
+            })
+        })
     }
-}
 
     
 

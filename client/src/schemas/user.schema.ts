@@ -25,10 +25,10 @@ export const createUserSchema = yup.object().shape({
 
 export const editeUserSchema = yup.object().shape({
     name: yup.string().notRequired(),
-    email: yup.string().email("Deve ser um email valido").notRequired(),
-    cpf: yup.string().length(11, "O CPF deve conter 11 números").matches(new RegExp("^[0-9]{11}$"), "O CPF deve conter apenas números.").notRequired(),
-    phone: yup.string().length(11, "O telefone deve conter 11 números").matches(new RegExp("^[0-9]{11}$"), "O telefone deve conter apenas números").notRequired(),
+    email: yup.string().notRequired(),
+    cpf: yup.string().notRequired(),
+    phone: yup.string().notRequired(),
     birth_date: yup.string().notRequired(),
-    description: yup.string().required("A sua descrição é obrigatória"),
+    description: yup.string().notRequired(),
     
 });
