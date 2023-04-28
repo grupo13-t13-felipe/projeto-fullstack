@@ -40,7 +40,6 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
 
                 try {
                     const { data } = await api.get("/profile")
-                    console.log("Usuario com token valido")
                     setUser(data)
                     router.push("/")
                 } catch (err) {
@@ -72,7 +71,7 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
             setUser(user)
 
             router.push(previousPath)
-        } catch (err) {
+        } catch (err: any) {
             toastIdRef.current = toast({
                 title: "error",
                 variant: "solid",
@@ -88,7 +87,7 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
                                 </Flex>
                                 <Flex flexDirection={"column"}>
                                     <Text fontSize={"20px"}>
-                                        Verifique seus dados e tente novamente!
+                                        {err.message.includes("500") ? "Ops!! Tivemos um problema, tente novamente mais tarde!" : "Verifique seus dados e tente novamente!"}
                                     </Text>
                                 </Flex>
                             </Box>
@@ -116,14 +115,14 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
                                     <Text fontSize={"20px"}>Sucesso!</Text>
                                     <Button onClick={closeToast} fontWeight={"400"} fontSize={"24px"} color={"grey.200"} border={"none"} bgColor={"transparent"} _hover={{bgColor: "transparent", color: "grey.250"}}>X</Button>
                                 </Flex>
-                                <Flex flexDirection={"column"}>
+                                <Flex flexDirection={"column"} gap={"16px"}>
                                     <Text fontSize={"20px"}>
                                         Sua conta foi criada com sucesso!
                                     </Text>
                                     <Text fontWeight={"400"} color={"grey.300"}>
                                         Agora você poderá ver seus negócios crescendo em grande escala
                                     </Text>
-                                    <Button onClick={() => router.push("/login")}>
+                                    <Button maxW={"250px"} w={"100%"} h={"48px"} color={"white"} fontWeight={"500"} bgColor={"blue.300"} border={"1px solid blue.300"} _hover={{borderColor: "blue.400", bgColor: "blue.400"}} onClick={() => router.push("/login")}>
                                         Ir para login
                                     </Button>
                                 </Flex>
@@ -132,8 +131,7 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
                     )
                 }
             })
-            router.push("/login")
-        } catch (err) {
+        } catch (err: any) {
             toastIdRef.current = toast({
                 title: "error",
                 variant: "solid",
@@ -149,7 +147,10 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
                                 </Flex>
                                 <Flex flexDirection={"column"}>
                                     <Text fontSize={"20px"}>
-                                        Verifique seus dados e tente novamente!
+                                        {err.response.data.message.includes("email") && "Já existe uma conta com este email!"}
+                                        {err.response.data.message.includes("cpf") && "Já existe uma conta com este CPF!"}
+                                        {err.response.data.message.includes("phone") && "Já existe uma conta com este número de telefone!"}
+                                        {err.message.includes("500") && "Verifique seus dados e tente novamente!"}
                                     </Text>
                                 </Flex>
                             </Box>

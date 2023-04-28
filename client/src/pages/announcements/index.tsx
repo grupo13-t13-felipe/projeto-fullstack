@@ -5,7 +5,7 @@ import HeaderProfile from "@/components/headers/headerProfile";
 import ProductCard from "@/components/productCard";
 import { annoucementCtx } from "@/contexts/announcements.context";
 import { UserContext } from "@/contexts/users.context";
-import { Box, Flex, List, ListItem, Text, Link, Avatar } from "@chakra-ui/react";
+import { Flex, List, ListItem, Text, Link, Avatar } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useContext } from "react";
 
@@ -109,9 +109,10 @@ const Advertiser = () => {
                                 >
                                     {
                                         announcementsByOwner!.map((element, index) => {
+                                            console.log(announcementsByOwner)
                                             return (
                                                 <ListItem w={"312px"} display={"inline-block"} key={index}>
-                                                    <Link _hover={{ textDecoration: "none" }} as={NextLink} href={`/product/${element.id}`}>
+                                                    <Link _hover={{ textDecoration: "none" }} as={NextLink} href={`/products/${element.id}`}>
                                                         <ProductCard
                                                             image={`${element.cover_image}`}
                                                             alt={`${element.brand}`}

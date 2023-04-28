@@ -364,7 +364,6 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
 export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
   const id = ctx.params!.id;
   const responseAn = await api.get(`/annoucements/${id}`);
-  console.log(responseAn)
   const announcement: IAnnouncement = responseAn.data;
 
   return {
