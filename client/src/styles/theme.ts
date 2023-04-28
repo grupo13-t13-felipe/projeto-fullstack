@@ -33,6 +33,7 @@ const customTheme = extendTheme({
             100: "#DDF3E4",
             200: "#CCEBD7",
             700: "#18794E",
+            800: "#349974"
           },
     },
     fonts: {

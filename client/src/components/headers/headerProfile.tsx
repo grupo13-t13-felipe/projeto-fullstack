@@ -2,6 +2,7 @@ import { Box, Flex, Text, HStack, MenuButton, Menu, MenuList, MenuItem, IconButt
 import { HamburgerIcon} from '@chakra-ui/icons'
 import { useContext } from "react";
 import { UserContext } from "@/contexts/users.context";
+import UserModal from "../UserModal";
 
 
 
@@ -11,7 +12,7 @@ const ProfileMenuList = () => {
   return (
     <MenuList>
       <MenuItem>
-        <Link href="">{""}Editar Perfil</Link>
+        <UserModal/>
       </MenuItem>
       <MenuItem>
         <Link href="">{""}Editar endereço</Link>

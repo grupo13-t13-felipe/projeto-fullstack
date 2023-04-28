@@ -21,3 +21,14 @@ export const createUserSchema = yup.object().shape({
     password: yup.string().min(8, "A senha deve conter no mínimo 8 caracteres").required("A senha é obrigatória"),
     confirm_password: yup.string().oneOf([yup.ref("password")], "As senhas devem ser iguais")
 });
+
+
+export const editeUserSchema = yup.object().shape({
+    name: yup.string().notRequired(),
+    email: yup.string().notRequired(),
+    cpf: yup.string().notRequired(),
+    phone: yup.string().notRequired(),
+    birth_date: yup.string().notRequired(),
+    description: yup.string().notRequired(),
+    
+});

@@ -1,9 +1,10 @@
 import { createContext, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import api from "@/services/api";
-import { IUser, IUserCreate, IUserLogin } from "@/types/user";
+import { IUser, IUserCreate, IUserEdite, IUserLogin } from "@/types/user";
 import { setCookie, parseCookies, destroyCookie } from "nookies";
 import { Box, Button, Flex, Text, ToastId, useToast } from "@chakra-ui/react";
+import nookies from 'nookies'
 
 interface IUserContextProvider {
     children: React.ReactNode
@@ -14,6 +15,8 @@ interface IUserContext {
     createUser: (dataForm: IUserCreate) => void;
     logoutUser: () => void;
     user: IUser | null;
+    editeUser: (dataForm: IUserEdite) => void;
+    deleteUser: () => void
 }
 
 export const UserContext = createContext({} as IUserContext)
@@ -162,6 +165,82 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
         }
     }
 
+    const editeUser = async (dataForm: IUserEdite) => {
+
+        const cookie = nookies.get()
+        
+        api.defaults.headers.authorization = `Bearer ${cookie['karsToken']}`
+        api.patch(`/users/${user?.id}`, dataForm)
+        .then ((response) => {
+            toast({
+                title: 'sucess',
+                variant: 'solid',
+                position: 'top-right',
+                isClosable: true,
+                render: () => (
+                    <Box color={'grey.50'} p={3} bg={'green.700'} fontWeight={'bold'} borderRadius={'md'}>
+                      Atualização realizada com sucesso!
+                    </Box>
+                  ),
+            })
+            router.reload()
+        })
+        .catch((err) => {
+            toast({
+                title: 'error',
+                variant:'solid',
+                position: 'top-right',
+                isClosable: true,
+                render: () => (
+                    <Box color={'grey.50'} p={3} bg={'red.700'} fontWeight={'bold'} borderRadius={'md'}>
+                      Erro na atualização, confira suas informações!
+                    </Box>
+                  ),
+            })
+        })
+               
+       }
+
+    const deleteUser = async () => {
+        const cookie = nookies.get()
+        
+        api.defaults.headers.authorization = `Bearer ${cookie['karsToken']}`
+        api.delete(`/users/${user?.id}`)
+        .then((response) => {
+            toast({
+                title: 'sucess',
+                variant: 'solid',
+                position: 'top-right',
+                isClosable: true,
+                render: () => (
+                    <Box color={'gray.50'} p={3} bg={'green.700'} fontWeight={'bold'} borderRadius={'md'}>
+                      Perfil excluído com sucesso !
+                    </Box>
+                  ),
+            })
+            destroyCookie(null, "karsToken")
+            destroyCookie(null, "karsUser")
+            destroyCookie(null, "karsUserId")
+            setUser(null)
+            router.push("/")
+        })
+        .catch((err) => {
+            toast({
+                title: 'error',
+                variant:'solid',
+                position: 'top-right',
+                isClosable: true,
+                render: () => (
+                    <Box color={'gray.50'} p={3} bg={'red.700'} fontWeight={'bold'} borderRadius={'md'}>
+                      Não foi possível excluir seu perfil!
+                    </Box>
+                  )
+            })
+        })
+    }
+
+    
+
     const logoutUser = () => {
         destroyCookie(null, "karsToken")
         destroyCookie(null, "karsUser")
@@ -170,7 +249,7 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
     }
 
     return (
-        <UserContext.Provider value={{ loginUser, createUser, logoutUser, user }}>
+        <UserContext.Provider value={{ loginUser, createUser, logoutUser, user, editeUser, deleteUser }}>
             {children}
         </UserContext.Provider>
     )
