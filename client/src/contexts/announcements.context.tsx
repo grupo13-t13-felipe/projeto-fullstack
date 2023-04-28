@@ -7,8 +7,9 @@ import React, {
 } from "react";
 import { useRouter } from "next/router";
 import api from "@/services/api";
-import { IAnnouncement, IAnnouncementOwner } from "@/types/announcements";
+import { IAnnouncement, IAnnouncementCreate, IAnnouncementOwner } from "@/types/announcements";
 import { UserContext } from "./users.context";
+import { Box, useToast } from "@chakra-ui/react";
 
 interface AnnouncementProviderData {
 	allAnnouncements: IAnnouncement[] | any;
@@ -36,6 +37,7 @@ interface AnnouncementProviderData {
 	getAllAnnouncements: () => Promise<void>;
 	paginationPage: number;
 	setPaginationPage: React.Dispatch<React.SetStateAction<number>>;
+    createAnnouncement: (dataForm: IAnnouncementCreate) => void
 }
 
 export interface IFilters {
@@ -81,6 +83,30 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 	const [filterData, setFilterData] = useState<IFilters | undefined>();
 	const [actualFilters, setActualFilters] = useState<IFilters | undefined>();
 	const [selectedFilters, setSelectedFilters] = useState<ISelectedFilter>({});
+	const { user } = useContext(UserContext);
+    const toast = useToast()
+
+    async function createAnnouncement(dataForm: IAnnouncementCreate) {
+        try {
+            console.log(dataForm)
+            await api.post("/annoucements", dataForm)
+        } catch (err){
+            console.log(err)
+            toast({
+                title: "error",
+                variant: "solid",
+                position: "top-right",
+                isClosable: true,
+                render: () => {
+                    return (
+                        <Box borderRadius={"4px"} color={"grey.50"} p={3} bg={"red.700"} fontWeight={"500"}>
+                            Ops!! Verifique seus dados e tente novamente!
+                        </Box>
+                    )
+                }
+            })
+        }
+    }
 
 	async function getAllAnnouncements() {
 		try {
@@ -135,7 +161,7 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 
 	return (
 		<AnnouncementContext.Provider
-			value={{
+			value={{ createAnnouncement,
 				allAnnouncements,
 				setAllAnnouncements,
 				allFilteredAnnouncements,

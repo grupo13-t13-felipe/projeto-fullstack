@@ -59,6 +59,7 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
   
     const loginUser = async (dataForm: IUserLogin) => {
         try {
+            console.log("yay")
             const { data } = await api.post("/login", dataForm)
             const { token, user } = data
 
