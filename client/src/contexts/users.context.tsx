@@ -170,7 +170,7 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
             if (cookie.karsToken) {
                 api.defaults.headers.authorization = `Bearer ${cookie.karsToken}`
         try {
-            await api.post(`/users/${cookie.karsUserId}`, dataForm)
+            await api.patch(`/users/${cookie.karsUserId}`, dataForm)
             
             router.reload()
         } catch (err) {
@@ -187,7 +187,7 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
             if (cookie.karsToken) {
                 api.defaults.headers.authorization = `Bearer ${cookie.karsToken}`
         try {
-            await api.post(`/users/${cookie.karsUserId}`)
+            await api.delete(`/users/${cookie.karsUserId}`)
             
             router.reload()
         } catch (err) {
