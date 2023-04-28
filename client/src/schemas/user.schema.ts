@@ -38,3 +38,12 @@ export const editeUserSchema = yup.object().shape({
     birth_date: yup.string().notRequired(),
     description: yup.string().notRequired(),
 });
+
+export const editAddressSchema = yup.object().shape({
+    cep: yup.string().notRequired(),
+    state: yup.string().notRequired(),
+    city: yup.string().notRequired(),
+    street: yup.string().notRequired(),
+    number: yup.string().notRequired(),
+    complement: yup.string().notRequired(),
+});

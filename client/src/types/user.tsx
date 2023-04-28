@@ -6,7 +6,18 @@ export interface IUser {
 	phone: string,
 	description: string,
 	birth_date: string,
-	is_seller?: boolean
+	is_seller?: boolean,
+	address?: IAddress
+}
+
+export interface IAddress {
+	id?: string;
+	cep?: string;
+	state?: string;
+	city?: string;
+	street?: string;
+	number?: string;
+	complement?: string;
 }
 
 export interface Props {
