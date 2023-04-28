@@ -10,7 +10,7 @@ export interface IUser {
 }
 
 export interface Props {
-	user: IUser
+	user: IUser | null
 }
 
 export interface IUserLogin {
@@ -42,4 +42,12 @@ export interface ISendEmail {
 
 export interface IChangePassword {
 	password: string
+
+export interface IUserEdite {
+	name?: string;
+	email?: string;
+	cpf?: string;
+	phone?: string;
+	description?: string;
+	birth_date?: string;
 }

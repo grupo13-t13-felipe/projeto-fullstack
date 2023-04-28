@@ -29,3 +29,12 @@ export const sendEmailSchema = yup.object().shape({
 export const changePasswordSchema = yup.object().shape({
     password: yup.string().min(8, "A senha deve conter no mínimo 8 caracteres").required("A senha é obrigatória"),
 })
+
+export const editeUserSchema = yup.object().shape({
+    name: yup.string().notRequired(),
+    email: yup.string().notRequired(),
+    cpf: yup.string().notRequired(),
+    phone: yup.string().notRequired(),
+    birth_date: yup.string().notRequired(),
+    description: yup.string().notRequired(),
+});

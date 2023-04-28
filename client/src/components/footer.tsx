@@ -1,4 +1,4 @@
-import { Box, Flex, Text, Stack, LinkBox } from "@chakra-ui/react";
+import { Box, Flex, Text, Stack, LinkBox, Button } from "@chakra-ui/react";
 import { ChevronUpIcon } from "@chakra-ui/icons";
 import Link from "next/link";
 
@@ -22,9 +22,9 @@ const DefaultFooter = () => {
           &copy; 2023 - Todos os direitos reservados
         </Text>
         <LinkBox w={["unset", "unset", "217px"]} display={"flex"} justifyContent={"flex-end"}>
-          <Link href={"#top"}>
+          <Button h={"40px"} w={"40px"} onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}>
             <ChevronUpIcon color={"grey.0"} backgroundColor={"grey.400"} w={"40px"} height={"40px"} borderRadius={"4px"} />
-          </Link>
+          </Button>
         </LinkBox>
       </Stack>
     </Flex>

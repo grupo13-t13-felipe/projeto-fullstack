@@ -14,25 +14,31 @@ import {
   Avatar, Image
 } from "@chakra-ui/react";
 import { GetServerSideProps, NextPage } from "next";
-import { useRouter } from "next/router";
-import { IUser } from "@/types/user";
 import Modals from "@/components/modal";
-import nookies from 'nookies'
+import { useContext, useEffect, useState } from "react";
+import { UserContext } from "@/contexts/users.context";
+import DefaultHeader from "@/components/headers/headerDefault";
 import { annoucementCtx } from "@/contexts/announcements.context";
+import { useRouter } from "next/router";
 
 export interface Props {
   announcement: IAnnouncement;
-  user: IUser;
 }
 
-const Dashboard: NextPage<Props> = ({ announcement, user }) => {
-  const router = useRouter();
-  const { id } = router.query;
-  const { getOwnerById, ownerId } = annoucementCtx()
+const Dashboard: NextPage<Props> = ({ announcement }) => {
+  const { user } = useContext(UserContext)
+  const { getOwnerById } = annoucementCtx()
+  const router = useRouter()
+
+  const verifyLogin = () => {
+    if (!user) {
+      router.push("/login")
+    }
+  }
 
   return (
     <>
-      <HeaderProfile userLog={user.name} />
+        {user? <HeaderProfile/> : <DefaultHeader /> }
       <Flex
         direction={"column"}
         justifyContent={"space-between"}
@@ -110,11 +116,13 @@ const Dashboard: NextPage<Props> = ({ announcement, user }) => {
                 </Text>
               </HStack>
               <Box>
+                
                 <Buttons
                   backgroundColor={"blue.300"}
                   color={"grey.0"}
                   valueButton={"Comprar"}
                   margin={"0px 0px 20px 0px"}
+                  onClick={() => verifyLogin()}
                 />
               </Box>
             </Stack>
@@ -160,24 +168,22 @@ const Dashboard: NextPage<Props> = ({ announcement, user }) => {
                   return (
 
                     <Modals
-                      nameButton={
-                        <Box
-                          key={index}
-                          bgImage={item.url}
-                          bgSize={"contain"}
-                          bgPos={"center"}
-                          bgRepeat={"no-repeat"}
-                          w={"100%"}
-                          minH={"90px"}
-                          h={"108px"}
-                        ></Box>
-                      }
-                      backgroundColor={"transparent"}
-                      modalContent={
-                        <Image src={item.url} />
-                      }
-                      key={index}
-                    />
+                      nameButton={<Box
+                        key={index}
+                        bgImage={item.url}
+                        bgSize={"contain"}
+                        bgPos={"center"}
+                        bgRepeat={"no-repeat"}
+                        w={"100%"}
+                        minH={"90px"}
+                        h={"108px"}
+                      ></Box>}
+                      modalContent={<Image src={item.url} />}
+                      key={index} isOpen={false} onOpen={function (): void {
+                        throw new Error("Function not implemented.");
+                      } } onClose={function (): void {
+                        throw new Error("Function not implemented.");
+                      } } modalTitle={""} titlesColor={""} modalButtons={undefined} sizeTitle={""} footerDirection={""} footerWidth={""} modalButtonColor={""} modalButtonBg={""} buttonWidth={""} buttonRadius={""} buttonBorder={""} buttonBorderColor={""}                    />
                   );
                 })}
               </SimpleGrid>
@@ -191,9 +197,9 @@ const Dashboard: NextPage<Props> = ({ announcement, user }) => {
               borderRadius={"base"}
               mr={["15px", "15px", "50px"]}
             >
-              <Avatar name={user.name} size={"md"} ml={"10px"} />{" "}
+              <Avatar name={announcement.owner.name} size={"md"} ml={"10px"} />{" "}
               <Text color={"grey.400"} fontWeight={"semibold"} fontSize={"xl"}>
-                {user.name}
+                {announcement.owner.name}
               </Text>
               <Text
                 color={"grey.300"}
@@ -201,15 +207,14 @@ const Dashboard: NextPage<Props> = ({ announcement, user }) => {
                 fontSize={"md"}
                 textAlign={"center"}
               >
-                Lorem Ipsum is simply dummy text of the printing and typesetting
-                industry. Lorem Ipsum has been the industry's
+                {announcement.owner.description}
               </Text>
               <Buttons
                 backgroundColor={"grey.500"}
                 color={"grey.0"}
                 fontSize={"md"}
                 valueButton={"Ver todos os anuncios"}
-                onClick={() => getOwnerById(ownerId)}
+                onClick={() => user ? getOwnerById(announcement.owner.id) : router.push("/login")}
               />
             </Stack>
           </Stack>
@@ -363,19 +368,13 @@ const Dashboard: NextPage<Props> = ({ announcement, user }) => {
 };
 
 export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
-  const cookies = nookies.get(ctx)
-  api.defaults.headers.authorization = `Bearer ${cookies['karsToken']} `;
-  const idUser = JSON.parse(cookies["karsUserId"])
   const id = ctx.params!.id;
   const responseAn = await api.get(`/annoucements/${id}`);
-  const responseUser = await api.get(`/users/${idUser}`);
   const announcement: IAnnouncement = responseAn.data;
-  const user: IUser = responseUser.data;
 
   return {
     props: {
       announcement,
-      user,
     },
   };
 };

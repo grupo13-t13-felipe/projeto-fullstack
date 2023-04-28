@@ -1,23 +1,30 @@
 /* eslint-disable prettier/prettier */
-import { Injectable, NotFoundException, ConflictException } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ConflictException,
+} from '@nestjs/common';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateAddressDto } from '../address/dto/create-address.dto';
 import { PrismaService } from 'src/database/prisma.service';
 import { UsersPrismaRepository } from './repositories/prisma/users.prisma.repository';
 import { MailService } from 'src/utils/mail.service';
-import { randomUUID } from "node:crypto";
+import { randomUUID } from 'node:crypto';
 import { hashSync } from 'bcryptjs';
-import "dotenv/config"
+import 'dotenv/config';
 
 @Injectable()
 export class UsersService {
   constructor(
     private prisma: PrismaService,
     private prismaRepository: UsersPrismaRepository,
-    private mailService: MailService
-  ) { }
-  async create(createUserDto: CreateUserDto, createAddressDto: CreateAddressDto) {
+    private mailService: MailService,
+  ) {}
+  async create(
+    createUserDto: CreateUserDto,
+    createAddressDto: CreateAddressDto,
+  ) {
     const findUser = await this.prisma.user.findFirst({
       where: {
         OR: [
@@ -34,12 +41,12 @@ export class UsersService {
     });
 
     if (findUser) {
-      const keys = ["email", "cpf", "phone"]
-      keys.forEach(key => {
+      const keys = ['email', 'cpf', 'phone'];
+      keys.forEach((key) => {
         if (findUser[key] == createUserDto[key]) {
-          throw new ConflictException(`this ${key} already in use`)
+          throw new ConflictException(`this ${key} already in use`);
         }
-      })
+      });
     }
 
     return this.prismaRepository.create(createUserDto, createAddressDto);
@@ -52,7 +59,7 @@ export class UsersService {
   async findOne(id: string) {
     const findUser = await this.prismaRepository.findOne(id);
     if (!findUser) {
-      throw new NotFoundException("user not found");
+      throw new NotFoundException('user not found');
     }
     return findUser;
   }
@@ -65,8 +72,10 @@ export class UsersService {
   async update(id: string, updateUserDto: UpdateUserDto) {
     const findUserToUpdate = await this.prismaRepository.findOne(id);
     if (!findUserToUpdate) {
-      throw new NotFoundException("user not found");
+      throw new NotFoundException('user not found');
     }
+
+    console.log(updateUserDto)
 
     const findUser = await this.prisma.user.findFirst({
       where: {
@@ -85,12 +94,12 @@ export class UsersService {
     });
 
     if (findUser && findUser.id !== id) {
-      const keys = ["email", "cpf", "phone"]
-      keys.forEach(key => {
+      const keys = ['email', 'cpf', 'phone'];
+      keys.forEach((key) => {
         if (findUser[key] === updateUserDto[key]) {
-          throw new ConflictException(`this ${key} already in use`)
+          throw new ConflictException(`this ${key} already in use`);
         }
-      })
+      });
     }
 
     return this.prismaRepository.update(id, updateUserDto);
@@ -99,7 +108,7 @@ export class UsersService {
   async remove(id: string) {
     const findUser = await this.prismaRepository.findOne(id);
     if (!findUser) {
-      throw new NotFoundException("user not found");
+      throw new NotFoundException('user not found');
     }
     return this.prismaRepository.delete(id);
   }
@@ -107,45 +116,49 @@ export class UsersService {
   async sendResetEmailPassword(email: string) {
     const user = await this.prisma.user.findUnique({
       where: { email },
-    })
+    });
 
     if (!user) {
-      throw new NotFoundException('User not found')
+      throw new NotFoundException('User not found');
     }
 
-    const resetToken = randomUUID()
+    const resetToken = randomUUID();
 
     await this.prisma.user.update({
       where: { email },
       data: {
         reset_token: resetToken,
-      }
-    })
+      },
+    });
 
-    const resetPasswordTemplate = this.mailService.resetPassword(email, user.name, resetToken)
+    const resetPasswordTemplate = this.mailService.resetPassword(
+      email,
+      user.name,
+      resetToken,
+    );
 
-    await this.mailService.sendEmail(resetPasswordTemplate)
+    await this.mailService.sendEmail(resetPasswordTemplate);
   }
 
   async resetPassword(password: string, resetToken: string) {
     const user = await this.prisma.user.findFirst({
       where: {
         reset_token: resetToken,
-      }
-    })
+      },
+    });
 
     if (!user) {
-      throw new NotFoundException('User not found')
+      throw new NotFoundException('User not found');
     }
 
     await this.prisma.user.update({
       where: {
-        id: user.id
+        id: user.id,
       },
       data: {
         password: hashSync(password, 10),
-        reset_token: undefined
-      }
-    })
+        reset_token: undefined,
+      },
+    });
   }
 }

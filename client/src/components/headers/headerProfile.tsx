@@ -1,21 +1,18 @@
 import { Box, Flex, Text, HStack, MenuButton, Menu, MenuList, MenuItem, IconButton, Link, Avatar } from "@chakra-ui/react";
 import { HamburgerIcon} from '@chakra-ui/icons'
-import { IUser } from "@/types/user";
 import { useContext } from "react";
 import { UserContext } from "@/contexts/users.context";
+import UserModal from "../UserModal";
 
-interface IHeaderProfile {
-  userLog: string
-}
 
 
 const ProfileMenuList = () => {
-  const {user} = useContext(UserContext)
+  const {user, logoutUser} = useContext(UserContext)
   
   return (
     <MenuList>
       <MenuItem>
-        <Link href="">{""}Editar Perfil</Link>
+        <UserModal/>
       </MenuItem>
       <MenuItem>
         <Link href="">{""}Editar endereço</Link>
@@ -23,13 +20,14 @@ const ProfileMenuList = () => {
       {user?.is_seller? <MenuItem><Link href="">{""}Meus anúncios</Link> </MenuItem> : <></> }
      
       <MenuItem>
-        <Link href="/login">{""}Sair</Link>
+        <Link href="/login" onClick={() => logoutUser()}>{""}Sair</Link>
       </MenuItem>
     </MenuList>
   );
 }
 
-const HeaderProfile = ({userLog}: IHeaderProfile) => {
+const HeaderProfile = () => {
+  const {user} = useContext(UserContext)
   
   return (
     <Flex justifyContent={'space-between'} mx={['20px', '20px', '26px', '30px', 'auto']} h={'80px'} maxW={'1200px'}>
@@ -40,7 +38,7 @@ const HeaderProfile = ({userLog}: IHeaderProfile) => {
         bgClip='text'>Shop</Text>
       </HStack>
       <HStack borderLeft={'1px'} borderColor={'grey.200'}>
-        <Avatar name={userLog} size={'md'} ml={'10px'}/>{' '}
+        <Avatar name={user?.name} size={'md'} ml={'10px'}/>{' '}
         
         <Box display={['none', 'none', 'block']}>
           <Menu >
@@ -48,7 +46,7 @@ const HeaderProfile = ({userLog}: IHeaderProfile) => {
             as={Link}
             aria-label='Options'
             variant='outline'
-          >{userLog}</MenuButton>
+          >{user?.name}</MenuButton>
           {ProfileMenuList()}
         </Menu>
         </Box>
@@ -60,7 +58,7 @@ const HeaderProfile = ({userLog}: IHeaderProfile) => {
             aria-label='Options'
             icon={<HamburgerIcon />}
             variant='outline'
-          >{userLog}</MenuButton>
+          >{user?.name}</MenuButton>
           {ProfileMenuList()}
         </Menu>
         </Box>

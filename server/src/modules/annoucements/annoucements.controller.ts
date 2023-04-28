@@ -44,6 +44,11 @@ export class AnnoucementsController {
     );
   }
 
+  @Get('filters')
+  getAllAnnoucementFilterTypes() {
+    return this.annoucementsService.getAllAnnoucementFilterTypes();
+  }
+
   @Get()
   findAll(
     @Query() query: AnnoucementFiltersDto,

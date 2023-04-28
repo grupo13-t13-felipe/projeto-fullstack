@@ -1,5 +1,5 @@
 import { useContext } from 'react'
-import { useForm, Controller } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { yupResolver } from "@hookform/resolvers/yup";
 import DefaultFooter from '@/components/footer'
 import DefaultForm from '@/components/form'
@@ -28,8 +28,8 @@ const Register = () => {
                     <Text mb={"16px"} w={"100%"} textAlign={"left"}>Informações pessoais</Text>
                     <InputForm errors={errors.name?.message} isInvalid={!!errors.name?.message} inputregister={{...register("name")}} isRequired mb={"12px"} labeltext={"Nome"} inputplaceholder={"Ex: Samuel Leão"} inputtype={"text"} />
                     <InputForm errors={errors.email?.message} isInvalid={!!errors.email?.message} inputregister={{...register("email")}} isRequired mb={"12px"} labeltext={"Email"} inputplaceholder={"Ex: samuel@kenzie.com.br"} inputtype={"email"} />
-                    <InputForm errors={errors.cpf?.message} isInvalid={!!errors.cpf?.message} inputregister={{...register("cpf")}} isRequired labeltext={"CPF"} inputplaceholder={"000.000.000-00"} mb={"12px"} inputtype={"string"} />
-                    <InputForm errors={errors.phone?.message} isInvalid={!!errors.phone?.message} inputregister={{...register("phone")}} isRequired mb={"12px"} labeltext={"Celular"} inputplaceholder={"(DDD) 90000-0000"} inputtype={"string"} />
+                    <InputForm errors={errors.cpf?.message} isInvalid={!!errors.cpf?.message} inputregister={{...register("cpf")}} isRequired labeltext={"CPF"} inputplaceholder={"000.000.000-00"} mb={"12px"} inputtype={"text"} />
+                    <InputForm errors={errors.phone?.message} isInvalid={!!errors.phone?.message} inputregister={{...register("phone")}} isRequired mb={"12px"} labeltext={"Celular"} inputplaceholder={"(DDD) 90000-0000"} inputtype={"text"} />
                     <InputForm errors={errors.birth_date?.message} isInvalid={!!errors.birth_date?.message} inputregister={{...register("birth_date")}} isRequired mb={"12px"} labeltext={"Data de nascimento"} inputplaceholder={"00/00/00"} inputtype={"date"} />
                     <FormControl mb={"34px"} isInvalid={!!errors.description?.message} isRequired>
                         <FormLabel>
