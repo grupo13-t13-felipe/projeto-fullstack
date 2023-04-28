@@ -55,7 +55,7 @@ const SendEmail = () => {
             <Flex minH={"600px"} h={["calc(100vh - 60px - 149px)", "calc(100vh - 60px - 149px)", "calc(100vh - 60px - 120px)"]} justifyContent={"center"} alignItems={"center"} bgColor={"grey.50"} p={"16px"}>
                 <DefaultForm submithandler={handleSubmit(changePassword)} formtitle="Inserir senha de recuperação">
                     <InputForm errors={errors.password?.message} isInvalid={!!errors.password?.message} inputregister={{ ...register("password") }} isRequired mb={"12px"} labeltext={"Senha"} inputplaceholder={"Digitar senha"} inputtype={"text"} />
-                    <Buttons onClick={() => setIdChangePassword(String(id))} backgroundColor={"blue.300"} color={"white"} fontSize={"md"} valueButton={"Enviar senha"} hover={"blue.400"} border={"solid 2px"} radius={"5px"} borderColor={"black"} width={"100%"} maxWidth={"500px"} margin={"2px"} type={"submit"} />
+                    <Buttons onClick={() => setIdChangePassword(String(id))} backgroundColor={"blue.300"} color={"white"} fontSize={"md"} valueButton={"Enviar senha"} hover={"blue.400"} border={"1px solid blue.300"} radius={"5px"} borderColor={"black"} width={"100%"} maxWidth={"500px"} margin={"2px"} type={"submit"} />
                 </DefaultForm>
             </Flex>
             <DefaultFooter />
