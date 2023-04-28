@@ -19,7 +19,7 @@ import "dotenv/config"
         }
       },
       defaults: {
-        from: "kauancompositor@outlook.com"
+        from: "lucaskauandev@gmail.com"
       }
     })
   ],

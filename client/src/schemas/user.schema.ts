@@ -21,3 +21,11 @@ export const createUserSchema = yup.object().shape({
     password: yup.string().min(8, "A senha deve conter no mínimo 8 caracteres").required("A senha é obrigatória"),
     confirm_password: yup.string().oneOf([yup.ref("password")], "As senhas devem ser iguais")
 });
+
+export const sendEmailSchema = yup.object().shape({
+    email: yup.string().email("Deve ser um email valido").required("O email é obrigatório"),
+})
+
+export const changePasswordSchema = yup.object().shape({
+    password: yup.string().min(8, "A senha deve conter no mínimo 8 caracteres").required("A senha é obrigatória"),
+})

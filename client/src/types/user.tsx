@@ -35,3 +35,11 @@ export interface IUserCreate {
 	number: string;
 	complement: string;
 }
+
+export interface ISendEmail {
+	email: string
+}
+
+export interface IChangePassword {
+	password: string
+}
