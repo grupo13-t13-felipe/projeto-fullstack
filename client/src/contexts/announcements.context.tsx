@@ -81,7 +81,6 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 	const [filterData, setFilterData] = useState<IFilters | undefined>();
 	const [actualFilters, setActualFilters] = useState<IFilters | undefined>();
 	const [selectedFilters, setSelectedFilters] = useState<ISelectedFilter>({});
-	const { user } = useContext(UserContext);
 
 	async function getAllAnnouncements() {
 		try {
