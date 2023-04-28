@@ -1,4 +1,4 @@
-import { Button, ButtonGroup } from '@chakra-ui/react'
+import { Button, ButtonGroup } from "@chakra-ui/react";
 
 const Buttons = ({ onClick, backgroundColor, color, fontSize, valueButton, hover, border, radius, borderColor, width, maxWidth, margin, type, disable}: any) => {
     return (
