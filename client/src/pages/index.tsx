@@ -63,7 +63,7 @@ const Home = () => {
 							alignItems={"center"}
 							justifyContent={"center"}>
 							<Box
-								backgroundImage={"/Photo.svg"}
+								backgroundImage={"/folder.png"}
 								display={"flex"}
 								filter="grayscale(80%)"
 								backgroundPosition={"center"}
