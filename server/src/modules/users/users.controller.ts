@@ -62,13 +62,13 @@ export class UsersController {
   }
 
   @HttpCode(200)
-  @Post('resetPassword')
+  @Post('reset-password')
   async sendEmailResetPassword(@Body('email') email: string) {
     await this.usersService.sendResetEmailPassword(email)
     return { message: 'token send' }
   }
 
-  @Patch('resetPassword/:token')
+  @Patch('reset-password/:token')
   async resetPassword(
     @Param('token') token: string,
     @Body('password') password: string,

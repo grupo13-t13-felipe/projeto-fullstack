@@ -36,6 +36,13 @@ export interface IUserCreate {
 	complement: string;
 }
 
+export interface ISendEmail {
+	email: string
+}
+
+export interface IChangePassword {
+	password: string
+
 export interface IUserEdite {
 	name?: string;
 	email?: string;
