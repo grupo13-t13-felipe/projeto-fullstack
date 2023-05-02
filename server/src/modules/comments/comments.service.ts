@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import { Injectable } from '@nestjs/common';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
@@ -7,8 +8,12 @@ import { PrismaService } from 'src/database/prisma.service';
 export class CommentsService {
   constructor(private prisma: PrismaService) {}
 
-  create(createCommentDto: CreateCommentDto) {
-    return 'This action adds a new comment';
+  async create(createCommentDto: CreateCommentDto, announcement_id: string, owner_id: string) {
+
+    const comment = await this.prisma.comment.create({
+      data: {...createCommentDto, owner_id, announcement_id} 
+    })
+    return comment;
   }
 
   async findAllByAnnoucement(annoucement_id: string) {
