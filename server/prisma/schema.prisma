@@ -25,10 +25,13 @@ model User {
   updated_at  DateTime @updatedAt
   reset_token String   @default("") @db.Text
 
-  address    Address @relation(fields: [address_id], references: [id], onDelete: Cascade)
   address_id String  @unique
 
   annoucements Annoucement[]
+  comments Comment[]
+
+  address    Address @relation(fields: [address_id], references: [id], onDelete: Cascade)
+
 
   @@map("users")
 }
@@ -64,9 +67,25 @@ model Annoucement {
   updated_at  DateTime @updatedAt
 
   owner_id       String
+  
   gallery_images GalleryImage[]
+  comments Comment[]
 
   owner User @relation(fields: [owner_id], references: [id])
+}
+model Comment {
+  id           String   @id @default(uuid())
+  content      String   
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  owner_id    String
+  announcement_id String
+
+  owner       User     @relation(fields: [owner_id], references: [id])
+  announcement Annoucement @relation(fields: [announcement_id], references: [id])
+  
+  @@map("comments")
 }
 
 model GalleryImage {
