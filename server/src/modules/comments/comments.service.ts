@@ -11,7 +11,11 @@ export class CommentsService {
   async create(createCommentDto: CreateCommentDto, announcement_id: string, owner_id: string) {
 
     const comment = await this.prisma.comment.create({
-      data: {...createCommentDto, owner_id, announcement_id} 
+      data: {...createCommentDto, owner_id, announcement_id},
+      include: {
+        announcement: true,
+        owner: {select: {id: true, name: true, email: true }}
+      }
     })
     return comment;
   }
@@ -21,6 +25,10 @@ export class CommentsService {
       where: {
         announcement_id: annoucement_id,
       },
+      include: {
+        announcement: true,
+        owner: {select: {id: true, name: true, email: true }}
+      }
     });
     return result;
   }
