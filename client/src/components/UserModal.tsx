@@ -13,6 +13,7 @@ import {
   Input,
   Text,
   Textarea,
+  Link,
 } from "@chakra-ui/react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -45,7 +46,7 @@ const UserModal = () => {
 
   return (
     <>
-      <Button onClick={onOpen}>Editar Perfil</Button>
+      <Link onClick={onOpen}>Editar Perfil</Link>
 
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
