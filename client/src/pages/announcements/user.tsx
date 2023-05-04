@@ -25,7 +25,7 @@ const Advertiser = () => {
                             direction={"column"}
                             justifyContent={"space-between"}
                             alignItems={["center", "center", "initial"]}
-                            bgGradient={'linear(to-b, blue.400 0px 500px, grey.75 500px 100%)'}
+                            bgGradient={'linear(to-b, blue.400 0px 250px, grey.75 250px 100%)'}
                         >
                         
                             <Flex
@@ -89,7 +89,7 @@ const Advertiser = () => {
                                 direction={'column'}
                                 my={'50px'}
                             >
-                                <Text
+                                {/* <Text
                                     display={"flex"}
                                     w={"100%"}
 
@@ -99,7 +99,7 @@ const Advertiser = () => {
                                     fontSize={"2xl"}
                                 >
                                     Anúncios
-                                </Text>
+                                </Text> */}
                                 <List
                                     border={"none"} width={["100%", "100%", "95%"]} maxW={["none", "none", "1400px"]} overflowX={"auto"} display={"flex"} flexWrap={["nowrap", "nowrap", "wrap"]} alignItems={"center"} gap={["16px", "24px"]} ml={"0"} pb={"8px"}
                                 >

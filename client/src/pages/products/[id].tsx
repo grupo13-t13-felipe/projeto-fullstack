@@ -30,6 +30,12 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
   const { getOwnerById } = annoucementCtx()
   const router = useRouter()
 
+  const verifyLogin = () => {
+    if (!user) {
+      router.push("/login")
+    }
+  }
+
   return (
     <>
         {user? <HeaderProfile/> : <DefaultHeader /> }
@@ -110,11 +116,13 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
                 </Text>
               </HStack>
               <Box>
+                
                 <Buttons
                   backgroundColor={"blue.300"}
                   color={"grey.0"}
                   valueButton={"Comprar"}
                   margin={"0px 0px 20px 0px"}
+                  onClick={() => verifyLogin()}
                 />
               </Box>
             </Stack>
@@ -160,24 +168,22 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
                   return (
 
                     <Modals
-                      nameButton={
-                        <Box
-                          key={index}
-                          bgImage={item.url}
-                          bgSize={"contain"}
-                          bgPos={"center"}
-                          bgRepeat={"no-repeat"}
-                          w={"100%"}
-                          minH={"90px"}
-                          h={"108px"}
-                        ></Box>
-                      }
-                      backgroundColor={"transparent"}
-                      modalContent={
-                        <Image src={item.url} />
-                      }
-                      key={index}
-                    />
+                      nameButton={<Box
+                        key={index}
+                        bgImage={item.url}
+                        bgSize={"contain"}
+                        bgPos={"center"}
+                        bgRepeat={"no-repeat"}
+                        w={"100%"}
+                        minH={"90px"}
+                        h={"108px"}
+                      ></Box>}
+                      modalContent={<Image src={item.url} />}
+                      key={index} isOpen={false} onOpen={function (): void {
+                        throw new Error("Function not implemented.");
+                      } } onClose={function (): void {
+                        throw new Error("Function not implemented.");
+                      } } modalTitle={""} titlesColor={""} modalButtons={undefined} sizeTitle={""} footerDirection={""} footerWidth={""} modalButtonColor={""} modalButtonBg={""} buttonWidth={""} buttonRadius={""} buttonBorder={""} buttonBorderColor={""}                    />
                   );
                 })}
               </SimpleGrid>

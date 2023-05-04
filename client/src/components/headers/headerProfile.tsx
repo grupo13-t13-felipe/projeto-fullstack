@@ -2,6 +2,8 @@ import { Box, Flex, Text, HStack, MenuButton, Menu, MenuList, MenuItem, IconButt
 import { HamburgerIcon} from '@chakra-ui/icons'
 import { useContext } from "react";
 import { UserContext } from "@/contexts/users.context";
+import UserModal from "../UserModal";
+import AddressModal from "../AddressModal";
 
 
 
@@ -9,12 +11,12 @@ const ProfileMenuList = () => {
   const {user, logoutUser} = useContext(UserContext)
   
   return (
-    <MenuList>
+    <MenuList maxW={"92px"} ml={"auto"}>
       <MenuItem>
-        <Link href="">{""}Editar Perfil</Link>
+        <UserModal/>
       </MenuItem>
       <MenuItem>
-        <Link href="">{""}Editar endereço</Link>
+        <AddressModal/>
       </MenuItem>
       {user?.is_seller? <MenuItem><Link href="">{""}Meus anúncios</Link> </MenuItem> : <></> }
      
@@ -50,8 +52,8 @@ const HeaderProfile = () => {
         </Menu>
         </Box>
         
-        <Box display={["block",'block' ,"none"]} >
-        <Menu>
+        <Box display={["block",'block' ,"none"]} maxW={"100px"}>
+        <Menu placement="top-end" gutter={16}>
           <MenuButton
             as={IconButton}
             aria-label='Options'

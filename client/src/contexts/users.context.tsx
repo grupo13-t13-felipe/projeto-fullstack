@@ -1,9 +1,10 @@
 import { createContext, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import api from "@/services/api";
-import { IUser, IUserCreate, IUserLogin } from "@/types/user";
+import { IAddress, IChangePassword, ISendEmail, IUser, IUserCreate, IUserLogin } from "@/types/user";
 import { setCookie, parseCookies, destroyCookie } from "nookies";
 import { Box, Button, Flex, Text, ToastId, useToast } from "@chakra-ui/react";
+import nookies from 'nookies'
 
 interface IUserContextProvider {
     children: React.ReactNode
@@ -14,6 +15,12 @@ interface IUserContext {
     createUser: (dataForm: IUserCreate) => void;
     logoutUser: () => void;
     user: IUser | null;
+    sendEmail: (dataForm: ISendEmail) => void;
+    stateButton: string
+    disableButton: boolean
+    editeUser: (dataForm: IUserEdite) => void;
+    deleteUser: () => void;
+    editAdress: (dataForm: IAddress) => void;
 }
 
 export const UserContext = createContext({} as IUserContext)
@@ -21,6 +28,9 @@ export const UserContext = createContext({} as IUserContext)
 export const UserContextProvider = ({ children }: IUserContextProvider) => {
     const router = useRouter()
     const [user, setUser] = useState<IUser | null>(null)
+    const [stateButton, setStateButton] = useState("Enviar e-mail")
+    const [secondsSendEmail, setSecondsSendEmail] = useState(0.2 * 60)
+    const [disableButton, setDisableButton] = useState(false)
     const [previousPath, setPreviousPath] = useState("/");
     const toast = useToast()
     const toastIdRef = useRef<ToastId>()
@@ -49,7 +59,7 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
         }
 
         loadUser()
-    }, [])
+    }, [stateButton])
 
     useEffect(() => {
         if (router.asPath !== router.route) {
@@ -162,6 +172,115 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
         }
     }
 
+    const editeUser = async (dataForm: IUserEdite) => {
+
+        const cookie = nookies.get()
+        
+        api.defaults.headers.authorization = `Bearer ${cookie['karsToken']}`
+        api.patch(`/users/${user?.id}`, dataForm)
+        .then ((response) => {
+            toast({
+                title: 'sucess',
+                variant: 'solid',
+                position: 'top-right',
+                isClosable: true,
+                render: () => (
+                    <Box color={'grey.50'} p={3} bg={'green.700'} fontWeight={'bold'} borderRadius={'md'}>
+                      Atualização realizada com sucesso!
+                    </Box>
+                  ),
+            })
+            router.reload()
+        })
+        .catch((err) => {
+            toast({
+                title: 'error',
+                variant:'solid',
+                position: 'top-right',
+                isClosable: true,
+                render: () => (
+                    <Box color={'grey.50'} p={3} bg={'red.700'} fontWeight={'bold'} borderRadius={'md'}>
+                      Erro na atualização, confira suas informações!
+                    </Box>
+                  ),
+            })
+        })
+               
+       }
+
+    const deleteUser = async () => {
+        const cookie = nookies.get()
+        
+        api.defaults.headers.authorization = `Bearer ${cookie['karsToken']}`
+        api.delete(`/users/${user?.id}`)
+        .then((response) => {
+            toast({
+                title: 'sucess',
+                variant: 'solid',
+                position: 'top-right',
+                isClosable: true,
+                render: () => (
+                    <Box color={'gray.50'} p={3} bg={'green.700'} fontWeight={'bold'} borderRadius={'md'}>
+                      Perfil excluído com sucesso !
+                    </Box>
+                  ),
+            })
+            destroyCookie(null, "karsToken")
+            destroyCookie(null, "karsUser")
+            destroyCookie(null, "karsUserId")
+            setUser(null)
+            router.push("/")
+        })
+        .catch((err) => {
+            toast({
+                title: 'error',
+                variant:'solid',
+                position: 'top-right',
+                isClosable: true,
+                render: () => (
+                    <Box color={'gray.50'} p={3} bg={'red.700'} fontWeight={'bold'} borderRadius={'md'}>
+                      Não foi possível excluir seu perfil!
+                    </Box>
+                  )
+            })
+        })
+    }
+
+    const editAdress = async (dataForm: IAddress) => {
+        const cookie = nookies.get()
+
+        api.defaults.headers.authorization = `Bearer ${cookie['karsToken']}`
+        api.patch(`/address/${user?.address!.id}`, dataForm)
+            .then((response) => {
+                toast({
+                    title: 'sucess',
+                    variant: 'solid',
+                    position: 'top-right',
+                    isClosable: true,
+                    render: () => (
+                        <Box color={'grey.50'} p={3} bg={'green.700'} fontWeight={'bold'} borderRadius={'md'}>
+                            Atualização realizada com sucesso!
+                        </Box>
+                    ),
+                })
+                router.reload()
+            })
+            .catch((err) => {
+                toast({
+                    title: 'error',
+                    variant: 'solid',
+                    position: 'top-right',
+                    isClosable: true,
+                    render: () => (
+                        <Box color={'grey.50'} p={3} bg={'red.700'} fontWeight={'bold'} borderRadius={'md'}>
+                            Erro na atualização, confira suas informações!
+                        </Box>
+                    ),
+                })
+            })
+    }
+    
+
     const logoutUser = () => {
         destroyCookie(null, "karsToken")
         destroyCookie(null, "karsUser")
@@ -169,8 +288,53 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
         setUser(null)
     }
 
+    const sendEmail = async (dataForm: ISendEmail) => {
+        
+        try {
+            await api.post("/users/reset-password", dataForm)
+            toast({
+                title: "success",
+                variant: "solid",
+                position: "top-right",
+                isClosable: true,
+                render: () => {
+                    return (
+                        <Box borderRadius={"4px"} color={"grey.50"} p={3} bg={"green.700"} fontWeight={"500"}>
+                            Verifique seu e-mail!
+                        </Box>
+                    )
+                }
+            })
+            setDisableButton(true)
+            timerSendEmail()
+        } catch (err) {
+            console.log(err)
+        }
+    }
+    
+    const timerSendEmail = () => {
+        if(secondsSendEmail === 0){
+            setStateButton("Enviar e-mail")
+            setDisableButton(false)
+            setSecondsSendEmail(0.2 * 60)
+            return
+        }
+        setTimeout(() => {
+            setSecondsSendEmail(secondsSendEmail - 1)
+            setStateButton(`Enviar novo email: 00:00:${secondsSendEmail <= 10 ? `0${secondsSendEmail - 1}` : secondsSendEmail - 1}`)
+        }, 1000)
+    }
+    
+    useEffect(() => {
+        if(stateButton === "Enviar e-mail"){
+            return
+        }
+        timerSendEmail()
+    }, [secondsSendEmail, disableButton])
+    
+
     return (
-        <UserContext.Provider value={{ loginUser, createUser, logoutUser, user }}>
+        <UserContext.Provider value={{ loginUser, createUser, logoutUser, user, editeUser, deleteUser, editAdress, sendEmail, stateButton, disableButton }}>
             {children}
         </UserContext.Provider>
     )

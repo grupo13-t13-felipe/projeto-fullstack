@@ -75,6 +75,8 @@ export class UsersService {
       throw new NotFoundException('user not found');
     }
 
+    console.log(updateUserDto)
+
     const findUser = await this.prisma.user.findFirst({
       where: {
         OR: [
