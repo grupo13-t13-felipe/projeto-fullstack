@@ -9,3 +9,89 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model User {
+  id          String   @id @default(uuid())
+  name        String   @db.VarChar(127)
+  email       String   @unique @db.VarChar(127)
+  cpf         String   @unique @db.VarChar(11)
+  phone       String   @unique @db.VarChar(11)
+  password    String   @db.VarChar(127)
+  description String   @db.Text
+  is_admin    Boolean  @default(false)
+  is_seller   Boolean  @default(false)
+  birth_date  DateTime @db.Date
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+  reset_token String   @default("") @db.Text
+
+  address_id String  @unique
+
+  annoucements Annoucement[]
+  comments Comment[]
+
+  address    Address @relation(fields: [address_id], references: [id], onDelete: Cascade)
+
+
+  @@map("users")
+}
+
+model Address {
+  id         String @id @default(uuid())
+  cep        String @db.VarChar(8)
+  state      String @db.VarChar(64)
+  city       String @db.VarChar(64)
+  street     String @db.VarChar(64)
+  number     String @db.VarChar(8)
+  complement String @db.VarChar(128)
+
+  user User?
+
+  @@map("addresses")
+}
+
+model Annoucement {
+  id          String   @id @default(uuid())
+  model       String
+  brand       String
+  year        String
+  fuel        String
+  km          String
+  color       String
+  fip_price   String
+  price       String
+  description String
+  cover_image String
+  is_active   Boolean  @default(true)
+  created_at  DateTime @default(now())
+  updated_at  DateTime @updatedAt
+
+  owner_id       String
+  
+  gallery_images GalleryImage[]
+  comments Comment[]
+
+  owner User @relation(fields: [owner_id], references: [id])
+}
+model Comment {
+  id           String   @id @default(uuid())
+  content      String   
+  created_at   DateTime @default(now())
+  updated_at   DateTime @updatedAt
+
+  owner_id    String
+  announcement_id String
+
+  owner       User     @relation(fields: [owner_id], references: [id])
+  announcement Annoucement @relation(fields: [announcement_id], references: [id])
+  
+  @@map("comments")
+}
+
+model GalleryImage {
+  id             String @id @default(uuid())
+  url            String
+  annoucement_id String
+
+  annoucement Annoucement @relation(fields: [annoucement_id], references: [id], onDelete: Cascade)
+}
