@@ -7,7 +7,7 @@ import {
 } from "@/contexts/announcements.context";
 import api from "@/services/api";
 import { IAnnouncement } from "@/types/announcements";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 const HomeFilter = () => {
 	const {
@@ -26,15 +26,14 @@ const HomeFilter = () => {
 	const inputPriceMaxValue = useRef<HTMLInputElement>(null);
 
 	async function clearFilters() {
-		setActualFilters(filterData);
-		setSelectedFilters({});
-		getAllAnnouncements();
-
-		//não funciona
 		if (inputKmMinValue.current) inputKmMinValue.current.value = "";
 		if (inputKmMaxValue.current) inputKmMaxValue.current.value = "";
 		if (inputPriceMinValue.current) inputPriceMinValue.current.value = "";
 		if (inputPriceMaxValue.current) inputPriceMaxValue.current.value = "";
+
+		setActualFilters(filterData);
+		setSelectedFilters({});
+		getAllAnnouncements();
 	}
 
 	function getAllAnnoucementFilterTypes(
@@ -73,10 +72,9 @@ const HomeFilter = () => {
 			toSearchStr.push(`${key}=${value[i]}`);
 		});
 		if (toSearchStr.length > 0) {
-			toSearchStr.unshift("?");
 			toSearchStr = toSearchStr.join("&");
 		}
-		return toSearchStr;
+		return "?" + toSearchStr;
 	}
 
 	async function clickOnFilter(e: any, type: string, item: string) {
@@ -85,6 +83,7 @@ const HomeFilter = () => {
 
 	useEffect(() => {
 		if (Object.keys(selectedFilters).length > 0) {
+			console.log("A largura é: " + Object.keys(selectedFilters).length);
 			console.log(selectedFilters);
 			const searchParameter: string = toSearch(selectedFilters);
 			console.log(searchParameter);
@@ -106,6 +105,9 @@ const HomeFilter = () => {
 				color={"grey.250"}
 				fontSize={["md", "lg", "lg", "xl"]}
 				fontWeight={"normal"}
+				cursor={"pointer"}
+				transition={".2s"}
+				_hover={{ color: "blue.300" }}
 				onClick={(e) => clickOnFilter(e, type, item)}>
 				{item[0].toUpperCase() + item.substring(1)}
 			</ListItem>
@@ -230,6 +232,7 @@ const HomeFilter = () => {
 				marginTop={"22px"}
 				onClick={() => {
 					clearFilters();
+					console.log(selectedFilters);
 				}}>
 				Limpar
 			</Button>
