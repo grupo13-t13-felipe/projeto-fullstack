@@ -154,8 +154,8 @@ const AnnouncementModal = () => {
               {galleryImage.map((item: any, index: any) => (
                   <InputForm key={index}
                     id={index}
-                    // isInvalid={!!errors.gallery_images?.message}
-                    // inputregister={{ ...register("gallery_images") }}
+                    isInvalid={!!errors.gallery_images?.message}
+                    inputregister={{ ...register("gallery_images") }}
                     errors={errors.gallery_images?.message}
                     labeltext={`${index + 1}º Imagem da Galeria`}
                     inputtype={"text"}

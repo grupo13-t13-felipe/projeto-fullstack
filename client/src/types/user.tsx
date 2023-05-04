@@ -53,7 +53,7 @@ export interface ISendEmail {
 
 export interface IChangePassword {
 	password: string
-
+}
 export interface IUserEdite {
 	name?: string;
 	email?: string;
