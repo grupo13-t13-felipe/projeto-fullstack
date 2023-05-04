@@ -4,11 +4,11 @@ import {
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaClient } from '@prisma/client';
 
 @Injectable()
 export class ImageExistsGuard implements CanActivate {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaClient) {}
 
   async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();

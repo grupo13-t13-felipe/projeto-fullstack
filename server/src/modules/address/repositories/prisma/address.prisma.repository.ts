@@ -1,4 +1,4 @@
-import { PrismaService } from "src/database/prisma.service";
+import { PrismaClient } from "@prisma/client";
 import { UpdateAddressDto } from "../../dto/update-address.dto";
 import { Address } from "../../entities/address.entity";
 import { AddressRepository } from "../address.repository";
@@ -6,7 +6,7 @@ import { Injectable } from "@nestjs/common";
 
 @Injectable()
 export class AddressPrismaRepository implements AddressRepository {
-    constructor(private prisma: PrismaService) {}
+    constructor(private prisma: PrismaClient) {}
     async findAll(): Promise<Address[]> {
         const addresses: Address[] = await this.prisma.address.findMany();
         return addresses;

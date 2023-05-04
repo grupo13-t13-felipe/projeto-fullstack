@@ -7,7 +7,7 @@ import {
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { CreateAddressDto } from '../address/dto/create-address.dto';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaClient } from '@prisma/client';
 import { UsersPrismaRepository } from './repositories/prisma/users.prisma.repository';
 import { MailService } from 'src/utils/mail.service';
 import { randomUUID } from 'node:crypto';
@@ -17,7 +17,7 @@ import 'dotenv/config';
 @Injectable()
 export class UsersService {
   constructor(
-    private prisma: PrismaService,
+    private prisma: PrismaClient,
     private prismaRepository: UsersPrismaRepository,
     private mailService: MailService,
   ) {}

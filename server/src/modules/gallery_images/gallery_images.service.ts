@@ -3,13 +3,13 @@ import {
   CreateGalleryImagesArrayDto,
   GalleryImageDto,
 } from './dto/create-gallery_image.dto';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaClient } from '@prisma/client';
 import { Annoucement } from '../annoucements/entities/annoucement.entity';
 import { UpdateGalleryImageDto } from './dto/update-gallery_image.dto';
 
 @Injectable()
 export class GalleryImagesService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaClient) {}
 
   async createMany(
     createGalleryImageDto: CreateGalleryImagesArrayDto,

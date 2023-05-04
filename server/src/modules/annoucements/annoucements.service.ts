@@ -1,7 +1,7 @@
 import { Injectable, HttpException } from '@nestjs/common';
 import { CreateAnnoucementDto } from './dto/create-annoucement.dto';
 import { UpdateAnnoucementDto } from './dto/update-annoucement.dto';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaClient } from '@prisma/client';
 import { User } from '../users/entities/user.entity';
 import { CreateGalleryImagesArrayDto } from '../gallery_images/dto/create-gallery_image.dto';
 import { GalleryImagesService } from '../gallery_images/gallery_images.service';
@@ -12,7 +12,7 @@ import { getPaginatedResponse } from 'src/utils/getPaginatedResponse.utils';
 @Injectable()
 export class AnnoucementsService {
   constructor(
-    private prisma: PrismaService,
+    private prisma: PrismaClient,
     private galleryImageService: GalleryImagesService,
   ) {}
   async create(

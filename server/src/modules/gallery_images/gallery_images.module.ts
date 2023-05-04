@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { GalleryImagesService } from './gallery_images.service';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaClient } from '@prisma/client';
 import { GalleryImagesController } from './gallery_images.controller';
 
 @Module({
-  providers: [GalleryImagesService, PrismaService],
+  providers: [GalleryImagesService, PrismaClient],
   exports: [GalleryImagesService],
   controllers: [GalleryImagesController],
 })

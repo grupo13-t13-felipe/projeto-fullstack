@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AddressService } from './address.service';
 import { AddressController } from './address.controller';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaClient } from '@prisma/client';
 import { AddressRepository } from './repositories/address.repository';
 import { AddressPrismaRepository } from './repositories/prisma/address.prisma.repository';
 
@@ -9,7 +9,7 @@ import { AddressPrismaRepository } from './repositories/prisma/address.prisma.re
   controllers: [AddressController],
   providers: [
     AddressService,
-    PrismaService,
+    PrismaClient,
     { provide: AddressRepository, useClass: AddressPrismaRepository },
   ]
 })

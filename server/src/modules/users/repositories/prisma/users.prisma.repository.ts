@@ -1,4 +1,4 @@
-import { PrismaService } from "src/database/prisma.service";
+import { PrismaClient } from "@prisma/client";
 import { CreateUserDto } from "../../dto/create-user.dto";
 import { UpdateUserDto } from "../../dto/update-user.dto";
 import { User } from "../../entities/user.entity";
@@ -8,7 +8,7 @@ import { CreateAddressDto } from "src/modules/address/dto/create-address.dto";
 
 @Injectable()
 export class UsersPrismaRepository {
-    constructor(private prisma: PrismaService) {}
+    constructor(private prisma: PrismaClient) {}
     async create(userDto: CreateUserDto, addressDto: CreateAddressDto): Promise<User> {
         const address = await this.prisma.address.create({
             data: {

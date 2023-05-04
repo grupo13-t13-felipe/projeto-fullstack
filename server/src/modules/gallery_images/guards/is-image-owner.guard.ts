@@ -5,12 +5,12 @@ import {
   NotFoundException,
   ForbiddenException,
 } from '@nestjs/common';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaClient } from '@prisma/client';
 import { User } from 'src/modules/users/entities/user.entity';
 
 @Injectable()
 export class IsImageOwnerGuard implements CanActivate {
-  constructor(private prisma: PrismaService) {}
+  constructor(private prisma: PrismaClient) {}
 
   async canActivate(context: ExecutionContext) {
     const request = context.switchToHttp().getRequest();

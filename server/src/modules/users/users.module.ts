@@ -2,7 +2,7 @@
 import { Module } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { UsersController } from './users.controller';
-import { PrismaService } from 'src/database/prisma.service';
+import { PrismaClient } from '@prisma/client';
 import { UsersPrismaRepository } from './repositories/prisma/users.prisma.repository';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { MailService } from 'src/utils/mail.service';
@@ -26,7 +26,7 @@ import "dotenv/config"
   controllers: [UsersController],
   providers: [
     UsersService,
-    PrismaService,
+    PrismaClient,
     UsersPrismaRepository,
     MailService,
   ],

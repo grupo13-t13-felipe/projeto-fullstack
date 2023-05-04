@@ -1,7 +1,7 @@
 import { CanActivate, ExecutionContext, Injectable, NotFoundException, ForbiddenException } from "@nestjs/common";
 import { Reflector } from "@nestjs/core";
 import { Request } from "express";
-import { PrismaService } from "src/database/prisma.service";
+import { PrismaClient } from "@prisma/client";
 import { IAuthUser } from "src/interfaces/users";
 
 
@@ -9,7 +9,7 @@ import { IAuthUser } from "src/interfaces/users";
 export class AddressOwnerGuard implements CanActivate {
     constructor(
         private readonly reflector: Reflector,
-        private readonly prismaService: PrismaService
+        private readonly prismaService: PrismaClient
     ) {}
     async canActivate(context: ExecutionContext): Promise<boolean> {
         const request: Request = context.switchToHttp().getRequest();
