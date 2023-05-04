@@ -19,7 +19,7 @@ import "dotenv/config"
         }
       },
       defaults: {
-        from: "lucaskauandev@gmail.com"
+        from: "biblioteka.kenzie@gmail.com"
       }
     })
   ],
