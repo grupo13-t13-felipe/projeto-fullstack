@@ -1,9 +1,9 @@
 import Buttons from "@/components/button";
 import DefaultFooter from "@/components/footer";
 import HeaderProfile from "@/components/headers/headerProfile";
-import TextArea from "@/components/textArea";
 import api from "@/services/api";
-import { IAnnouncement } from "@/types/announcements";
+import { IAnnouncement, IComment } from "@/types/announcements";
+import { useForm } from 'react-hook-form';
 import {
   Box,
   Flex,
@@ -11,15 +11,17 @@ import {
   SimpleGrid,
   Stack,
   Text,
-  Avatar, Image
+  Avatar, Image, Progress, List, Button, Textarea
 } from "@chakra-ui/react";
 import { GetServerSideProps, NextPage } from "next";
 import Modals from "@/components/modal";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import { UserContext } from "@/contexts/users.context";
 import DefaultHeader from "@/components/headers/headerDefault";
 import { annoucementCtx } from "@/contexts/announcements.context";
 import { useRouter } from "next/router";
+import { commentSchema } from "@/schemas/user.schema";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 export interface Props {
   announcement: IAnnouncement;
@@ -27,17 +29,52 @@ export interface Props {
 
 const Dashboard: NextPage<Props> = ({ announcement }) => {
   const { user } = useContext(UserContext)
-  const { getOwnerById } = annoucementCtx()
+  const { getOwnerById, comments, loading, getComments, setLoading } = annoucementCtx()
   const router = useRouter()
-
+  const { id }: any = router.query;
   const verifyLogin = () => {
     if (!user) {
       router.push("/login")
     }
   }
 
+  const postComment = async (formData: IComment) => {
+    try {
+      await api.post(`/annoucements/${id}/comments`, formData)
+    } catch (err) {
+      console.error(err)
+    }finally{
+      if(user){
+        setLoading(true)
+        verifyComments()
+      }else{
+        verifyLogin()
+      }
+    }
+  }
+
+  const { register, handleSubmit, formState: { errors } } = useForm<IComment>({
+    resolver: yupResolver(commentSchema)
+  })
+
+  const verifyComments = () => {
+    setLoading(true)
+    getComments(id)
+  }
+  useEffect(() => {
+    verifyComments()
+  }, [])
+
   return (
-    <>
+    <>{
+      loading ? (
+				<Flex justifyContent={"center"} alignItems={"center"} h={'100vh'}>
+					<Text color={"blue.400"} fontSize={"6xl"}>
+						Loading...
+					</Text>
+					<Progress size='xs' isIndeterminate />
+				</Flex>
+			) : <>
         {user? <HeaderProfile/> : <DefaultHeader /> }
       <Flex
         direction={"column"}
@@ -214,7 +251,7 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
                 color={"grey.0"}
                 fontSize={"md"}
                 valueButton={"Ver todos os anuncios"}
-                onClick={() => user ? getOwnerById(announcement.owner.id) : router.push("/login")}
+                onClick={() => getOwnerById(announcement.owner.id)}
               />
             </Stack>
           </Stack>
@@ -238,54 +275,26 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
             <Text color={"grey.400"} fontWeight={"semibold"} fontSize={"xl"}>
               Comentários
             </Text>
-            <HStack>
-              <Box
-                background={"blue.400"}
-                borderRadius={"150px"}
-                color={"grey.0"}
-                p={"5px"}
-                ml={"10px"}
-                fontSize={"sm"}
-              >
-                GM
-              </Box>
-              <Text color={"grey.400"} fontWeight={"medium"} fontSize={"sm"}>
-                Gabriela Marchiori
-              </Text>
-              <Text color={"grey.250"} fontWeight={"normal"} fontSize={"xs"}>
-                Há 1 dia
-              </Text>
-            </HStack>
-            <Text color={"grey.300"} fontWeight={"normal"} fontSize={"sm"}>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book.
-            </Text>
-            <HStack>
-              <Box
-                background={"pink.400"}
-                borderRadius={"150px"}
-                color={"grey.0"}
-                p={"5px"}
-                ml={"10px"}
-                fontSize={"sm"}
-              >
-                FH
-              </Box>
-              <Text color={"grey.400"} fontWeight={"medium"} fontSize={"sm"}>
-                Fernando Portugal
-              </Text>
-              <Text color={"grey.250"} fontWeight={"normal"} fontSize={"xs"}>
-                Há 1 dia
-              </Text>
-            </HStack>
-            <Text color={"grey.300"} fontWeight={"normal"} fontSize={"sm"}>
-              Lorem Ipsum is simply dummy text of the printing and typesetting
-              industry. Lorem Ipsum has been the industry's standard dummy text
-              ever since the 1500s, when an unknown printer took a galley of
-              type and scrambled it to make a type specimen book.
-            </Text>
+            {
+              comments?.map((element, key) => {
+                return (
+                  <List key={key}>
+                    <HStack mb={"20px"}>
+                      <Avatar name={element.owner.name} size={"sm"}/>
+                      <Text color={"grey.400"} fontWeight={"medium"} fontSize={"sm"}>
+                        {element.owner.name}
+                      </Text>
+                      <Text color={"grey.250"} fontWeight={"normal"} fontSize={"xs"}>
+                        {element.updated_at.substring(0, 10)}
+                      </Text>
+                    </HStack>
+                    <Text color={"grey.300"} fontWeight={"normal"} fontSize={"sm"}>
+                      {element.content}
+                    </Text>
+                  </List>
+                )
+              })
+            }
           </Stack>
           <Stack
             bg={"grey.0"}
@@ -296,39 +305,36 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
             p={"20px"}
           >
             <HStack>
-              <Box
-                background={"green.400"}
-                borderRadius={"150px"}
-                color={"grey.0"}
-                p={"5px"}
-                ml={"10px"}
-                fontSize={"sm"}
-              >
-                LS
-              </Box>
-              <Text color={"grey.400"} fontWeight={"medium"} fontSize={"sm"}>
-                Lavínia Silva
-              </Text>
+              {
+                user ? <>
+                  <Avatar name={user!.name} size={"sm"}/>
+                  <Text color={"grey.400"} fontWeight={"medium"} fontSize={"sm"}>
+                    {user!.name}
+                  </Text></> : null 
+              }
             </HStack>
-            <Stack
-              alignItems={"flex-end"}
-              border={"1.5px solid"}
-              borderColor={"grey.100"}
-              borderRadius={"base"}
-              p={"10px"}
-            >
-              <TextArea
-                placeHolder={
-                  "Carro muito confortável, foi uma ótima experiência de compra..."
-                }
-                border={"none"}
-              />
-              <Buttons
-                backgroundColor={"blue.300"}
-                color={"grey.0"}
-                valueButton={"Comentar"}
-              />
-            </Stack>
+              <form
+                onSubmit={handleSubmit(postComment)}
+              >
+                <Stack
+                  alignItems={"flex-end"}
+                  border={"1.5px solid"}
+                  borderColor={"grey.100"}
+                  borderRadius={"base"}
+                  p={"10px"}
+                >
+                  <Textarea placeholder="insira seu comentário..." {...register("content")} border={"none"} />
+                  <Flex w={"100%"} justifyContent={"flex-end"} mt={"20px"}>
+                    <Buttons
+                      backgroundColor={"blue.300"}
+                      color={"grey.0"}
+                      valueButton={"Comentar"}
+                      type={"submit"}
+                    />
+                  </Flex>
+                </Stack>
+              </form> 
+            
             <HStack>
               <Text
                 bg={"grey.100"}
@@ -363,6 +369,8 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
       </Flex>
       <Text>{ }</Text>
       <DefaultFooter />
+      </>
+    }
     </>
   );
 };
