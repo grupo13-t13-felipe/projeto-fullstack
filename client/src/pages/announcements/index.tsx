@@ -5,9 +5,12 @@ import HeaderProfile from "@/components/headers/headerProfile";
 import ProductCard from "@/components/productCard";
 import { annoucementCtx } from "@/contexts/announcements.context";
 import { UserContext } from "@/contexts/users.context";
+import { commentSchema } from "@/schemas/user.schema";
 import { Flex, List, ListItem, Text, Link, Avatar } from "@chakra-ui/react";
+import { yupResolver } from "@hookform/resolvers/yup";
 import NextLink from "next/link";
 import { useContext } from "react";
+import { useForm } from "react-hook-form";
 
 
 const Advertiser = () => {
@@ -96,7 +99,6 @@ const Advertiser = () => {
                                 {/* <Text
                                     display={"flex"}
                                     w={"100%"}
-
                                     justifyContent={"flex-start"}
                                     color={"grey.500"}
                                     fontWeight={"semibold"}

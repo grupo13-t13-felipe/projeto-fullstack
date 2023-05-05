@@ -25,6 +25,7 @@ import { createAnnouncementSchema, editAnnouncementSchema } from "@/schemas/anno
 import DefaultForm from "./form";
 import { useForm } from "react-hook-form";
 import { destroyCookie, setCookie } from "nookies";
+import DeleteAnnouncementModal from "./deleteAnnouncmentModal";
 
 interface editProps {
   announcId: string
@@ -196,14 +197,7 @@ const EditAnnouncementModal = ({ announcId, announcementInfo }: editProps) => {
             />
 
             <ButtonGroup ml={"auto"} mt={"18px"} mb={"0px"}>
-              <Buttons
-                backgroundColor={"#DEE2E6"}
-                valueButton={"Excluir Anúncio"}
-                color={"#495057"}
-                fontSize={"16px"}
-                onClick={onClose}
-              />
-
+              <DeleteAnnouncementModal/>
               <Buttons
                 backgroundColor={"#4529E6"}
                 valueButton={"Salvar Alterações"}

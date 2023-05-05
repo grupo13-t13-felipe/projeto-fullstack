@@ -7,7 +7,7 @@ import React, {
 } from "react";
 import { useRouter } from "next/router";
 import api from "@/services/api";
-import { IAnnouncement, IAnnouncementCreate, IAnnouncementEdit, IAnnouncementOwner } from "@/types/announcements";
+import { IAnnouncement, IAnnouncementCreate, IAnnouncementEdit, IAnnouncementOwner, IComments } from "@/types/announcements";
 import { UserContext } from "./users.context";
 import { Box, useToast } from "@chakra-ui/react";
 import nookies from 'nookies'
@@ -42,6 +42,8 @@ interface AnnouncementProviderData {
     createAnnouncement: (dataForm: IAnnouncementCreate) => void
 	editAnnouncement: (dataForm: IAnnouncementEdit) => void
 	deleteAnnouncement: () => void
+	getComments: (announcement_id: string) => void
+	comments: IComments[] | undefined
 }
 
 export interface IFilters {
@@ -87,6 +89,7 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 	const [filterData, setFilterData] = useState<IFilters | undefined>();
 	const [actualFilters, setActualFilters] = useState<IFilters | undefined>();
 	const [selectedFilters, setSelectedFilters] = useState<ISelectedFilter>({});
+	const [ comments, setComments ] = useState<IComments[] | undefined>()
 	const { user } = useContext(UserContext);
     const toast = useToast()
 
@@ -198,6 +201,21 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 		}
 	}
 
+	async function getComments(announcement_id: string){
+		try {
+			const { data } = await api.get(`/annoucements/${announcement_id}/comments`)
+			console.log(data)
+      		setComments(data)
+		} catch (err) {
+			console.error(err)
+		}finally{
+			setTimeout(() => {
+				setLoading(false);
+			}, 1000);
+		}
+	}
+  
+
 	useEffect(() => {
 		getAllAnnouncements();
 		asyncLoad();
@@ -233,6 +251,8 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 				getAllAnnouncements,
 				paginationPage,
 				setPaginationPage,
+				getComments,
+				comments
 			}}>
 			{children}
 		</AnnouncementContext.Provider>
