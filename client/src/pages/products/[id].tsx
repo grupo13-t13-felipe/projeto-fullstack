@@ -11,10 +11,16 @@ import {
   SimpleGrid,
   Stack,
   Text,
-  Avatar, Image, Progress, List, Button, Textarea
+  Avatar, Image, Progress, List, Button, Textarea, Modal,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+  useDisclosure,
 } from "@chakra-ui/react";
 import { GetServerSideProps, NextPage } from "next";
-import Modals from "@/components/modal";
 import { useContext, useEffect } from "react";
 import { UserContext } from "@/contexts/users.context";
 import DefaultHeader from "@/components/headers/headerDefault";
@@ -28,6 +34,7 @@ export interface Props {
 }
 
 const Dashboard: NextPage<Props> = ({ announcement }) => {
+  const { isOpen, onOpen, onClose } = useDisclosure()
   const { user } = useContext(UserContext)
   const { getOwnerById, comments, loading, getComments, setLoading } = annoucementCtx()
   const router = useRouter()
@@ -204,23 +211,27 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
                 {announcement.gallery_images.map((item, index) => {
                   return (
 
-                    <Modals
-                      nameButton={<Box
-                        key={index}
-                        bgImage={item.url}
-                        bgSize={"contain"}
-                        bgPos={"center"}
-                        bgRepeat={"no-repeat"}
-                        w={"100%"}
-                        minH={"90px"}
-                        h={"108px"}
-                      ></Box>}
-                      modalContent={<Image src={item.url} />}
-                      key={index} isOpen={false} onOpen={function (): void {
-                        throw new Error("Function not implemented.");
-                      } } onClose={function (): void {
-                        throw new Error("Function not implemented.");
-                      } } modalTitle={""} titlesColor={""} modalButtons={undefined} sizeTitle={""} footerDirection={""} footerWidth={""} modalButtonColor={""} modalButtonBg={""} buttonWidth={""} buttonRadius={""} buttonBorder={""} buttonBorderColor={""}                    />
+                    <>
+                       <Button key={index} onClick={onOpen} backgroundColor={'transparent'}>
+                        {
+                          <Box>
+                            <Image src={item.url} alt={item.id}/>
+                          </Box>
+                        }
+                       </Button>
+
+                          <Modal isOpen={isOpen} onClose={onClose} key={item.id}>
+                            <ModalOverlay />
+                            <ModalContent>
+                            <ModalHeader></ModalHeader>
+                            <ModalCloseButton />
+                              <ModalBody>
+                                {<Image src={item.url} alt={item.id}/>}
+                              </ModalBody>
+                            </ModalContent>
+                          </Modal>
+                    </>
+
                   );
                 })}
               </SimpleGrid>

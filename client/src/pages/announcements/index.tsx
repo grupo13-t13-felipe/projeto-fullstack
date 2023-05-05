@@ -99,7 +99,6 @@ const Advertiser = () => {
                                 {/* <Text
                                     display={"flex"}
                                     w={"100%"}
-
                                     justifyContent={"flex-start"}
                                     color={"grey.500"}
                                     fontWeight={"semibold"}

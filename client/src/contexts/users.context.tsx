@@ -1,7 +1,7 @@
 import { createContext, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import api from "@/services/api";
-import { IAddress, IChangePassword, ISendEmail, IUser, IUserCreate, IUserLogin } from "@/types/user";
+import { IAddress, IChangePassword, ISendEmail, IUser, IUserCreate, IUserEdite, IUserLogin } from "@/types/user";
 import { setCookie, parseCookies, destroyCookie } from "nookies";
 import { Box, Button, Flex, Text, ToastId, useToast } from "@chakra-ui/react";
 import nookies from 'nookies'
