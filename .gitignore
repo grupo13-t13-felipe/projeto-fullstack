@@ -6,3 +6,4 @@ package-lock.*
 .vscode/*
 .vercel
 next-env.d.ts
+yarn.lock

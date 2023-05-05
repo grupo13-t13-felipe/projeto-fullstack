@@ -47,3 +47,7 @@ export const editAddressSchema = yup.object().shape({
     number: yup.string().notRequired(),
     complement: yup.string().notRequired(),
 });
+
+export const commentSchema = yup.object().shape({
+    content: yup.string().required()
+})
