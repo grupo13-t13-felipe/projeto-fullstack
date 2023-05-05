@@ -212,7 +212,7 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
                   return (
 
                     <>
-                       <Button key={index} onClick={onOpen} backgroundColor={'transparent'}>
+                       <Button key={index} onClick={onOpen} backgroundColor={'transparent'} _hover={{bgColor: 'transparent'}}>
                         {
                           <Box>
                             <Image src={item.url} alt={item.id}/>
