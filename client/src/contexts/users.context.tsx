@@ -286,6 +286,7 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
         destroyCookie(null, "karsUser")
         destroyCookie(null, "karsUserId")
         setUser(null)
+        router.push("/login")
     }
 
     const sendEmail = async (dataForm: ISendEmail) => {

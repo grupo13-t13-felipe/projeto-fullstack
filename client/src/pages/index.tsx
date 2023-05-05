@@ -21,6 +21,7 @@ import { annoucementCtx } from "@/contexts/announcements.context";
 import HeaderProfile from "@/components/headers/headerProfile";
 import { useContext } from "react";
 import { UserContext } from "@/contexts/users.context";
+import { useRouter } from "next/router";
 
 const Home = () => {
 	const {
@@ -124,40 +125,22 @@ const Home = () => {
 												w={"312px"}
 												display={"inline-block"}
 												key={index}>
-												<Link
-													_hover={{
-														textDecoration: "none",
-													}}
-													as={NextLink}
-													href={`/products/${item.id}`}
-													onClick={() => {
-														setOwnerId(
-															item.owner.id
-														)
-														getComments(item.id)
-													}
-													}>
 													<ProductCard
-														good={
-															item.price /
-																item.fip_price <=
-															0.95
-														}
+														announcId={item.id}
+														good={item.price /
+															item.fip_price <=
+															0.95}
 														image={item.cover_image}
 														alt={item.model}
 														brand={item.brand}
 														model={item.model}
-														description={
-															item.description
-														}
+														description={item.description}
 														owner={item.owner.name}
 														userAvatar={""}
 														km={item.km}
 														year={item.year}
-														price={
-															item.price
-														}></ProductCard>
-												</Link>
+														price={item.price} 
+														ownerId={item.owner.id}></ProductCard>
 											</ListItem>
 										);
 									}

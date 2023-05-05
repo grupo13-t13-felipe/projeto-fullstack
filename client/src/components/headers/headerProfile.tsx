@@ -18,10 +18,11 @@ const ProfileMenuList = () => {
       <MenuItem>
         <AddressModal/>
       </MenuItem>
-      {user?.is_seller? <MenuItem><Link href="/">{""}Meus anúncios</Link> </MenuItem> : <></> }
+      {user?.is_seller? <MenuItem><Link href="/announcements">{""}Meus anúncios</Link> </MenuItem> : <></> }
+
      
       <MenuItem>
-        <Link href="/login" onClick={() => logoutUser()}>{""}Sair</Link>
+        <Link onClick={() => logoutUser()}>{""}Sair</Link>
       </MenuItem>
     </MenuList>
   );

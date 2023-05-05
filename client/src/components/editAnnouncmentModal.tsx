@@ -4,27 +4,52 @@ import {
   FormControl,
   FormLabel,
   FormErrorMessage,
+  FormHelperText,
   Text,
+  VStack,
   Box,
   HStack,
   ButtonGroup,
   useConst,
   useDisclosure,
   Textarea,
+  Input,
+  ModalCloseButton
 } from "@chakra-ui/react";
+import TextArea from "./textArea";
 import Buttons from "./button";
 import { useContext, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { IAnnouncementCreate } from "@/types/announcements";
-import { AnnouncementContext } from "@/contexts/announcements.context";
-import { createAnnouncementSchema } from "@/schemas/annoucement.schema";
+import { AnnouncementContext, annoucementCtx } from "@/contexts/announcements.context";
+import { createAnnouncementSchema, editAnnouncementSchema } from "@/schemas/annoucement.schema";
+import DefaultForm from "./form";
 import { useForm } from "react-hook-form";
+import { destroyCookie, setCookie } from "nookies";
+import DeleteAnnouncementModal from "./deleteAnnouncmentModal";
 
-const AnnouncementModal = () => {
-    const { createAnnouncement } = useContext(AnnouncementContext)
+interface editProps {
+  announcId: string
+  announcementInfo: {
+    model: string,
+    brand: string,
+    year: string,
+    fuel: string,
+    km: string,
+    color: string,
+    fip_price: string,
+    price: string,
+    description: string,
+    cover_image: string,
+    //gallery_images?: string[]
+  }
+}
+
+const EditAnnouncementModal = ({ announcId, announcementInfo }: editProps) => {
+    const { editAnnouncement } = useContext(AnnouncementContext)
 
     const { register, handleSubmit, formState: { errors } } = useForm<IAnnouncementCreate>({
-      resolver: yupResolver(createAnnouncementSchema)
+      resolver: yupResolver(editAnnouncementSchema)
     })
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [galleryImage, setGalleryImage] = useState([0]);
@@ -32,20 +57,26 @@ const AnnouncementModal = () => {
         setGalleryImage([...galleryImage, galleryImage.length]);
         console.log(galleryImage)
     }
+    const setCurrentAnnouncement = () => setCookie(null, "announcId", announcId, { maxAge: 3600 * 24, path: "/" })
+    const resetCurrentAnnouncement = () => destroyCookie(null, "announcId")
   
     const modalContent =
       <>
-        <form onSubmit={handleSubmit(createAnnouncement)}>
+        <form onSubmit={handleSubmit(editAnnouncement)}>
           <Box gap={"24px"} display={"flex"} flexDir={"column"}>
-            <Text fontSize={"14px"}>Infomações do veículo</Text>
+            <HStack>
+              <Text fontSize={"14px"}>Infomações do veículo</Text>
+              <ModalCloseButton/>
+            </HStack>
+              
             <InputForm
               isInvalid={!!errors.brand?.message}
               errors={errors.brand?.message}
               inputregister={{...register("brand")}}
               labeltext={"Marca"}
               inputtype={"text"}
-              inputplaceholder={"Mercedes Benz"}
-              isRequired={true}
+              inputplaceholder={announcementInfo.brand}
+              
             ></InputForm>
 
             <InputForm
@@ -54,8 +85,8 @@ const AnnouncementModal = () => {
               errors={errors.model?.message}
               labeltext={"Modelo"}
               inputtype={"text"}
-              inputplaceholder={"A 200 CGI ADVANCE SEDAN"}
-              isRequired={true}
+              inputplaceholder={announcementInfo.model}
+              
             ></InputForm>
 
             <HStack gap={"14px"}>
@@ -65,8 +96,8 @@ const AnnouncementModal = () => {
                 errors={errors.year?.message}
                 labeltext={"Ano"}
                 inputtype={"text"}
-                inputplaceholder={"2018"}
-                isRequired={true}
+                inputplaceholder={announcementInfo.year}
+                
               ></InputForm>
 
               <InputForm
@@ -75,8 +106,8 @@ const AnnouncementModal = () => {
                 errors={errors.fuel?.message}
                 labeltext={"Combustível"}
                 inputtype={"text"}
-                inputplaceholder={"Gasolina / Etanol"}
-                isRequired={true}
+                inputplaceholder={announcementInfo.fuel}
+                
               ></InputForm>
             </HStack>
 
@@ -87,8 +118,8 @@ const AnnouncementModal = () => {
                 errors={errors.km?.message}
                 labeltext={"Quilometragem"}
                 inputtype={"text"}
-                inputplaceholder={"30.000"}
-                isRequired={true}
+                inputplaceholder={announcementInfo.km}
+                
               ></InputForm>
 
               <InputForm
@@ -97,8 +128,8 @@ const AnnouncementModal = () => {
                 errors={errors.color?.message}
                 labeltext={"Cor"}
                 inputtype={"text"}
-                inputplaceholder={"Branco"}
-                isRequired={true}
+                inputplaceholder={announcementInfo.color}
+                
               ></InputForm>
             </HStack>
 
@@ -109,8 +140,8 @@ const AnnouncementModal = () => {
                 errors={errors.fip_price?.message}
                 labeltext={"Preço tabela FIPE"}
                 inputtype={"text"}
-                inputplaceholder={"R$ 48.000,00"}
-                isRequired={true}
+                inputplaceholder={announcementInfo.fip_price}
+                
               ></InputForm>
 
               <InputForm
@@ -119,16 +150,16 @@ const AnnouncementModal = () => {
                 errors={errors.price?.message}
                 labeltext={"Preço"}
                 inputtype={"text"}
-                inputplaceholder={"R$ 50.000,00"}
-                isRequired={true}
+                inputplaceholder={announcementInfo.price}
+                
               ></InputForm>
             </HStack>
 
-            <FormControl isRequired isInvalid={!!errors.description?.message}>
+            <FormControl isInvalid={!!errors.description?.message}>
               <FormLabel>Descrição</FormLabel>
               <Textarea
                 {...register("description")}
-                placeholder={"Descreva o carro..."}
+                placeholder={announcementInfo.description}
                 resize={"none"}
               ></Textarea>
               <FormErrorMessage mt={"4px"} position={"absolute"}>
@@ -142,22 +173,23 @@ const AnnouncementModal = () => {
               errors={errors.cover_image?.message}
               labeltext={"Imagem da Capa"}
               inputtype={"text"}
-              inputplaceholder={"https://image.com"}
-              isRequired={true}
+              inputplaceholder={announcementInfo.cover_image}
+              
             ></InputForm>
             <div>
-              {/* {galleryImage.map((item: any, index: any) => (
+              {galleryImage.map((item: any, index: any) => (
                   <InputForm key={index}
-                    id={index}
-                    // isInvalid={!!errors.gallery_images?.message}
-                    // inputregister={{ ...register("gallery_images") }}
-                    errors={errors.gallery_images?.message}
-                    labeltext={`${index + 1}º Imagem da Galeria`}
-                    inputtype={"text"}
-                    inputplaceholder={"https://image.com"}
-                    isRequired={false}
-                  ></InputForm>
-              ))} */}
+                id={index}
+                // isInvalid={!!errors.gallery_images?.message}
+                // inputregister={{ ...register("gallery_images") }}
+                errors={errors.gallery_images?.message}
+                labeltext={`${index + 1}º Imagem da Galeria`}
+                inputtype={"text"}
+                inputplaceholder={"https://image.com"}
+                isRequired={false} 
+                inputregister={undefined}               
+                ></InputForm>
+              ))}
             </div>
             <Buttons
               backgroundColor={"#EDEAFD"}
@@ -170,17 +202,10 @@ const AnnouncementModal = () => {
             />
 
             <ButtonGroup ml={"auto"} mt={"18px"} mb={"0px"}>
+              <DeleteAnnouncementModal/>
               <Buttons
-                backgroundColor={"#DEE2E6"}
-                valueButton={"Cancelar"}
-                color={"#495057"}
-                fontSize={"16px"}
-                onClick={onClose}
-              />
-
-              <Buttons
-              backgroundColor={"#4529E6"}
-                valueButton={"Criar anúncio"}
+                backgroundColor={"#4529E6"}
+                valueButton={"Salvar Alterações"}
                 color={"#EDEAFD"}
                 fontSize={"16px"}
                 type={"submit"}
@@ -194,19 +219,19 @@ const AnnouncementModal = () => {
       
         return (
             <Modals
-            modalTitle={"Criar anúncio"}
+            modalTitle={"Editar anúncio"}
             sizeTitle={"1em"}
             modalContent={modalContent}
-            buttonWidth={"160px"}
-            nameButton={"Criar anuncio"}
-            modalButtonColor={"#4529E6"}
+            buttonWidth={"80px"}
+            nameButton={"Editar"}
+            modalButtonColor={"#212529"}
             modalButtonBg={"#FDFDFD"}
             buttonRadius={"4px"}
             buttonBorder={"2px"}
-            buttonBorderColor={"#4529E6"}
+            buttonBorderColor={"#212529"}
             isOpen={isOpen}
-            onOpen={() => {  setGalleryImage([0]); onOpen() }}
-            onClose={() => { onClose()}} 
+            onOpen={() => { setCurrentAnnouncement(), setGalleryImage([0]); onOpen() }}
+            onClose={onClose} 
             titlesColor={""} 
             modalButtons={""} 
             footerDirection={""} 
@@ -214,4 +239,4 @@ const AnnouncementModal = () => {
     );}
 };
 
-export default AnnouncementModal
+export default EditAnnouncementModal

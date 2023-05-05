@@ -7,9 +7,12 @@ import React, {
 } from "react";
 import { useRouter } from "next/router";
 import api from "@/services/api";
-import { IAnnouncement, IAnnouncementCreate, IAnnouncementOwner, IComments } from "@/types/announcements";
+import { IAnnouncement, IAnnouncementCreate, IAnnouncementEdit, IAnnouncementOwner, IComments } from "@/types/announcements";
 import { UserContext } from "./users.context";
 import { Box, useToast } from "@chakra-ui/react";
+import nookies from 'nookies'
+import removeEmptyStrings from "@/utils/removeEmptyStrings";
+
 
 interface AnnouncementProviderData {
 	allAnnouncements: IAnnouncement[] | any;
@@ -37,8 +40,10 @@ interface AnnouncementProviderData {
 	getAllAnnouncements: () => Promise<void>;
 	paginationPage: number;
 	setPaginationPage: React.Dispatch<React.SetStateAction<number>>;
-    createAnnouncement: (dataForm: IAnnouncementCreate) => void
-	getComments: (announcement_id: string) => void
+  createAnnouncement: (dataForm: IAnnouncementCreate) => void
+  editAnnouncement: (dataForm: IAnnouncementEdit) => void
+	deleteAnnouncement: () => void
+  getComments: (announcement_id: string) => void
 	comments: IComments[] | undefined
 }
 
@@ -91,10 +96,52 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 
     async function createAnnouncement(dataForm: IAnnouncementCreate) {
         try {
-            console.log(dataForm)
             await api.post("/annoucements", dataForm)
         } catch (err){
-            console.log(err)
+            toast({
+                title: "error",
+                variant: "solid",
+                position: "top-right",
+                isClosable: true,
+                render: () => {
+                    return (
+                        <Box borderRadius={"4px"} color={"grey.50"} p={3} bg={"red.700"} fontWeight={"500"}>
+                            Ops!! Verifique seus dados e tente novamente!
+                        </Box>
+                    )
+                }
+            })
+        }
+    }
+
+	async function editAnnouncement (dataForm: IAnnouncementEdit) {
+		const announcId = nookies.get()['announcId']
+		const data = removeEmptyStrings(dataForm)
+        try {
+            await api.patch(`/annoucements/${announcId}`, data)
+        } catch (err){
+            toast({
+                title: "error",
+                variant: "solid",
+                position: "top-right",
+                isClosable: true,
+                render: () => {
+                    return (
+                        <Box borderRadius={"4px"} color={"grey.50"} p={3} bg={"red.700"} fontWeight={"500"}>
+                            Ops!! Verifique seus dados e tente novamente!
+                        </Box>
+                    )
+                }
+            })
+			console.log(err)
+        }
+    }
+
+	async function deleteAnnouncement () {
+		const announcId = nookies.get()['announcId']
+        try {
+            await api.delete(`/annoucements/${announcId}`)
+        } catch (err){
             toast({
                 title: "error",
                 variant: "solid",
@@ -155,7 +202,6 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 	async function getComments(announcement_id: string){
 		try {
 			const { data } = await api.get(`/annoucements/${announcement_id}/comments`)
-			console.log(data)
       		setComments(data)
 		} catch (err) {
 			console.error(err)
@@ -179,7 +225,10 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 
 	return (
 		<AnnouncementContext.Provider
-			value={{ createAnnouncement,
+			value={{ 
+				createAnnouncement,
+				editAnnouncement,
+				deleteAnnouncement,
 				allAnnouncements,
 				setAllAnnouncements,
 				allFilteredAnnouncements,

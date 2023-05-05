@@ -25,6 +25,20 @@ export interface IAnnouncementCreate {
     gallery_images?: string[]
 }
 
+export interface IAnnouncementEdit {
+    model?: string,
+    brand?: string,
+    year?: string,
+    fuel?: string,
+    km?: string,
+    color?: string,
+    fip_price?: string,
+    price?: string,
+    description?: string,
+    cover_image?: string,
+    gallery_images?: string[]
+}
+
 export interface IAnnouncement {
     id: string,
     model: string,

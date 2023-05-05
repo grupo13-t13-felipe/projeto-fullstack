@@ -15,3 +15,19 @@ export const createAnnouncementSchema = yup.object().shape({
     //     yup.string().notRequired()
     // ).notRequired()
 });
+
+export const editAnnouncementSchema = yup.object().shape({
+    model: yup.string().notRequired(),
+    brand: yup.string().notRequired(),
+    year: yup.string().notRequired(),
+    fuel: yup.string().notRequired(),
+    km: yup.string().notRequired(),
+    color: yup.string().notRequired(),
+    fip_price: yup.string().notRequired(),
+    price: yup.string().notRequired(),
+    description: yup.string().notRequired(),
+    cover_image: yup.string().notRequired(),
+    // gallery_images: yup.array().of(
+    //     yup.string().notRequired()
+    // ).notRequired()
+});

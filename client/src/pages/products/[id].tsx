@@ -39,6 +39,8 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
   const { getOwnerById, comments, loading, getComments, setLoading } = annoucementCtx()
   const router = useRouter()
   const { id }: any = router.query;
+
+  const today: any = new Date()
   const verifyLogin = () => {
     if (!user) {
       router.push("/login")
@@ -212,10 +214,12 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
                   return (
 
                     <>
-                       <Button key={index} onClick={onOpen} backgroundColor={'transparent'} _hover={{bgColor: 'transparent'}}>
+
+                       <Button key={index + "btn"} onClick={onOpen} backgroundColor={'transparent'} _hover={{bgColor: 'transparent'}}>
                         {
                           <Box>
-                            <Image src={item.url} alt={item.id}/>
+                            <Image src={item.url}/>
+
                           </Box>
                         }
                        </Button>
@@ -226,7 +230,9 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
                             <ModalHeader></ModalHeader>
                             <ModalCloseButton />
                               <ModalBody>
-                                {<Image src={item.url} alt={item.id}/>}
+
+                                {<Image src={item.url} />}
+
                               </ModalBody>
                             </ModalContent>
                           </Modal>
@@ -288,15 +294,21 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
             </Text>
             {
               comments?.map((element, key) => {
+                const createdDate = new Date(element.created_at)
+                const difTime = today.getTime() - createdDate.getTime()
+                const difDays = difTime / (1000 * 3600 * 24)
+                
                 return (
-                  <List key={key}>
+
+                  <List key={key + 'comments'}>
+
                     <HStack mb={"20px"}>
                       <Avatar name={element.owner.name} size={"sm"}/>
                       <Text color={"grey.400"} fontWeight={"medium"} fontSize={"sm"}>
                         {element.owner.name}
                       </Text>
                       <Text color={"grey.250"} fontWeight={"normal"} fontSize={"xs"}>
-                        {element.updated_at.substring(0, 10)}
+                        {`há ${Math.floor(difDays)} dias`}
                       </Text>
                     </HStack>
                     <Text color={"grey.300"} fontWeight={"normal"} fontSize={"sm"}>
