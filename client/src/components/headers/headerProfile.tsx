@@ -22,7 +22,7 @@ const ProfileMenuList = () => {
 
      
       <MenuItem>
-        <Link href="/login" onClick={() => logoutUser()}>{""}Sair</Link>
+        <Link onClick={() => logoutUser()}>{""}Sair</Link>
       </MenuItem>
     </MenuList>
   );
