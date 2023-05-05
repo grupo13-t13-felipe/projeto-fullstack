@@ -33,6 +33,9 @@ const Home = () => {
 		setPaginationPage,
 	} = annoucementCtx();
 	const { user } = useContext(UserContext);
+	const { getComments } = annoucementCtx();
+
+	console.log(allAnnouncements)
 
 	return (
 		<>
@@ -129,10 +132,12 @@ const Home = () => {
 													}}
 													as={NextLink}
 													href={`/products/${item.id}`}
-													onClick={() =>
+													onClick={() => {
 														setOwnerId(
 															item.owner.id
 														)
+														getComments(item.id)
+													}
 													}>
 													<ProductCard
 														good={
