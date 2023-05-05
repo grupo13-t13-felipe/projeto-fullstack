@@ -212,10 +212,12 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
                   return (
 
                     <>
+
                        <Button key={index + "btn"} onClick={onOpen} backgroundColor={'transparent'} _hover={{bgColor: 'transparent'}}>
                         {
                           <Box>
                             <Image src={item.url}/>
+
                           </Box>
                         }
                        </Button>
@@ -226,7 +228,9 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
                             <ModalHeader></ModalHeader>
                             <ModalCloseButton />
                               <ModalBody>
+
                                 {<Image src={item.url} />}
+
                               </ModalBody>
                             </ModalContent>
                           </Modal>
@@ -289,7 +293,9 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
             {
               comments?.map((element, key) => {
                 return (
+
                   <List key={key + 'comments'}>
+
                     <HStack mb={"20px"}>
                       <Avatar name={element.owner.name} size={"sm"}/>
                       <Text color={"grey.400"} fontWeight={"medium"} fontSize={"sm"}>
