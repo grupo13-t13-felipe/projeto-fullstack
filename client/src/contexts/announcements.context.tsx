@@ -40,10 +40,10 @@ interface AnnouncementProviderData {
 	getAllAnnouncements: () => Promise<void>;
 	paginationPage: number;
 	setPaginationPage: React.Dispatch<React.SetStateAction<number>>;
-    createAnnouncement: (dataForm: IAnnouncementCreate) => void
-	editAnnouncement: (dataForm: IAnnouncementEdit) => void
+  createAnnouncement: (dataForm: IAnnouncementCreate) => void
+  editAnnouncement: (dataForm: IAnnouncementEdit) => void
 	deleteAnnouncement: () => void
-	getComments: (announcement_id: string) => void
+  getComments: (announcement_id: string) => void
 	comments: IComments[] | undefined
 }
 
