@@ -6,7 +6,6 @@ import { User } from '../users/entities/user.entity';
 import { CreateGalleryImagesArrayDto } from '../gallery_images/dto/create-gallery_image.dto';
 import { GalleryImagesService } from '../gallery_images/gallery_images.service';
 import { AnnoucementFiltersDto } from './dto/annoucements-filters.dto';
-import { Annoucement, GalleryImage } from '@prisma/client';
 import { getPaginatedResponse } from 'src/utils/getPaginatedResponse.utils';
 
 @Injectable()
