@@ -79,7 +79,7 @@ const Advertiser = () => {
                                         {owner!.description!}
                                     </Text>
                                     {
-                                        user!.is_seller ? <AnnouncementModal /> : null
+                                        user?.is_seller ? <AnnouncementModal /> : null
                                     }
                                 </Flex>
                             </Flex>
