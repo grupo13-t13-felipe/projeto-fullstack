@@ -5,6 +5,8 @@ import Buttons from "./button";
 import { redirect } from "next/dist/server/api-utils";
 import { AnnouncementContext } from "@/contexts/announcements.context";
 import { useContext } from "react";
+import nookies, { parseCookies } from 'nookies'
+
 
 interface IProductCard {
   image: string;
@@ -37,6 +39,7 @@ const ProductCard = ({
   announcId,
   ownerId
 }: IProductCard) => {
+  const userId = parseCookies().karsUserId.replace(/['"]+/g, '');
   const { setOwnerId, getComments } = useContext(AnnouncementContext)
   const router = useRouter()
   const redirect = () => {
@@ -54,6 +57,7 @@ const ProductCard = ({
         setOwnerId(ownerId)
         getComments(announcId)
   }
+  console.log(ownerId)
   return (
     <Card role="group" boxShadow={"none"} w="312px" h="380px" borderRadius={"0"} onClick={redirect}>
       <CardBody padding={"1px"}>
@@ -122,7 +126,7 @@ const ProductCard = ({
         
         {router.asPath == "/announcements" ? 
           <ButtonGroup mt="1em">
-            <EditAnnouncementModal announcId={announcId} announcementInfo={{
+            {ownerId == userId ? <EditAnnouncementModal announcId={announcId} announcementInfo={{
               model: "",
               brand: "",
               year: "",
@@ -133,7 +137,7 @@ const ProductCard = ({
               price: "",
               description: "",
               cover_image: ""
-            }}/>
+            }}/> : <></>}
             <Buttons onClick={redirectFromButton} border={"2px"} backgroundColor={"#FDFDFD"} color={"#212529"} borderColor={"#212529"} radius={"4px"} fontSize={"1em"} valueButton={"Ver detalhes"}>Ver detalhes</Buttons>
           </ButtonGroup>
           :

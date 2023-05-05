@@ -111,7 +111,6 @@ const Advertiser = () => {
                                 >
                                     {
                                         announcementsByOwner!.map((element, index) => {
-                                            console.log(announcementsByOwner)
                                             return (
                                                 <ListItem w={"312px"} display={"inline-block"} key={index}>
                                                     
@@ -128,7 +127,7 @@ const Advertiser = () => {
                                                             price={`${element.price}`}
                                                             good={true} 
                                                             announcId={element.id} 
-                                                            ownerId={element.owner.id}                                                        />
+                                                            ownerId={element.owner_id}                                                        />
                                                 </ListItem>
                                             )
                                         })
