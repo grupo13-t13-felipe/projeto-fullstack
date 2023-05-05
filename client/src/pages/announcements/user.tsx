@@ -107,8 +107,7 @@ const Advertiser = () => {
                                         announcementsByOwner!.map((element, index) => {
                                             return (
                                                 <ListItem w={"312px"} display={"inline-block"} key={index}>
-                                                    <Link _hover={{ textDecoration: "none" }} as={NextLink} href={`/product/${element.id}`}>
-                                                        <ProductCard
+                                                         <ProductCard
                                                             image={`${element.cover_image}`}
                                                             alt={`${element.brand}`}
                                                             brand={`${element.brand}`}
@@ -120,8 +119,10 @@ const Advertiser = () => {
                                                             year={`${element.year}`}
                                                             price={`${element.price}`}
                                                             good={true}
+                                                            announcId={element.id}
+                                                            ownerId={element.owner_id}
                                                         />
-                                                    </Link>
+                                                    
                                                 </ListItem>
                                             )
                                         })

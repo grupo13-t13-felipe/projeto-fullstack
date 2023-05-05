@@ -39,7 +39,7 @@ const ProductCard = ({
   announcId,
   ownerId
 }: IProductCard) => {
-  const userId = parseCookies().karsUserId.replace(/['"]+/g, '');
+  const userId = parseCookies().karsUserId?.replace(/['"]+/g, '');
   const { setOwnerId, getComments } = useContext(AnnouncementContext)
   const router = useRouter()
   const redirect = () => {

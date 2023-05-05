@@ -39,6 +39,8 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
   const { getOwnerById, comments, loading, getComments, setLoading } = annoucementCtx()
   const router = useRouter()
   const { id }: any = router.query;
+
+  const today: any = new Date()
   const verifyLogin = () => {
     if (!user) {
       router.push("/login")
@@ -292,11 +294,9 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
             </Text>
             {
               comments?.map((element, key) => {
-                console.log(element.created_at)
-                console.log(new Date())
-                const difDay: any = new Date()  - new Date(element.created_at)
-                const difDayForm = difDay / (1000 * 60 * 60 * 24)
-                console.log(difDayForm)
+                // const difDay = today  - new Date(element.created_at)
+                // const difDayForm = difDay / (1000 * 60 * 60 * 24)
+                // console.log(difDayForm)
                 
                 return (
 
@@ -308,7 +308,7 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
                         {element.owner.name}
                       </Text>
                       <Text color={"grey.250"} fontWeight={"normal"} fontSize={"xs"}>
-                        {difDayForm < 1 ? `${0} dias` : `${difDayForm} dias atrás`}
+                        {element.created_at}
                       </Text>
                     </HStack>
                     <Text color={"grey.300"} fontWeight={"normal"} fontSize={"sm"}>
