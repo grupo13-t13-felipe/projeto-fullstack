@@ -62,5 +62,8 @@ export interface IComments {
 
 export interface IComment {
     content: string
+
 }
+
+
 

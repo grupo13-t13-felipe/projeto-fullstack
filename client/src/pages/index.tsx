@@ -35,8 +35,6 @@ const Home = () => {
 	const { user } = useContext(UserContext);
 	const { getComments } = annoucementCtx();
 
-	console.log(allAnnouncements)
-
 	return (
 		<>
 			<Head>
