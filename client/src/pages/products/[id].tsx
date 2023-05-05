@@ -294,9 +294,9 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
             </Text>
             {
               comments?.map((element, key) => {
-                // const difDay = today  - new Date(element.created_at)
-                // const difDayForm = difDay / (1000 * 60 * 60 * 24)
-                // console.log(difDayForm)
+                const createdDate = new Date(element.created_at)
+                const difTime = today.getTime() - createdDate.getTime()
+                const difDays = difTime / (1000 * 3600 * 24)
                 
                 return (
 
@@ -308,7 +308,7 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
                         {element.owner.name}
                       </Text>
                       <Text color={"grey.250"} fontWeight={"normal"} fontSize={"xs"}>
-                        {element.created_at}
+                        {`há ${Math.floor(difDays)} dias`}
                       </Text>
                     </HStack>
                     <Text color={"grey.300"} fontWeight={"normal"} fontSize={"sm"}>
