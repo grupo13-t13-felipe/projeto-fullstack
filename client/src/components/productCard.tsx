@@ -1,4 +1,13 @@
-import { Card, CardBody, CardFooter, Image, Stack, Heading, Text, Avatar, HStack } from "@chakra-ui/react";
+import { Card, CardBody, CardFooter, Image, Stack, Heading, Text, Avatar, HStack, ButtonGroup, Box } from "@chakra-ui/react";
+import { useRouter } from "next/router";
+import EditAnnouncementModal from "./editAnnouncmentModal";
+import Buttons from "./button";
+import { redirect } from "next/dist/server/api-utils";
+import { AnnouncementContext } from "@/contexts/announcements.context";
+import { useContext } from "react";
+import nookies, { parseCookies } from 'nookies'
+
+
 interface IProductCard {
   image: string;
   alt: string;
@@ -11,6 +20,8 @@ interface IProductCard {
   year: string | number;
   price: string | number;
   good: boolean;
+  announcId: string;
+  ownerId: string;
 }
 
 const ProductCard = ({
@@ -24,10 +35,31 @@ const ProductCard = ({
   km,
   year,
   price,
-  good
+  good,
+  announcId,
+  ownerId
 }: IProductCard) => {
+  const userId = parseCookies().karsUserId.replace(/['"]+/g, '');
+  const { setOwnerId, getComments } = useContext(AnnouncementContext)
+  const router = useRouter()
+  const redirect = () => {
+    console.log(router.asPath)
+    if(router.asPath != "/announcements") {
+        router.push(`/products/${announcId}`)
+        setOwnerId(ownerId)
+        getComments(announcId)
+    }else{
+
+    }
+  }
+  const redirectFromButton = () => {
+        router.push(`/products/${announcId}`)
+        setOwnerId(ownerId)
+        getComments(announcId)
+  }
+  console.log(ownerId)
   return (
-    <Card role="group" boxShadow={"none"} w="312px" h="352px" borderRadius={"0"}>
+    <Card role="group" boxShadow={"none"} w="312px" h="380px" borderRadius={"0"} onClick={redirect}>
       <CardBody padding={"1px"}>
         {good ? <Text
           position={"absolute"}
@@ -63,32 +95,54 @@ const ProductCard = ({
           </HStack>
         </Stack>
       </CardBody>
-      <CardFooter padding={"0"}>
-        <HStack w={"100%"} spacing={"1em"}>
-          <Text
-            backgroundColor={"blue.100"}
-            color={"blue.300"}
-            fontSize={"sm"}
-            fontWeight={"500"}
-            paddingX={"0.5em"}
-            paddingY={"0.25em"}
-          >
-            {km} KM
+      <CardFooter padding={"0"} flexDirection={"column"}>
+        <Box flexDirection={"row"} display={"flex"}>
+          <HStack w={"50%"} spacing={"1em"}>
+            <Text
+              backgroundColor={"blue.100"}
+              color={"blue.300"}
+              fontSize={"sm"}
+              fontWeight={"500"}
+              paddingX={"0.5em"}
+              paddingY={"0.25em"}
+            >
+              {km} KM
+            </Text>
+            <Text
+              backgroundColor={"blue.100"}
+              color={"blue.300"}
+              fontSize={"sm"}
+              fontWeight={"500"}
+              paddingX={"0.5em"}
+              paddingY={"0.25em"}
+            >
+              {year}
+            </Text>
+          </HStack>
+          <Text fontSize="1em" fontWeight={"500"} ml={'auto'}>
+            R${price}
           </Text>
-          <Text
-            backgroundColor={"blue.100"}
-            color={"blue.300"}
-            fontSize={"sm"}
-            fontWeight={"500"}
-            paddingX={"0.5em"}
-            paddingY={"0.25em"}
-          >
-            {year}
-          </Text>
-        </HStack>
-        <Text fontSize="1em" fontWeight={"500"} ml={"auto"}>
-          R${price}
-        </Text>
+        </Box>
+        
+        {router.asPath == "/announcements" ? 
+          <ButtonGroup mt="1em">
+            {ownerId == userId ? <EditAnnouncementModal announcId={announcId} announcementInfo={{
+              model: "",
+              brand: "",
+              year: "",
+              fuel: "",
+              km: "",
+              color: "",
+              fip_price: "",
+              price: "",
+              description: "",
+              cover_image: ""
+            }}/> : <></>}
+            <Buttons onClick={redirectFromButton} border={"2px"} backgroundColor={"#FDFDFD"} color={"#212529"} borderColor={"#212529"} radius={"4px"} fontSize={"1em"} valueButton={"Ver detalhes"}>Ver detalhes</Buttons>
+          </ButtonGroup>
+          :
+          <></>
+        }
       </CardFooter>
     </Card>
   );

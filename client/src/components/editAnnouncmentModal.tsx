@@ -13,7 +13,8 @@ import {
   useConst,
   useDisclosure,
   Textarea,
-  Input
+  Input,
+  ModalCloseButton
 } from "@chakra-ui/react";
 import TextArea from "./textArea";
 import Buttons from "./button";
@@ -63,7 +64,11 @@ const EditAnnouncementModal = ({ announcId, announcementInfo }: editProps) => {
       <>
         <form onSubmit={handleSubmit(editAnnouncement)}>
           <Box gap={"24px"} display={"flex"} flexDir={"column"}>
-            <Text fontSize={"14px"}>Infomações do veículo</Text>
+            <HStack>
+              <Text fontSize={"14px"}>Infomações do veículo</Text>
+              <ModalCloseButton/>
+            </HStack>
+              
             <InputForm
               isInvalid={!!errors.brand?.message}
               errors={errors.brand?.message}
@@ -71,7 +76,7 @@ const EditAnnouncementModal = ({ announcId, announcementInfo }: editProps) => {
               labeltext={"Marca"}
               inputtype={"text"}
               inputplaceholder={announcementInfo.brand}
-              isRequired={true}
+              
             ></InputForm>
 
             <InputForm
@@ -81,7 +86,7 @@ const EditAnnouncementModal = ({ announcId, announcementInfo }: editProps) => {
               labeltext={"Modelo"}
               inputtype={"text"}
               inputplaceholder={announcementInfo.model}
-              isRequired={true}
+              
             ></InputForm>
 
             <HStack gap={"14px"}>
@@ -92,7 +97,7 @@ const EditAnnouncementModal = ({ announcId, announcementInfo }: editProps) => {
                 labeltext={"Ano"}
                 inputtype={"text"}
                 inputplaceholder={announcementInfo.year}
-                isRequired={true}
+                
               ></InputForm>
 
               <InputForm
@@ -102,7 +107,7 @@ const EditAnnouncementModal = ({ announcId, announcementInfo }: editProps) => {
                 labeltext={"Combustível"}
                 inputtype={"text"}
                 inputplaceholder={announcementInfo.fuel}
-                isRequired={true}
+                
               ></InputForm>
             </HStack>
 
@@ -114,7 +119,7 @@ const EditAnnouncementModal = ({ announcId, announcementInfo }: editProps) => {
                 labeltext={"Quilometragem"}
                 inputtype={"text"}
                 inputplaceholder={announcementInfo.km}
-                isRequired={true}
+                
               ></InputForm>
 
               <InputForm
@@ -124,7 +129,7 @@ const EditAnnouncementModal = ({ announcId, announcementInfo }: editProps) => {
                 labeltext={"Cor"}
                 inputtype={"text"}
                 inputplaceholder={announcementInfo.color}
-                isRequired={true}
+                
               ></InputForm>
             </HStack>
 
@@ -136,7 +141,7 @@ const EditAnnouncementModal = ({ announcId, announcementInfo }: editProps) => {
                 labeltext={"Preço tabela FIPE"}
                 inputtype={"text"}
                 inputplaceholder={announcementInfo.fip_price}
-                isRequired={true}
+                
               ></InputForm>
 
               <InputForm
@@ -146,11 +151,11 @@ const EditAnnouncementModal = ({ announcId, announcementInfo }: editProps) => {
                 labeltext={"Preço"}
                 inputtype={"text"}
                 inputplaceholder={announcementInfo.price}
-                isRequired={true}
+                
               ></InputForm>
             </HStack>
 
-            <FormControl isRequired isInvalid={!!errors.description?.message}>
+            <FormControl isInvalid={!!errors.description?.message}>
               <FormLabel>Descrição</FormLabel>
               <Textarea
                 {...register("description")}
@@ -169,7 +174,7 @@ const EditAnnouncementModal = ({ announcId, announcementInfo }: editProps) => {
               labeltext={"Imagem da Capa"}
               inputtype={"text"}
               inputplaceholder={announcementInfo.cover_image}
-              isRequired={true}
+              
             ></InputForm>
             <div>
               {galleryImage.map((item: any, index: any) => (
@@ -214,19 +219,19 @@ const EditAnnouncementModal = ({ announcId, announcementInfo }: editProps) => {
       
         return (
             <Modals
-            modalTitle={"Criar anúncio"}
+            modalTitle={"Editar anúncio"}
             sizeTitle={"1em"}
             modalContent={modalContent}
-            buttonWidth={"160px"}
-            nameButton={"Criar anuncio"}
-            modalButtonColor={"#4529E6"}
+            buttonWidth={"80px"}
+            nameButton={"Editar"}
+            modalButtonColor={"#212529"}
             modalButtonBg={"#FDFDFD"}
             buttonRadius={"4px"}
             buttonBorder={"2px"}
-            buttonBorderColor={"#4529E6"}
+            buttonBorderColor={"#212529"}
             isOpen={isOpen}
             onOpen={() => { setCurrentAnnouncement(), setGalleryImage([0]); onOpen() }}
-            onClose={() => { resetCurrentAnnouncement(), onClose}} 
+            onClose={onClose} 
             titlesColor={""} 
             modalButtons={""} 
             footerDirection={""} 
