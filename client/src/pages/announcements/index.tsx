@@ -114,7 +114,7 @@ const Advertiser = () => {
                                             console.log(announcementsByOwner)
                                             return (
                                                 <ListItem w={"312px"} display={"inline-block"} key={index}>
-                                                    <Link _hover={{ textDecoration: "none" }} as={NextLink} href={`/products/${element.id}`}>
+                                                    
                                                         <ProductCard
                                                             image={`${element.cover_image}`}
                                                             alt={`${element.brand}`}
@@ -126,9 +126,9 @@ const Advertiser = () => {
                                                             km={`${element.km}`}
                                                             year={`${element.year}`}
                                                             price={`${element.price}`}
-                                                            good={true}
-                                                        />
-                                                    </Link>
+                                                            good={true} 
+                                                            announcId={element.id} 
+                                                            ownerId={element.owner.id}                                                        />
                                                 </ListItem>
                                             )
                                         })

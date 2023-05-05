@@ -11,6 +11,7 @@ import { IAnnouncement, IAnnouncementCreate, IAnnouncementEdit, IAnnouncementOwn
 import { UserContext } from "./users.context";
 import { Box, useToast } from "@chakra-ui/react";
 import nookies from 'nookies'
+import removeEmptyStrings from "@/utils/removeEmptyStrings";
 
 
 interface AnnouncementProviderData {
@@ -95,10 +96,8 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 
     async function createAnnouncement(dataForm: IAnnouncementCreate) {
         try {
-            console.log(dataForm)
             await api.post("/annoucements", dataForm)
         } catch (err){
-            console.log(err)
             toast({
                 title: "error",
                 variant: "solid",
@@ -117,11 +116,10 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 
 	async function editAnnouncement (dataForm: IAnnouncementEdit) {
 		const announcId = nookies.get()['announcId']
+		const data = removeEmptyStrings(dataForm)
         try {
-            console.log(dataForm)
-            await api.patch(`/annoucements/${announcId}`, dataForm)
+            await api.patch(`/annoucements/${announcId}`, data)
         } catch (err){
-            console.log(err)
             toast({
                 title: "error",
                 variant: "solid",
@@ -135,15 +133,15 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
                     )
                 }
             })
+			console.log(err)
         }
     }
 
 	async function deleteAnnouncement () {
 		const announcId = nookies.get()['announcId']
         try {
-            await api.patch(`/annoucements/${announcId}`)
+            await api.delete(`/annoucements/${announcId}`)
         } catch (err){
-            console.log(err)
             toast({
                 title: "error",
                 variant: "solid",
@@ -204,7 +202,6 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 	async function getComments(announcement_id: string){
 		try {
 			const { data } = await api.get(`/annoucements/${announcement_id}/comments`)
-			console.log(data)
       		setComments(data)
 		} catch (err) {
 			console.error(err)

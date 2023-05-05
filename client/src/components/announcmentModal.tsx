@@ -211,7 +211,7 @@ const AnnouncementModal = () => {
             buttonBorderColor={"#4529E6"}
             isOpen={isOpen}
             onOpen={() => {  setGalleryImage([0]); onOpen() }}
-            onClose={() => { onClose}} 
+            onClose={() => { onClose()}} 
             titlesColor={""} 
             modalButtons={""} 
             footerDirection={""} 
