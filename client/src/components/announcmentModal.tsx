@@ -4,25 +4,20 @@ import {
   FormControl,
   FormLabel,
   FormErrorMessage,
-  FormHelperText,
   Text,
-  VStack,
   Box,
   HStack,
   ButtonGroup,
   useConst,
   useDisclosure,
   Textarea,
-  Input
 } from "@chakra-ui/react";
-import TextArea from "./textArea";
 import Buttons from "./button";
 import { useContext, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { IAnnouncementCreate } from "@/types/announcements";
-import { AnnouncementContext, annoucementCtx } from "@/contexts/announcements.context";
+import { AnnouncementContext } from "@/contexts/announcements.context";
 import { createAnnouncementSchema } from "@/schemas/annoucement.schema";
-import DefaultForm from "./form";
 import { useForm } from "react-hook-form";
 
 const AnnouncementModal = () => {

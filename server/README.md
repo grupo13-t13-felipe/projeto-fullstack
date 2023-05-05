@@ -1,6 +1,7 @@
 # API do projeto fullstack de finalização da Kenzie Academy Brasil
 
 ## Tecnologias utilizadas:
+- typescript
 - nestjs
 - prisma
 - postgreSQL
