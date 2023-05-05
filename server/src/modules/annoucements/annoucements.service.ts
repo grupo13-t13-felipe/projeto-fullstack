@@ -132,7 +132,7 @@ export class AnnoucementsService {
             gallery_images: true,
             owner: { select: { id: true, name: true } },
           },
-          orderBy: { created_at: "desc" },
+          orderBy: { created_at: 'desc' },
 
           ...filters,
           take,
@@ -149,6 +149,15 @@ export class AnnoucementsService {
       include: {
         gallery_images: true,
         owner: { select: { id: true, name: true, description: true } },
+        comments: {
+          select: {
+            id: true,
+            content: true,
+            created_at: true,
+            updated_at: true,
+            owner: { select: { id: true, name: true, email: true } },
+          },
+        },
       },
     });
   }

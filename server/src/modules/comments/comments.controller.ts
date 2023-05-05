@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Request, UseGuards } from '@nestjs/common';
+import { HttpCode, HttpStatus, Request, UseGuards } from '@nestjs/common';
 import {
   Controller,
   Get,
@@ -12,7 +12,7 @@ import {
 import { CommentsService } from './comments.service';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { UpdateCommentDto } from './dto/update-comment.dto';
-import {Request as req} from 'express'
+import { Request as req } from 'express';
 import { User } from '../users/entities/user.entity';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { AccountOwnerGuard } from '../users/guards/account-owner.guard';
@@ -21,7 +21,7 @@ import { CommentExistsGuard } from './guards/comment-exists.guard';
 import { IsCommentOwnerGuard } from './guards/is-comment-owner.guard';
 
 interface UserRequest extends req {
-  user: User
+  user: User;
 }
 
 @Controller()
@@ -31,11 +31,15 @@ export class CommentsController {
   @UseGuards(JwtAuthGuard, AnnoucementExistsGuard)
   @Post('annoucements/:annoucement_id/comments')
   create(
-    @Body() createCommentDto: CreateCommentDto, 
-    @Param('annoucement_id') annoucement_id: string, 
-    @Request() request: UserRequest
-    ) {
-    return this.commentsService.create(createCommentDto, annoucement_id, request.user.id);
+    @Body() createCommentDto: CreateCommentDto,
+    @Param('annoucement_id') annoucement_id: string,
+    @Request() request: UserRequest,
+  ) {
+    return this.commentsService.create(
+      createCommentDto,
+      annoucement_id,
+      request.user.id,
+    );
   }
 
   @UseGuards(AnnoucementExistsGuard)
@@ -46,13 +50,17 @@ export class CommentsController {
 
   @UseGuards(JwtAuthGuard, CommentExistsGuard, IsCommentOwnerGuard)
   @Patch('comments/:comment_id')
-  update(@Param('id') id: string, @Body() updateCommentDto: UpdateCommentDto) {
-    return this.commentsService.update(+id, updateCommentDto);
+  update(
+    @Param('comment_id') commentId: string,
+    @Body() updateCommentDto: UpdateCommentDto,
+  ) {
+    return this.commentsService.update(commentId, updateCommentDto);
   }
 
-  @UseGuards(JwtAuthGuard, CommentExistsGuard, IsCommentOwnerGuard)
+  @UseGuards(JwtAuthGuard, CommentExistsGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
   @Delete('comments/:comment_id')
-  remove(@Param('id') id: string) {
-    return this.commentsService.remove(+id);
+  remove(@Param('comment_id') commentId: string) {
+    return this.commentsService.remove(commentId);
   }
 }
