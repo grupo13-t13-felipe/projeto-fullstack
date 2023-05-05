@@ -49,3 +49,21 @@ export interface Props {
     announcements: IAnnouncement[]
 }
 
+export interface IComments {
+    content: string
+    created_at: string
+	updated_at: string
+    owner: {
+        id: string
+        name: string
+        email: string
+    }
+}
+
+export interface IComment {
+    content: string
+
+}
+
+
+
