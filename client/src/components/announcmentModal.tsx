@@ -151,7 +151,7 @@ const AnnouncementModal = () => {
               isRequired={true}
             ></InputForm>
             <div>
-              {galleryImage.map((item: any, index: any) => (
+              {/* {galleryImage.map((item: any, index: any) => (
                   <InputForm key={index}
                     id={index}
                     // isInvalid={!!errors.gallery_images?.message}
@@ -162,7 +162,7 @@ const AnnouncementModal = () => {
                     inputplaceholder={"https://image.com"}
                     isRequired={false}
                   ></InputForm>
-              ))}
+              ))} */}
             </div>
             <Buttons
               backgroundColor={"#EDEAFD"}
