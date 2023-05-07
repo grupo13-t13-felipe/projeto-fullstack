@@ -8,15 +8,18 @@ import { PrismaService } from 'src/database/prisma.service';
 export class CommentsService {
   constructor(private prisma: PrismaService) {}
 
-  async create(createCommentDto: CreateCommentDto, announcement_id: string, owner_id: string) {
-
+  async create(
+    createCommentDto: CreateCommentDto,
+    announcement_id: string,
+    owner_id: string,
+  ) {
     const comment = await this.prisma.comment.create({
-      data: {...createCommentDto, owner_id, announcement_id},
+      data: { ...createCommentDto, owner_id, announcement_id },
       include: {
         announcement: true,
-        owner: {select: {id: true, name: true, email: true }}
-      }
-    })
+        owner: { select: { id: true, name: true, email: true } },
+      },
+    });
     return comment;
   }
 
@@ -27,21 +30,23 @@ export class CommentsService {
       },
       include: {
         announcement: true,
-        owner: {select: {id: true, name: true, email: true }}
-      }
+        owner: { select: { id: true, name: true, email: true } },
+      },
     });
     return result;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} comment`;
+  async update(commentId: string, updateCommentDto: UpdateCommentDto) {
+    const comment = await this.prisma.comment.update({
+      where: { id: commentId },
+      data: updateCommentDto,
+    });
+    return comment;
   }
 
-  update(id: number, updateCommentDto: UpdateCommentDto) {
-    return `This action updates a #${id} comment`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} comment`;
+  async remove(commentId: string) {
+    const comment = await this.prisma.comment.delete({
+      where: { id: commentId },
+    });
   }
 }
