@@ -20,17 +20,21 @@
 <br>
 <h2 align="center"> Página Inicial </h2>
 
-<!-- ![Projeto-kars-1](https://user-images.githubusercontent.com/106371099/202442169-394021d4-0d29-4248-8a98-23ec572ac8f4.png)
+![Projeto-kars-1](https://raw.githubusercontent.com/grupo13-t13-felipe/readme-images/master/pc-deslogado.png)
 
-<h2 align="center"> Dashboard Desenvolvedor </h2>
+<h2 align="center"> Página Inicial - Logado </h2>
 
-![Projeto-kars-2](https://user-images.githubusercontent.com/106371099/202442205-7cb5356e-9f6f-4bf9-a1d5-f5400c1b50b8.png)
+![Projeto-kars-2](https://raw.githubusercontent.com/grupo13-t13-felipe/readme-images/master/pc-logado.png)
 
 <h2 align="center"> Exemplo Mobile </h2>
 
 <p align="center">
-  <img src="https://i.imgur.com/jppDRRv.png">
+  <img src="https://raw.githubusercontent.com/grupo13-t13-felipe/readme-images/master/mobile.png">
 </p>
 
-## Vamos nos conectar?
-- [Linkedin](https://www.linkedin.com/in/felipegrondek/) -->
+## Devs que participaram do projeto:
+- [Felipe Grondek](https://www.linkedin.com/in/felipegrondek/)
+- [Gabriela Marchiori](https://www.linkedin.com/in/gabriela-marchiori/)
+- [Lucas Magalhães](https://www.linkedin.com/in/lucas-magalh%C3%A3es618/)
+- [Lucas Kauan](https://www.linkedin.com/in/lucas-kauan-nunes/)
+- [Matheus Serruya](https://www.linkedin.com/in/matheusserruya/)
