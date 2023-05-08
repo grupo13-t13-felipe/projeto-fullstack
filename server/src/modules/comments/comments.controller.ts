@@ -19,6 +19,7 @@ import { AccountOwnerGuard } from '../users/guards/account-owner.guard';
 import { AnnoucementExistsGuard } from '../annoucements/guards/annoucement-exists.guard';
 import { CommentExistsGuard } from './guards/comment-exists.guard';
 import { IsCommentOwnerGuard } from './guards/is-comment-owner.guard';
+import { IsCommentAdOwnerGuard } from './guards/is-comment-ad-owner.guard';
 
 interface UserRequest extends req {
   user: User;
@@ -57,7 +58,7 @@ export class CommentsController {
     return this.commentsService.update(commentId, updateCommentDto);
   }
 
-  @UseGuards(JwtAuthGuard, CommentExistsGuard)
+  @UseGuards(JwtAuthGuard, IsCommentAdOwnerGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete('comments/:comment_id')
   remove(@Param('comment_id') commentId: string) {
