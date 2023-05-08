@@ -2,7 +2,7 @@ import Buttons from "@/components/button";
 import DefaultFooter from "@/components/footer";
 import HeaderProfile from "@/components/headers/headerProfile";
 import api from "@/services/api";
-import { IAnnouncement, IComment } from "@/types/announcements";
+import { IComment } from "@/types/announcements";
 import { useForm } from 'react-hook-form';
 import {
   Box,
@@ -15,12 +15,10 @@ import {
   ModalOverlay,
   ModalContent,
   ModalHeader,
-  ModalFooter,
   ModalBody,
   ModalCloseButton,
   useDisclosure,
 } from "@chakra-ui/react";
-import { GetServerSideProps, NextPage } from "next";
 import { useContext, useEffect } from "react";
 import { UserContext } from "@/contexts/users.context";
 import DefaultHeader from "@/components/headers/headerDefault";
@@ -29,24 +27,26 @@ import { useRouter } from "next/router";
 import { commentSchema } from "@/schemas/user.schema";
 import { yupResolver } from "@hookform/resolvers/yup";
 
-export interface Props {
-  announcement: IAnnouncement;
-}
-
-const Dashboard: NextPage<Props> = ({ announcement }) => {
+const Dashboard = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { user } = useContext(UserContext)
-  const { getOwnerById, comments, loading, getComments, setLoading } = annoucementCtx()
+  const { getOwnerById, comments, loading, getComments, setLoading, announcementById, getAnnouncementById } = annoucementCtx()
   const router = useRouter()
   const { id }: any = router.query;
-
   const today: any = new Date()
+
+  useEffect(() => {
+    getAnnouncementById(id)
+  }, [])
+
   const verifyLogin = () => {
     if (!user) {
       router.push("/login")
+    } else {
+      window.open(`https://wa.me/55${announcementById.owner.phone}`, "_blank")
     }
   }
-
+  
   const postComment = async (formData: IComment) => {
     try {
       await api.post(`/annoucements/${id}/comments`, formData)
@@ -61,11 +61,11 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
       }
     }
   }
-
+  
   const { register, handleSubmit, formState: { errors } } = useForm<IComment>({
     resolver: yupResolver(commentSchema)
   })
-
+  
   const verifyComments = () => {
     setLoading(true)
     getComments(id)
@@ -73,11 +73,11 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
   useEffect(() => {
     verifyComments()
   }, [])
-
+  
   return (
     <>{
       loading ? (
-				<Flex justifyContent={"center"} alignItems={"center"} h={'100vh'}>
+        <Flex justifyContent={"center"} alignItems={"center"} h={'100vh'}>
 					<Text color={"blue.400"} fontSize={"6xl"}>
 						Loading...
 					</Text>
@@ -112,8 +112,8 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
             >
               <Box m={"auto"} display={'flex'}>
                 <Image
-                  src={announcement.cover_image}
-                  alt={announcement.model}
+                  src={announcementById.cover_image}
+                  alt={announcementById.model}
                   height={250}
                 />
               </Box>
@@ -132,7 +132,7 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
                 mb={"45px"}
                 mt={"20px"}
               >
-                {announcement.model}
+                {announcementById.model}
               </Text>
               <HStack justifyContent={"space-between"}>
                 <HStack>
@@ -144,7 +144,7 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
                     borderRadius={"4px"}
                     color={"blue.300"}
                   >
-                    {announcement.year}
+                    {announcementById.year}
                   </Text>
                   <Text
                     bg={"blue.100"}
@@ -154,11 +154,11 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
                     borderRadius={"4px"}
                     color={"blue.300"}
                   >
-                    {announcement.km} KM
+                    {announcementById.km} KM
                   </Text>
                 </HStack>
                 <Text fontSize={"md"} fontWeight={"medium"}>
-                  R$ {announcement.price}
+                  R$ {announcementById.price}
                 </Text>
               </HStack>
               <Box>
@@ -184,7 +184,7 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
                 Descrição
               </Text>
               <Text color={"grey.300"} fontWeight={"normal"} fontSize={"md"}>
-                {announcement.description}
+                {announcementById.description}
               </Text>
             </Stack>
           </Stack>
@@ -210,32 +210,28 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
                 Fotos
               </Text>
               <SimpleGrid columns={3} spacing={"14px"} pl={"44px"} pr={"44px"}>
-                {announcement.gallery_images.map((item, index) => {
+                {announcementById.gallery_images.map((item, index) => {
                   return (
-
                     <>
-
                        <Button key={index + "btn"} onClick={onOpen} backgroundColor={'transparent'} _hover={{bgColor: 'transparent'}}>
                         {
                           <Box>
                             <Image src={item.url}/>
-
                           </Box>
                         }
                        </Button>
+                        <Modal isOpen={isOpen} onClose={onClose} key={item.id + "modal"}>
+                          <ModalOverlay />
+                          <ModalContent>
+                          <ModalHeader></ModalHeader>
+                          <ModalCloseButton />
+                            <ModalBody>
 
-                          <Modal isOpen={isOpen} onClose={onClose} key={item.id}>
-                            <ModalOverlay />
-                            <ModalContent>
-                            <ModalHeader></ModalHeader>
-                            <ModalCloseButton />
-                              <ModalBody>
+                              {<Image src={item.url} />}
 
-                                {<Image src={item.url} />}
-
-                              </ModalBody>
-                            </ModalContent>
-                          </Modal>
+                            </ModalBody>
+                          </ModalContent>
+                        </Modal>
                     </>
 
                   );
@@ -251,9 +247,9 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
               borderRadius={"base"}
               mr={["15px", "15px", "50px"]}
             >
-              <Avatar name={announcement.owner.name} size={"md"} ml={"10px"} />{" "}
+              <Avatar name={announcementById.owner.name} size={"md"} ml={"10px"} />{" "}
               <Text color={"grey.400"} fontWeight={"semibold"} fontSize={"xl"}>
-                {announcement.owner.name}
+                {announcementById.owner.name}
               </Text>
               <Text
                 color={"grey.300"}
@@ -261,14 +257,14 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
                 fontSize={"md"}
                 textAlign={"center"}
               >
-                {announcement.owner.description}
+                {announcementById.owner.description}
               </Text>
               <Buttons
                 backgroundColor={"grey.500"}
                 color={"grey.0"}
                 fontSize={"md"}
                 valueButton={"Ver todos os anuncios"}
-                onClick={() => getOwnerById(announcement.owner.id)}
+                onClick={() => getOwnerById(announcementById.owner.id)}
               />
             </Stack>
           </Stack>
@@ -396,18 +392,6 @@ const Dashboard: NextPage<Props> = ({ announcement }) => {
     }
     </>
   );
-};
-
-export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
-  const id = ctx.params!.id;
-  const responseAn = await api.get(`/annoucements/${id}`);
-  const announcement: IAnnouncement = responseAn.data;
-
-  return {
-    props: {
-      announcement,
-    },
-  };
 };
 
 export default Dashboard;

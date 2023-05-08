@@ -16,25 +16,19 @@ import Modals from "@/components/modal";
 import Buttons from "@/components/button";
 import HomeFilter from "@/components/homeFilter";
 import ProductCard from "@/components/productCard";
-import NextLink from "next/link";
 import { annoucementCtx } from "@/contexts/announcements.context";
 import HeaderProfile from "@/components/headers/headerProfile";
 import { useContext } from "react";
 import { UserContext } from "@/contexts/users.context";
-import { useRouter } from "next/router";
 
 const Home = () => {
 	const {
 		allAnnouncements,
-		setAllAnnouncements,
 		loading,
-		setLoading,
-		setOwnerId,
 		paginationPage,
 		setPaginationPage,
 	} = annoucementCtx();
 	const { user } = useContext(UserContext);
-	const { getComments } = annoucementCtx();
 
 	return (
 		<>
@@ -170,7 +164,7 @@ const Home = () => {
 										throw new Error("Function not implemented.");
 									} } onClose={function (): void {
 										throw new Error("Function not implemented.");
-									} } buttonRadius={""} buttonBorder={""} buttonBorderColor={""}							/>
+									} } buttonRadius={""} buttonBorder={""} buttonBorderColor={""} />
 						</Stack>
 						<Box
 							mb={"16px"}
