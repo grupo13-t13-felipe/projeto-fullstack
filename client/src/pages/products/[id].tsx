@@ -18,6 +18,7 @@ import {
   ModalBody,
   ModalCloseButton,
   useDisclosure,
+  Input,
 } from "@chakra-ui/react";
 import { useContext, useEffect } from "react";
 import { UserContext } from "@/contexts/users.context";
@@ -26,6 +27,9 @@ import { annoucementCtx } from "@/contexts/announcements.context";
 import { useRouter } from "next/router";
 import { commentSchema } from "@/schemas/user.schema";
 import { yupResolver } from "@hookform/resolvers/yup";
+import Modals from "@/components/modal";
+import DeleteCommentModal from "@/components/deleteCommentModal";
+import DeleteAnnouncementModal from "@/components/deleteCommentModal";
 
 const Dashboard = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -73,7 +77,15 @@ const Dashboard = () => {
   useEffect(() => {
     verifyComments()
   }, [])
-  
+
+  const modalContent = <>
+    <Text>Confirmar deleção de comentário</Text>
+    <HStack>
+      <Buttons valueButton={"Sim"} color={"grey.250"} fontSize={"sm"}/>
+      <Buttons valueButton={"Não"} color={"grey.250"} fontSize={"sm"}/>
+    </HStack>
+  </>
+
   return (
     <>{
       loading ? (
@@ -298,14 +310,30 @@ const Dashboard = () => {
 
                   <List key={key + 'comments'}>
 
-                    <HStack mb={"20px"}>
-                      <Avatar name={element.owner.name} size={"sm"}/>
-                      <Text color={"grey.400"} fontWeight={"medium"} fontSize={"sm"}>
-                        {element.owner.name}
-                      </Text>
-                      <Text color={"grey.250"} fontWeight={"normal"} fontSize={"xs"}>
-                        {`há ${Math.floor(difDays)} dias`}
-                      </Text>
+                    <HStack mb={"20px"} justifyContent={"space-between"}>
+                      <HStack>
+                        <Avatar name={element.owner.name} size={"sm"}/>
+                        <Text color={"grey.400"} fontWeight={"medium"} fontSize={"sm"}>
+                          {element.owner.name}
+                        </Text>
+                        <Text color={"grey.250"} fontWeight={"normal"} fontSize={"xs"}>
+                          {`há ${Math.floor(difDays)} dias`}
+                        </Text>
+                      </HStack>
+                      <HStack>
+                        {
+                          user?.is_seller ? <>
+                            <Buttons valueButton={"Editar"} backgroundColor={"transparent"} color={"grey.250"} fontSize={"xs"}/>
+                            <Buttons valueButton={"Excluir"} backgroundColor={"transparent"} color={"grey.250"} fontSize={"xs"}/>
+                          </> : null
+                        }
+                        {
+                          user?.id === element?.owner.id ? <>
+                            <Buttons valueButton={"Editar"} backgroundColor={"transparent"} color={"grey.250"} fontSize={"xs"}/>
+                            <DeleteCommentModal />
+                          </> : null 
+                        }
+                      </HStack>
                     </HStack>
                     <Text color={"grey.300"} fontWeight={"normal"} fontSize={"sm"}>
                       {element.content}

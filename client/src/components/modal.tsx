@@ -35,7 +35,7 @@ const Modals = ({ isOpen, onOpen, onClose, modalTitle, titlesColor, modalContent
     // const { isOpen, onOpen, onClose } = useDisclosure()
     return (
         <>
-            <Buttons onClick={onOpen} valueButton={nameButton} color={modalButtonColor}backgroundColor={modalButtonBg} width={buttonWidth} radius={buttonRadius} border={buttonBorder} borderColor={buttonBorderColor} />
+            <Buttons onClick={onOpen} valueButton={nameButton} color={modalButtonColor}backgroundColor={modalButtonBg} width={buttonWidth} radius={buttonRadius} border={buttonBorder} borderColor={buttonBorderColor} fontSize={sizeTitle}/>
 
             <Modal isOpen={isOpen} onClose={onClose} >
                 <ModalOverlay />
