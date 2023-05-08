@@ -64,6 +64,7 @@ export interface Props {
 }
 
 export interface IComments {
+    id: string
     content: string
     created_at: string
 	updated_at: string
@@ -72,9 +73,14 @@ export interface IComments {
         name: string
         email: string
     }
+    announcement: {
+        id: string
+        owner_id: string
+    }
 }
 
 export interface IComment {
+    text: string
     content: string
 
 }
