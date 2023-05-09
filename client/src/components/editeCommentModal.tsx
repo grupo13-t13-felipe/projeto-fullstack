@@ -26,12 +26,12 @@ import {
   import api from "@/services/api";
 import { annoucementCtx } from "@/contexts/announcements.context";
 
-  const EditeCommentModal = ({comment_id}: any) => {
+
+  const EditeCommentModal = ({comment_id, defaultValue}: any) => {
 
     const {setComments, comments} = annoucementCtx()
 
     const editeComment = async (dataForm: IComment) => {
-        console.log(dataForm)
         const cookie = nookies.get()
         
         try {
@@ -49,8 +49,10 @@ import { annoucementCtx } from "@/contexts/announcements.context";
     const handleEdite = async (dataForm: any) => {
       const data = await editeComment(dataForm)
       const comment_filter = comments!.filter((element) => element.id !== comment_id)
-            setComments([...comment_filter, data])
-            console.log(comments, data, comment_filter)
+      setTimeout(() => {
+				setComments([...comment_filter, data])
+			}, 1000);
+      onClose()
     }
 
           
@@ -82,13 +84,14 @@ import { annoucementCtx } from "@/contexts/announcements.context";
                 <FormLabel fontSize={["sm", "sm", "md"]} color={"grey.400"}>Comentário</FormLabel>
                 <Textarea
                   {...register("content")}
+                  defaultValue={defaultValue}
                   
                 />
               </FormControl>
             </ModalBody>
   
             <ModalFooter>
-                <Button backgroundColor={'blue.300'} color={'grey.0'} fontWeight={'medium'} fontSize={['sm', 'sm', 'md']} type={"submit"} onClick={handleSubmit(handleEdite)}>
+                <Button backgroundColor={'blue.300'} color={'grey.0'} fontWeight={'medium'} fontSize={['sm', 'sm', 'md']} type={"submit"} onClick={handleSubmit(handleEdite)} >
                 Salvar alterações
               </Button>
             </ModalFooter>
