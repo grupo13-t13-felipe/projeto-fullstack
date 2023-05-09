@@ -11,14 +11,26 @@ import {
   useConst,
   useDisclosure,
   Textarea,
+  Select,
 } from "@chakra-ui/react";
 import Buttons from "./button";
-import { useContext, useState } from "react";
+import { ReactEventHandler, useContext, useEffect, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { IAnnouncementCreate } from "@/types/announcements";
 import { AnnouncementContext } from "@/contexts/announcements.context";
 import { createAnnouncementSchema } from "@/schemas/annoucement.schema";
 import { useForm } from "react-hook-form";
+import api from "@/services/api";
+import axios from "axios";
+
+interface IModel {
+  id: string,
+	name: string,
+	brand: string,
+	year: string,
+	fuel: string,
+	value: string
+}
 
 const AnnouncementModal = () => {
     const { createAnnouncement } = useContext(AnnouncementContext)
@@ -28,175 +40,59 @@ const AnnouncementModal = () => {
     })
     const { isOpen, onOpen, onClose } = useDisclosure()
     const [galleryImage, setGalleryImage] = useState([0]);
+
     const addImage = () => {
-        setGalleryImage([...galleryImage, galleryImage.length]);
-        console.log(galleryImage)
+      setGalleryImage([...galleryImage, galleryImage.length]);
     }
-  
-    const modalContent =
-      <>
-        <form onSubmit={handleSubmit(createAnnouncement)}>
-          <Box gap={"24px"} display={"flex"} flexDir={"column"}>
-            <Text fontSize={"14px"}>Infomações do veículo</Text>
-            <InputForm
-              isInvalid={!!errors.brand?.message}
-              errors={errors.brand?.message}
-              inputregister={{...register("brand")}}
-              labeltext={"Marca"}
-              inputtype={"text"}
-              inputplaceholder={"Mercedes Benz"}
-              isRequired={true}
-            ></InputForm>
+    const fipUrl = axios.create({
+	    baseURL: "https://kenzie-kars.herokuapp.com",
+    });
+    const [selectedBrandAlready, setSelectedBrandAlready] = useState(2)
+    const [selectedModelAlready, setSelectedModelAlready] = useState(1)
+    const [brands, setBrands] = useState<string[]>([])
+    const [models, setModels] = useState<IModel[]>([])
+    const [model, setModel] = useState<IModel>({
+      id: "",
+      name: "",
+      brand: "",
+      year: "",
+      fuel: "",
+      value: ""
+    })
+    useEffect(() => {
+        const fipRequest = async () => {
+          try{
+            const {data} = await fipUrl.get("/cars")
+            setBrands([])
+            Object.keys(data).forEach(key => {
+              setBrands(brands => [...brands, key]);
+            })
+          }catch(err){
+            console.log(err)
+          }
+        }
+        fipRequest()
+    }, [])
 
-            <InputForm
-              isInvalid={!!errors.model?.message}
-              inputregister={{ ...register("model") }}
-              errors={errors.model?.message}
-              labeltext={"Modelo"}
-              inputtype={"text"}
-              inputplaceholder={"A 200 CGI ADVANCE SEDAN"}
-              isRequired={true}
-            ></InputForm>
+    const selectedBrand = async (brand: string) => {
+      const {data} = await fipUrl.get(`/cars?brand=${brand}`)
+      setSelectedBrandAlready(selectedBrandAlready-1)
+      setSelectedModelAlready(1)
+      setModels(data)
+      setModel(models[0])
+    }
+    const selectedModel = (modelName: string) => {
+      const modell = models!.filter(item => item.name == modelName)[0]
+      setSelectedModelAlready(0)
+      setModel(modell);
+    }
 
-            <HStack gap={"14px"}>
-              <InputForm
-                isInvalid={!!errors.year?.message}
-                inputregister={{ ...register("year") }}
-                errors={errors.year?.message}
-                labeltext={"Ano"}
-                inputtype={"text"}
-                inputplaceholder={"2018"}
-                isRequired={true}
-              ></InputForm>
-
-              <InputForm
-                isInvalid={!!errors.fuel?.message}
-                inputregister={{ ...register("fuel") }}
-                errors={errors.fuel?.message}
-                labeltext={"Combustível"}
-                inputtype={"text"}
-                inputplaceholder={"Gasolina / Etanol"}
-                isRequired={true}
-              ></InputForm>
-            </HStack>
-
-            <HStack gap={"14px"}>
-              <InputForm
-                isInvalid={!!errors.km?.message}
-                inputregister={{ ...register("km") }}
-                errors={errors.km?.message}
-                labeltext={"Quilometragem"}
-                inputtype={"text"}
-                inputplaceholder={"30.000"}
-                isRequired={true}
-              ></InputForm>
-
-              <InputForm
-                isInvalid={!!errors.color?.message}
-                inputregister={{ ...register("color") }}
-                errors={errors.color?.message}
-                labeltext={"Cor"}
-                inputtype={"text"}
-                inputplaceholder={"Branco"}
-                isRequired={true}
-              ></InputForm>
-            </HStack>
-
-            <HStack gap={"14px"}>
-              <InputForm
-                isInvalid={!!errors.fip_price?.message}
-                inputregister={{ ...register("fip_price") }}
-                errors={errors.fip_price?.message}
-                labeltext={"Preço tabela FIPE"}
-                inputtype={"text"}
-                inputplaceholder={"R$ 48.000,00"}
-                isRequired={true}
-              ></InputForm>
-
-              <InputForm
-                isInvalid={!!errors.price?.message}
-                inputregister={{ ...register("price") }}
-                errors={errors.price?.message}
-                labeltext={"Preço"}
-                inputtype={"text"}
-                inputplaceholder={"R$ 50.000,00"}
-                isRequired={true}
-              ></InputForm>
-            </HStack>
-
-            <FormControl isRequired isInvalid={!!errors.description?.message}>
-              <FormLabel>Descrição</FormLabel>
-              <Textarea
-                {...register("description")}
-                placeholder={"Descreva o carro..."}
-                resize={"none"}
-              ></Textarea>
-              <FormErrorMessage mt={"4px"} position={"absolute"}>
-                {errors.model?.message}
-              </FormErrorMessage>
-            </FormControl>
-
-            <InputForm
-              isInvalid={!!errors.cover_image?.message}
-              inputregister={{ ...register("cover_image") }}
-              errors={errors.cover_image?.message}
-              labeltext={"Imagem da Capa"}
-              inputtype={"text"}
-              inputplaceholder={"https://image.com"}
-              isRequired={true}
-            ></InputForm>
-            <div>
-              {/* {galleryImage.map((item: any, index: any) => (
-                  <InputForm key={index}
-                    id={index}
-                    // isInvalid={!!errors.gallery_images?.message}
-                    // inputregister={{ ...register("gallery_images") }}
-                    errors={errors.gallery_images?.message}
-                    labeltext={`${index + 1}º Imagem da Galeria`}
-                    inputtype={"text"}
-                    inputplaceholder={"https://image.com"}
-                    isRequired={false}
-                  ></InputForm>
-              ))} */}
-            </div>
-            <Buttons
-              backgroundColor={"#EDEAFD"}
-              valueButton={"Adicionar campo para imagem da Galeria"}
-              color={"#4529E6"}
-              fontSize={"14px"}
-              width={"315px"}
-              maxWidth={"95%"}
-              onClick={addImage}
-            />
-
-            <ButtonGroup ml={"auto"} mt={"18px"} mb={"0px"}>
-              <Buttons
-                backgroundColor={"#DEE2E6"}
-                valueButton={"Cancelar"}
-                color={"#495057"}
-                fontSize={"16px"}
-                onClick={onClose}
-              />
-
-              <Buttons
-              backgroundColor={"#4529E6"}
-                valueButton={"Criar anúncio"}
-                color={"#EDEAFD"}
-                fontSize={"16px"}
-                type={"submit"}
-              />
-            </ButtonGroup>
-          </Box>
-        </form> 
-      </>
-    
     {
-      
         return (
             <Modals
             modalTitle={"Criar anúncio"}
             sizeTitle={"1em"}
-            modalContent={modalContent}
+            
             buttonWidth={"160px"}
             nameButton={"Criar anuncio"}
             modalButtonColor={"#4529E6"}
@@ -205,12 +101,175 @@ const AnnouncementModal = () => {
             buttonBorder={"2px"}
             buttonBorderColor={"#4529E6"}
             isOpen={isOpen}
-            onOpen={() => {  setGalleryImage([0]); onOpen() }}
+            onOpen={() => { setGalleryImage([0]); onOpen() }}
             onClose={() => { onClose()}} 
             titlesColor={""} 
             modalButtons={""} 
             footerDirection={""} 
-            footerWidth={""} />
+            footerWidth={""}
+            modalContent={ 
+              <>
+                <form onSubmit={handleSubmit(createAnnouncement)}>
+                  <Box gap={"24px"} display={"flex"} flexDir={"column"}>
+                    <Text fontSize={"14px"}>Infomações do veículo</Text>
+                    <FormControl isRequired isInvalid={!!errors.model?.message}>
+                      <FormLabel>Marca</FormLabel>
+                      <Select onChange={(e) => selectedBrand(e.target.value)}>
+                        {selectedBrandAlready < 1 ? <></> : <option></option>}
+                        {
+                          brands.map((item: any, index: any) => (
+                            <option value={item}>{item}</option>
+                          ))
+                        }
+                      </Select>
+                    </FormControl>
+                    <FormControl isRequired isInvalid={!!errors.model?.message}>
+                      <FormLabel>Modelo</FormLabel>
+                      <Select onChange={(e) => selectedModel(e.target.value)}>
+                        {selectedModelAlready < 1 ? <></> : <option></option>}
+                        {
+                          models ? models.map((item: any, index: any) => (
+                            <option value={item.name}>{item.name}</option>
+                          )) : <></>
+                        }
+                      </Select>
+                    </FormControl>
+                    <HStack gap={"14px"}>
+                      <InputForm
+                        isInvalid={!!errors.year?.message}
+                        inputregister={{ ...register("year") }}
+                        errors={errors.year?.message}
+                        labeltext={"Ano"}
+                        inputtype={"text"}
+                        inputplaceholder={"2018"}
+                        isRequired={true}
+                        value={model?.year}
+                      ></InputForm>
+
+                      <InputForm
+                        isInvalid={!!errors.fuel?.message}
+                        inputregister={{ ...register("fuel") }}
+                        errors={errors.fuel?.message}
+                        labeltext={"Combustível"}
+                        inputtype={"text"}
+                        inputplaceholder={"Gasolina / Etanol"}
+                        isRequired={true}
+                        value={model?.fuel == "1" ? "Flex" : model?.fuel == "2" ? "Híbrido" : "Elétrico"}
+                      ></InputForm>
+                    </HStack>
+
+                    <HStack gap={"14px"}>
+                      <InputForm
+                        isInvalid={!!errors.km?.message}
+                        inputregister={{ ...register("km") }}
+                        errors={errors.km?.message}
+                        labeltext={"Quilometragem"}
+                        inputtype={"text"}
+                        inputplaceholder={"30.000"+"km"}
+                        isRequired={true}
+                      ></InputForm>
+
+                      <InputForm
+                        isInvalid={!!errors.color?.message}
+                        inputregister={{ ...register("color") }}
+                        errors={errors.color?.message}
+                        labeltext={"Cor"}
+                        inputtype={"text"}
+                        inputplaceholder={"Branco"}
+                        isRequired={true}
+                      ></InputForm>
+                    </HStack>
+
+                    <HStack gap={"14px"}>
+                      <InputForm
+                        isInvalid={!!errors.fip_price?.message}
+                        inputregister={{ ...register("fip_price") }}
+                        errors={errors.fip_price?.message}
+                        labeltext={"Preço tabela FIPE"}
+                        inputtype={"text"}
+                        inputplaceholder={"R$ 48.000,00"}
+                        isRequired={true}
+                        value={`R$ ${model?.value}`}
+                      ></InputForm>
+
+                      <InputForm
+                        isInvalid={!!errors.price?.message}
+                        inputregister={{ ...register("price") }}
+                        errors={errors.price?.message}
+                        labeltext={"Preço"}
+                        inputtype={"text"}
+                        inputplaceholder={"R$ 50.000,00"}
+                        isRequired={true}
+                      ></InputForm>
+                    </HStack>
+
+                    <FormControl isRequired isInvalid={!!errors.description?.message}>
+                      <FormLabel>Descrição</FormLabel>
+                      <Textarea
+                        {...register("description")}
+                        placeholder={"Descreva o carro..."}
+                        resize={"none"}
+                      ></Textarea>
+                      <FormErrorMessage mt={"4px"} position={"absolute"}>
+                        {errors.model?.message}
+                      </FormErrorMessage>
+                    </FormControl>
+
+                    <InputForm
+                      isInvalid={!!errors.cover_image?.message}
+                      inputregister={{ ...register("cover_image") }}
+                      errors={errors.cover_image?.message}
+                      labeltext={"Imagem da Capa"}
+                      inputtype={"text"}
+                      inputplaceholder={"https://image.com"}
+                      isRequired={true}
+                    ></InputForm>
+                    <div>
+                      {/* {galleryImage.map((item: any, index: any) => (
+                          <InputForm key={index}
+                            id={index}
+                            // isInvalid={!!errors.gallery_images?.message}
+                            // inputregister={{ ...register("gallery_images") }}
+                            errors={errors.gallery_images?.message}
+                            labeltext={`${index + 1}º Imagem da Galeria`}
+                            inputtype={"text"}
+                            inputplaceholder={"https://image.com"}
+                            isRequired={false}
+                          ></InputForm>
+                      ))} */}
+                    </div>
+                    <Buttons
+                      backgroundColor={"#EDEAFD"}
+                      valueButton={"Adicionar campo para imagem da Galeria"}
+                      color={"#4529E6"}
+                      fontSize={"14px"}
+                      width={"315px"}
+                      maxWidth={"95%"}
+                      onClick={addImage}
+                    />
+
+                    <ButtonGroup ml={"auto"} mt={"18px"} mb={"0px"}>
+                      <Buttons
+                        backgroundColor={"#DEE2E6"}
+                        valueButton={"Cancelar"}
+                        color={"#495057"}
+                        fontSize={"16px"}
+                        onClick={onClose}
+                      />
+
+                      <Buttons
+                      backgroundColor={"#4529E6"}
+                        valueButton={"Criar anúncio"}
+                        color={"#EDEAFD"}
+                        fontSize={"16px"}
+                        type={"submit"}
+                      />
+                    </ButtonGroup>
+                  </Box>
+                </form> 
+                </>
+            }
+        />
     );}
 };
 

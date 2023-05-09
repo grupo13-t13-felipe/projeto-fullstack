@@ -57,7 +57,6 @@ const ProductCard = ({
         setOwnerId(ownerId)
         getComments(announcId)
   }
-  console.log(ownerId)
   return (
     <Card role="group" boxShadow={"none"} w="312px" h="380px" borderRadius={"0"} onClick={redirect}>
       <CardBody padding={"1px"}>
