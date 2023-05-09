@@ -1,11 +1,13 @@
 import { Box, Flex, Text, HStack, MenuButton, Menu, MenuList, MenuItem, IconButton, Link } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon} from '@chakra-ui/icons';
+import { useRouter } from "next/router";
 
 const DefaultHeader = () => {
+  const router = useRouter()
   
   return (
       <Flex justifyContent={"space-between"} height={"60px"} px={["24px", "55px", "55px"]} borderBottom={"2px"} borderColor={"grey.100"}>
-        <HStack>
+        <HStack onClick={() => router.push("/")} _hover={{cursor: "pointer"}}>
           <Text fontSize={'2xl'} fontWeight={'bold'} bgGradient='linear(to-r, #0B0D0D, #5126EA)'
           bgClip='text'>Motors </Text>
           <Text fontWeight={'bold'} bgGradient='linear(to-r, #5126EA, #4529E6)'
