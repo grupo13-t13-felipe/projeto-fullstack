@@ -11,13 +11,14 @@ import { useRouter } from "next/router";
 const DeleteCommentModal = ({comment_id}: any) => {
 
   const router = useRouter()
-  const {getComments} = annoucementCtx()
+  const {getComments, comments, setComments} = annoucementCtx()
     
   async function deleteComments(id: any) {
     const cookie = nookies.get()
     api.defaults.headers.authorization = `Bearer ${cookie['karsToken']}`
     await api.delete(`/comments/${id}`)
     getComments(cookie['announcId'])
+    setComments(comments!.filter((element) => element.id !== id)) 
   }
 
     const { isOpen, onOpen, onClose } = useDisclosure()
