@@ -4,8 +4,7 @@ import { useContext } from "react";
 import { UserContext } from "@/contexts/users.context";
 import UserModal from "../UserModal";
 import AddressModal from "../AddressModal";
-
-
+import { useRouter } from "next/router";
 
 const ProfileMenuList = () => {
   const {user, logoutUser} = useContext(UserContext)
@@ -30,10 +29,11 @@ const ProfileMenuList = () => {
 
 const HeaderProfile = () => {
   const {user} = useContext(UserContext)
+  const router = useRouter()
   
   return (
     <Flex justifyContent={'space-between'} mx={['20px', '20px', '26px', '30px', 'auto']} h={'80px'} maxW={'1200px'}>
-      <HStack>
+      <HStack onClick={() => router.push("/")} _hover={{cursor: "pointer"}}>
         <Text fontSize={'2xl'} fontWeight={'bold'} bgGradient='linear(to-r, #0B0D0D, #5126EA)'
         bgClip='text'>Motors </Text>
         <Text fontWeight={'bold'} bgGradient='linear(to-r, #5126EA, #4529E6)'

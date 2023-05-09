@@ -4,7 +4,6 @@ import {
 	Stack,
 	Flex,
 	Box,
-	Link,
 	VStack,
 	ListItem,
 	List,
@@ -16,25 +15,19 @@ import Modals from "@/components/modal";
 import Buttons from "@/components/button";
 import HomeFilter from "@/components/homeFilter";
 import ProductCard from "@/components/productCard";
-import NextLink from "next/link";
 import { annoucementCtx } from "@/contexts/announcements.context";
 import HeaderProfile from "@/components/headers/headerProfile";
 import { useContext } from "react";
 import { UserContext } from "@/contexts/users.context";
-import { useRouter } from "next/router";
 
 const Home = () => {
 	const {
 		allAnnouncements,
-		setAllAnnouncements,
 		loading,
-		setLoading,
-		setOwnerId,
 		paginationPage,
 		setPaginationPage,
 	} = annoucementCtx();
 	const { user } = useContext(UserContext);
-	const { getComments } = annoucementCtx();
 
 	return (
 		<>
@@ -118,7 +111,7 @@ const Home = () => {
 								gap={["16px", "24px"]}
 								ml={"0"}
 								pb={"8px"}>
-								{allAnnouncements.data.map(
+								{allAnnouncements.length > 0 ? allAnnouncements.data.map(
 									(item: any, index: any) => {
 										return (
 											<ListItem
@@ -144,7 +137,14 @@ const Home = () => {
 											</ListItem>
 										);
 									}
-								)}
+								) : <Flex pt={"20px"} flexDirection={"column"} w={"100%"} justifyContent={"center"} alignItems={"center"} gap={"16px"}>
+										<Text fontSize={"24px"} fontWeight={"500"} color={"grey.400"}>
+											Nenhum anuncio registrado
+										</Text>
+										<Text fontSize={"18px"} fontWeight={"500"} color={"grey.250"}>
+											Volte novamente mais tarde
+										</Text>
+									</Flex>}
 							</List>
 						</Stack>
 						<Stack
@@ -170,7 +170,7 @@ const Home = () => {
 										throw new Error("Function not implemented.");
 									} } onClose={function (): void {
 										throw new Error("Function not implemented.");
-									} } buttonRadius={""} buttonBorder={""} buttonBorderColor={""}							/>
+									} } buttonRadius={""} buttonBorder={""} buttonBorderColor={""} />
 						</Stack>
 						<Box
 							mb={"16px"}

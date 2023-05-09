@@ -14,7 +14,7 @@ async function bootstrap() {
   );
 
   app.enableCors({
-    origin: "http://localhost:3000"
+    origin: "https://projeto-fullstack-kohl.vercel.app"
   })
 
   await app.listen(3001);

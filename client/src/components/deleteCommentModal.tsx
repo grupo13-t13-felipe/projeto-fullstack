@@ -17,7 +17,7 @@ const DeleteCommentModal = ({comment_id}: any) => {
     const cookie = nookies.get()
     api.defaults.headers.authorization = `Bearer ${cookie['karsToken']}`
     await api.delete(`/comments/${id}`)
-    getComments(cookie['karsAdId'])
+    getComments(cookie['announcId'])
   }
 
     const { isOpen, onOpen, onClose } = useDisclosure()
