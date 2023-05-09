@@ -4,7 +4,6 @@ import {
 	Stack,
 	Flex,
 	Box,
-	Link,
 	VStack,
 	ListItem,
 	List,
@@ -112,7 +111,7 @@ const Home = () => {
 								gap={["16px", "24px"]}
 								ml={"0"}
 								pb={"8px"}>
-								{allAnnouncements.data.map(
+								{allAnnouncements.length > 0 ? allAnnouncements.data.map(
 									(item: any, index: any) => {
 										return (
 											<ListItem
@@ -138,7 +137,14 @@ const Home = () => {
 											</ListItem>
 										);
 									}
-								)}
+								) : <Flex pt={"20px"} flexDirection={"column"} w={"100%"} justifyContent={"center"} alignItems={"center"} gap={"16px"}>
+										<Text fontSize={"24px"} fontWeight={"500"} color={"grey.400"}>
+											Nenhum anuncio registrado
+										</Text>
+										<Text fontSize={"18px"} fontWeight={"500"} color={"grey.250"}>
+											Volte novamente mais tarde
+										</Text>
+									</Flex>}
 							</List>
 						</Stack>
 						<Stack
