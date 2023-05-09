@@ -111,7 +111,7 @@ const Home = () => {
 								gap={["16px", "24px"]}
 								ml={"0"}
 								pb={"8px"}>
-								{allAnnouncements.length > 0 ? allAnnouncements.data.map(
+								{allAnnouncements.data.length > 0 ? allAnnouncements.data.map(
 									(item: any, index: any) => {
 										return (
 											<ListItem
