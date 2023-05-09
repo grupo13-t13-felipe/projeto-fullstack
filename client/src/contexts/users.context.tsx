@@ -69,7 +69,6 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
   
     const loginUser = async (dataForm: IUserLogin) => {
         try {
-            console.log("yay")
             const { data } = await api.post("/login", dataForm)
             const { token, user } = data
 
@@ -132,7 +131,9 @@ export const UserContextProvider = ({ children }: IUserContextProvider) => {
                                     <Text fontWeight={"400"} color={"grey.300"}>
                                         Agora você poderá ver seus negócios crescendo em grande escala
                                     </Text>
-                                    <Button maxW={"250px"} w={"100%"} h={"48px"} color={"white"} fontWeight={"500"} bgColor={"blue.300"} border={"1px solid blue.300"} _hover={{borderColor: "blue.400", bgColor: "blue.400"}} onClick={() => router.push("/login")}>
+                                    <Button maxW={"250px"} w={"100%"} h={"48px"} color={"white"} fontWeight={"500"} bgColor={"blue.300"} border={"1px solid blue.300"} _hover={{borderColor: "blue.400", bgColor: "blue.400"}} onClick={() => {
+                                        closeToast()
+                                        router.push("/login")}}>
                                         Ir para login
                                     </Button>
                                 </Flex>
