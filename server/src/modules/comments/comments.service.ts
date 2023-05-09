@@ -39,6 +39,10 @@ export class CommentsService {
   async update(commentId: string, updateCommentDto: UpdateCommentDto) {
     const comment = await this.prisma.comment.update({
       where: { id: commentId },
+      include: {
+        announcement: true,
+        owner: { select: { id: true, name: true, email: true } },
+      },
       data: updateCommentDto,
     });
     return comment;

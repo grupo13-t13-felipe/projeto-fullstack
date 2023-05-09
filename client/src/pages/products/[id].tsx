@@ -45,6 +45,9 @@ const Dashboard = () => {
   const today: any = new Date()
   const cookie = nookies.get()
 
+  
+  console.log(comments)
+
   useEffect(() => {
     getAnnouncementById(id)
   }, [])
@@ -328,7 +331,7 @@ const Dashboard = () => {
                         {
                           user?.id === element.owner.id ? 
                           <>
-                            <EditeCommentModal comment_id={element.id} />
+                            <EditeCommentModal comment_id={element.id} defaultValue={element.content}/>
                            
                           </>
                           : null
