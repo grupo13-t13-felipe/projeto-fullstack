@@ -40,6 +40,7 @@ interface AnnouncementProviderData {
 	deleteAnnouncement: () => void
 	getComments: (announcement_id: string) => void
 	comments: IComments[] | undefined
+	setComments : React.Dispatch<React.SetStateAction<IComments[] | undefined>>;
 	getAnnouncementById(announcement_id: string): Promise<void>
 	announcementById: IAnnouncement
 }
@@ -261,6 +262,7 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 				setPaginationPage,
 				getComments,
 				comments,
+				setComments,
 				getAnnouncementById,
 				announcementById
 			}}>

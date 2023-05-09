@@ -41,7 +41,6 @@ interface editProps {
     price: string,
     description: string,
     cover_image: string,
-    //gallery_images?: string[]
   }
 }
 

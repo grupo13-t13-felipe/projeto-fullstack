@@ -2,7 +2,7 @@ import Buttons from "@/components/button";
 import DefaultFooter from "@/components/footer";
 import HeaderProfile from "@/components/headers/headerProfile";
 import api from "@/services/api";
-import { IComment } from "@/types/announcements";
+import { IComment, IComments } from "@/types/announcements";
 import { useForm } from 'react-hook-form';
 import {
   Box,
@@ -39,7 +39,7 @@ import nookies from 'nookies'
 const Dashboard = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const { user } = useContext(UserContext)
-  const { getOwnerById, comments, loading, getComments, setLoading, announcementById, getAnnouncementById } = annoucementCtx()
+  const { getOwnerById, comments, loading, getComments, setLoading, announcementById, getAnnouncementById, setComments } = annoucementCtx()
   const router = useRouter()
   const { id }: any = router.query;
   const today: any = new Date()
@@ -59,30 +59,28 @@ const Dashboard = () => {
   
   const postComment = async (formData: IComment) => {
     try {
-      await api.post(`/annoucements/${id}/comments`, formData)
+      const {data} : any = await api.post(`/annoucements/${id}/comments`, formData)
+      console.log(data)
+      setComments([...comments!, data])
     } catch (err) {
       console.error(err)
-    }finally{
-      if(user){
-        setLoading(true)
-        verifyComments()
-      }else{
-        verifyLogin()
-      }
     }
+      
+    
   }
   
   const { register, handleSubmit, formState: { errors } } = useForm<IComment>({
     resolver: yupResolver(commentSchema)
   })
   
-  const verifyComments = () => {
-    setLoading(true)
-    getComments(id)
-  }
-  useEffect(() => {
-    verifyComments()
-  }, [])
+  // const verifyComments = () => {
+  //   setLoading(true)
+  //   getComments(id)
+  // }
+  // useEffect(() => {
+  //   // verifyComments()
+    
+  // }, [comments])
 
   const modalContent = <>
     <Text>Confirmar deleção de comentário</Text>
