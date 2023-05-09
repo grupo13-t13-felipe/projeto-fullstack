@@ -2,7 +2,7 @@ import { Box, ButtonGroup, Text, useDisclosure } from "@chakra-ui/react"
 import Modals from "./modal";
 import Buttons from "./button";
 import { useContext } from "react";
-import { AnnouncementContext } from "@/contexts/announcements.context";
+import { AnnouncementContext, annoucementCtx } from "@/contexts/announcements.context";
 import {DeleteIcon } from '@chakra-ui/icons'
 import nookies from 'nookies'
 import api from "@/services/api";
@@ -11,18 +11,18 @@ import { useRouter } from "next/router";
 const DeleteCommentModal = ({comment_id}: any) => {
 
   const router = useRouter()
+  const {getComments} = annoucementCtx()
     
   async function deleteComments(id: any) {
     const cookie = nookies.get()
     api.defaults.headers.authorization = `Bearer ${cookie['karsToken']}`
-    api.delete(`/comments/${id}`)
+    await api.delete(`/comments/${id}`)
+    getComments(cookie['karsAdId'])
   }
 
     const { isOpen, onOpen, onClose } = useDisclosure()
-    // const {deleteAnnouncement} = useContext(AnnouncementContext)
     const modalContent = 
     <Box gap={"24px"} display={"flex"} flexDir={"column"}>
-        {/* <Text fontSize={"14px"} mt={"18px"}>Excluir anúncio</Text> */}
         <Text fontSize={"14px"} fontWeight={"bold"}>Tem certeza que deseja remover este comentário?</Text>
         <ButtonGroup>
             <Buttons

@@ -35,6 +35,7 @@ import DeleteAnnouncementModal from "@/components/deleteCommentModal";
 import {EditIcon } from '@chakra-ui/icons'
 import EditeComment from "@/components/editeCommentModal";
 import EditeCommentModal from "@/components/editeCommentModal";
+import { setCookie } from "nookies";
 
 export interface Props {
   announcement: IAnnouncement;
@@ -436,6 +437,7 @@ export const getServerSideProps: GetServerSideProps<Props> = async (ctx) => {
   const id = ctx.params!.id;
   const responseAn = await api.get(`/annoucements/${id}`);
   const announcement: IAnnouncement = responseAn.data;
+  setCookie(null, 'karsAdId', announcement.id, { maxAge: 3600 * 24, path: "/" })
 
   return {
     props: {
