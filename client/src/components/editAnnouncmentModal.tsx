@@ -76,7 +76,7 @@ const EditAnnouncementModal = ({ announcId, announcementInfo }: editProps) => {
               labeltext={"Marca"}
               inputtype={"text"}
               inputplaceholder={announcementInfo.brand}
-              
+              value={announcementInfo.brand}
             ></InputForm>
 
             <InputForm
@@ -86,7 +86,7 @@ const EditAnnouncementModal = ({ announcId, announcementInfo }: editProps) => {
               labeltext={"Modelo"}
               inputtype={"text"}
               inputplaceholder={announcementInfo.model}
-              
+              value={announcementInfo.model}
             ></InputForm>
 
             <HStack gap={"14px"}>
@@ -97,7 +97,7 @@ const EditAnnouncementModal = ({ announcId, announcementInfo }: editProps) => {
                 labeltext={"Ano"}
                 inputtype={"text"}
                 inputplaceholder={announcementInfo.year}
-                
+                value={announcementInfo.year}
               ></InputForm>
 
               <InputForm
@@ -107,7 +107,7 @@ const EditAnnouncementModal = ({ announcId, announcementInfo }: editProps) => {
                 labeltext={"Combustível"}
                 inputtype={"text"}
                 inputplaceholder={announcementInfo.fuel}
-                
+                value={announcementInfo.fuel == "1" ? "Flex" : announcementInfo.fuel == "2" ? "Híbrido" : "Elétrico"}
               ></InputForm>
             </HStack>
 
@@ -141,7 +141,7 @@ const EditAnnouncementModal = ({ announcId, announcementInfo }: editProps) => {
                 labeltext={"Preço tabela FIPE"}
                 inputtype={"text"}
                 inputplaceholder={announcementInfo.fip_price}
-                
+                value={announcementInfo.fip_price}
               ></InputForm>
 
               <InputForm
@@ -151,7 +151,6 @@ const EditAnnouncementModal = ({ announcId, announcementInfo }: editProps) => {
                 labeltext={"Preço"}
                 inputtype={"text"}
                 inputplaceholder={announcementInfo.price}
-                
               ></InputForm>
             </HStack>
 
