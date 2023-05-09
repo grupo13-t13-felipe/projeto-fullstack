@@ -2,14 +2,27 @@ import { Box, ButtonGroup, Text, useDisclosure } from "@chakra-ui/react"
 import Modals from "./modal";
 import Buttons from "./button";
 import { useContext } from "react";
-import { AnnouncementContext } from "@/contexts/announcements.context";
+import { AnnouncementContext, annoucementCtx } from "@/contexts/announcements.context";
+import {DeleteIcon } from '@chakra-ui/icons'
+import nookies from 'nookies'
+import api from "@/services/api";
+import { useRouter } from "next/router";
 
-const DeleteAnnouncementModal = ({announcId}: any) => {
+const DeleteCommentModal = ({comment_id}: any) => {
+
+  const router = useRouter()
+  const {getComments} = annoucementCtx()
+    
+  async function deleteComments(id: any) {
+    const cookie = nookies.get()
+    api.defaults.headers.authorization = `Bearer ${cookie['karsToken']}`
+    await api.delete(`/comments/${id}`)
+    getComments(cookie['announcId'])
+  }
+
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const {deleteAnnouncement} = useContext(AnnouncementContext)
     const modalContent = 
     <Box gap={"24px"} display={"flex"} flexDir={"column"}>
-        {/* <Text fontSize={"14px"} mt={"18px"}>Excluir anúncio</Text> */}
         <Text fontSize={"14px"} fontWeight={"bold"}>Tem certeza que deseja remover este comentário?</Text>
         <ButtonGroup>
             <Buttons
@@ -22,9 +35,9 @@ const DeleteAnnouncementModal = ({announcId}: any) => {
               <Buttons
                 backgroundColor={"#FDD8D8"}
                 valueButton={"Sim, excluir comentário"}
-                color={"#CD2B31"}
+                color={"red.700"}
                 fontSize={"16px"}
-                // onClick={deleteAnnouncement}
+                onClick={() => deleteComments(comment_id)}
               />
         </ButtonGroup>
     </Box>
@@ -33,7 +46,7 @@ const DeleteAnnouncementModal = ({announcId}: any) => {
             sizeTitle={"xs"}
             modalContent={modalContent}
             buttonWidth={""}
-            nameButton={"Excluir"}
+            nameButton={<DeleteIcon w={4} h={4} color="red.700"/>}
             modalButtonColor={"grey.250"}
             modalButtonBg={"transparent"}
             buttonRadius={""}
@@ -49,4 +62,4 @@ const DeleteAnnouncementModal = ({announcId}: any) => {
         )
 }
 
-export default DeleteAnnouncementModal;
+export default DeleteCommentModal;

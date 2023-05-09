@@ -30,6 +30,11 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import Modals from "@/components/modal";
 import DeleteCommentModal from "@/components/deleteCommentModal";
 import DeleteAnnouncementModal from "@/components/deleteCommentModal";
+import {EditIcon } from '@chakra-ui/icons'
+import EditeComment from "@/components/editeCommentModal";
+import EditeCommentModal from "@/components/editeCommentModal";
+import { setCookie } from "nookies";
+import nookies from 'nookies'
 
 const Dashboard = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -38,6 +43,7 @@ const Dashboard = () => {
   const router = useRouter()
   const { id }: any = router.query;
   const today: any = new Date()
+  const cookie = nookies.get()
 
   useEffect(() => {
     getAnnouncementById(id)
@@ -322,16 +328,19 @@ const Dashboard = () => {
                       </HStack>
                       <HStack>
                         {
-                          user?.is_seller ? <>
-                            <Buttons valueButton={"Editar"} backgroundColor={"transparent"} color={"grey.250"} fontSize={"xs"}/>
-                            <Buttons valueButton={"Excluir"} backgroundColor={"transparent"} color={"grey.250"} fontSize={"xs"}/>
-                          </> : null
+                          user?.id === element.owner.id ? 
+                          <>
+                            <EditeCommentModal comment_id={element.id} />
+                           
+                          </>
+                          : null
                         }
                         {
-                          user?.id === element?.owner.id ? <>
-                            <Buttons valueButton={"Editar"} backgroundColor={"transparent"} color={"grey.250"} fontSize={"xs"}/>
-                            <DeleteCommentModal />
-                          </> : null 
+                          user?.id === element.announcement.owner_id || user?.id === element.owner.id ? 
+                          <>
+                             <DeleteCommentModal comment_id={element.id} />
+                          </>
+                          : null
                         }
                       </HStack>
                     </HStack>
@@ -421,5 +430,6 @@ const Dashboard = () => {
     </>
   );
 };
+
 
 export default Dashboard;
