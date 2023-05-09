@@ -17,6 +17,8 @@ interface InputFormProps extends FormControlProps {
     errors: string | undefined;
     isRequired?: boolean;
     id?: string
+	value?: string;
+	disabled?: boolean
 }
 
 const InputArea = ({
@@ -113,6 +115,8 @@ const InputForm = (props: InputFormProps) => {
 				_focus={{ borderColor: "blue.400" }}
 				type={props.inputtype}
 				placeholder={props.inputplaceholder}
+				value={props.value}
+				disabled={props.disabled}
 			/>
 			<FormErrorMessage mt={"4px"} position={"absolute"}>
 				{props.errors}
