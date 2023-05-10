@@ -8,21 +8,17 @@ import React, {
 import { useRouter } from "next/router";
 import api from "@/services/api";
 import { IAnnouncement, IAnnouncementCreate, IAnnouncementEdit, IAnnouncementOwner, IComments } from "@/types/announcements";
-import { UserContext } from "./users.context";
 import { Box, useToast } from "@chakra-ui/react";
-import nookies from 'nookies'
+import nookies, { setCookie } from 'nookies'
 import removeEmptyStrings from "@/utils/removeEmptyStrings";
 
 
 interface AnnouncementProviderData {
 	allAnnouncements: IAnnouncement[] | any;
-	setAllAnnouncements: React.Dispatch<
-		React.SetStateAction<IAnnouncement[] | any>
-	>;
+	setAllAnnouncements: React.Dispatch<React.SetStateAction<IAnnouncement[] | any>>;
 	allFilteredAnnouncements: IAnnouncement[];
 	setAllFilteredAnnouncements: React.Dispatch<
-		React.SetStateAction<IAnnouncement[] | any>
-	>;
+	React.SetStateAction<IAnnouncement[] | any>>;
 	loading: boolean;
 	setLoading: React.Dispatch<React.SetStateAction<boolean>>;
 	announcementsByOwner: IAnnouncement[] | undefined;
@@ -33,18 +29,20 @@ interface AnnouncementProviderData {
 	filterData: IFilters | undefined;
 	actualFilters: IFilters | undefined;
 	setActualFilters: React.Dispatch<
-		React.SetStateAction<IFilters | undefined>
-	>;
+	React.SetStateAction<IFilters | undefined>>;
 	selectedFilters: ISelectedFilter;
 	setSelectedFilters: React.Dispatch<React.SetStateAction<ISelectedFilter>>;
 	getAllAnnouncements: () => Promise<void>;
 	paginationPage: number;
 	setPaginationPage: React.Dispatch<React.SetStateAction<number>>;
-  createAnnouncement: (dataForm: IAnnouncementCreate) => void
-  editAnnouncement: (dataForm: IAnnouncementEdit) => void
+	createAnnouncement: (dataForm: IAnnouncementCreate) => void
+	editAnnouncement: (dataForm: IAnnouncementEdit) => void
 	deleteAnnouncement: () => void
-  getComments: (announcement_id: string) => void
+	getComments: (announcement_id: string) => void
 	comments: IComments[] | undefined
+	setComments : React.Dispatch<React.SetStateAction<IComments[] | undefined>>;
+	getAnnouncementById(announcement_id: string): Promise<void>
+	announcementById: IAnnouncement
 }
 
 export interface IFilters {
@@ -85,13 +83,13 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 	const [announcementsByOwner, setAnnouncementsByOwner] = useState<
 		IAnnouncement[] | undefined
 	>();
+	const [announcementById, setAnnouncementById] = useState({} as IAnnouncement)
 	const [ownerId, setOwnerId] = useState<string>();
 	const [owner, setOwner] = useState<IAnnouncementOwner>();
 	const [filterData, setFilterData] = useState<IFilters | undefined>();
 	const [actualFilters, setActualFilters] = useState<IFilters | undefined>();
 	const [selectedFilters, setSelectedFilters] = useState<ISelectedFilter>({});
 	const [ comments, setComments ] = useState<IComments[] | undefined>()
-	const { user } = useContext(UserContext);
     const toast = useToast()
 
     async function createAnnouncement(dataForm: IAnnouncementCreate) {
@@ -199,6 +197,20 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 		}
 	}
 
+	async function getAnnouncementById(announcement_id: string) {
+		try {
+			if(announcement_id) {
+				setCookie(null, "announcId", announcement_id)
+			} else {
+				announcement_id = nookies.get()['announcId']
+			}
+			const { data } = await api.get(`/annoucements/${announcement_id}`);
+			setAnnouncementById(data)
+		} catch (err) {
+			console.log(err)
+		}
+	}
+
 	async function getComments(announcement_id: string){
 		try {
 			const { data } = await api.get(`/annoucements/${announcement_id}/comments`)
@@ -249,7 +261,10 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 				paginationPage,
 				setPaginationPage,
 				getComments,
-				comments
+				comments,
+				setComments,
+				getAnnouncementById,
+				announcementById
 			}}>
 			{children}
 		</AnnouncementContext.Provider>

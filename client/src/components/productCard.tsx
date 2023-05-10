@@ -2,11 +2,9 @@ import { Card, CardBody, CardFooter, Image, Stack, Heading, Text, Avatar, HStack
 import { useRouter } from "next/router";
 import EditAnnouncementModal from "./editAnnouncmentModal";
 import Buttons from "./button";
-import { redirect } from "next/dist/server/api-utils";
 import { AnnouncementContext } from "@/contexts/announcements.context";
-import { useContext } from "react";
-import nookies, { parseCookies } from 'nookies'
-
+import { useContext, useEffect } from "react";
+import { parseCookies } from 'nookies'
 
 interface IProductCard {
   image: string;
@@ -40,24 +38,23 @@ const ProductCard = ({
   ownerId
 }: IProductCard) => {
   const userId = parseCookies().karsUserId?.replace(/['"]+/g, '');
-  const { setOwnerId, getComments } = useContext(AnnouncementContext)
+  const { setOwnerId, getComments, getAnnouncementById } = useContext(AnnouncementContext)
   const router = useRouter()
+  useEffect(() => {
+    getAnnouncementById(announcId)
+  }, [])
   const redirect = () => {
-    console.log(router.asPath)
     if(router.asPath != "/announcements") {
-        router.push(`/products/${announcId}`)
-        setOwnerId(ownerId)
-        getComments(announcId)
-    }else{
-
+      router.push(`/products/${announcId}`)
+      setOwnerId(ownerId)
+      getComments(announcId)
     }
   }
   const redirectFromButton = () => {
-        router.push(`/products/${announcId}`)
-        setOwnerId(ownerId)
-        getComments(announcId)
+      router.push(`/products/${announcId}`)
+      setOwnerId(ownerId)
+      getComments(announcId)
   }
-  console.log(ownerId)
   return (
     <Card role="group" boxShadow={"none"} w="312px" h="380px" borderRadius={"0"} onClick={redirect}>
       <CardBody padding={"1px"}>
