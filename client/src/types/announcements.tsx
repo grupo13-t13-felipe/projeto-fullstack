@@ -24,7 +24,11 @@ export interface IAnnouncementCreate {
     price: string,
     description: string,
     cover_image: string,
-    gallery_images?: string[]
+    gallery_image: IGalleryImage[]
+}
+
+export interface IGalleryImage {
+    url: string
 }
 
 export interface IAnnouncementEdit {

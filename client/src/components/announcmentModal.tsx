@@ -8,42 +8,46 @@ import {
   Box,
   HStack,
   ButtonGroup,
-  useConst,
   useDisclosure,
   Textarea,
   Select,
+  Button,
 } from "@chakra-ui/react";
 import Buttons from "./button";
-import { ReactEventHandler, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { IAnnouncementCreate } from "@/types/announcements";
 import { AnnouncementContext } from "@/contexts/announcements.context";
 import { createAnnouncementSchema } from "@/schemas/annoucement.schema";
-import { useForm } from "react-hook-form";
-import api from "@/services/api";
+import { useForm, useFieldArray } from "react-hook-form";
 import axios from "axios";
 
 interface IModel {
-  id: string,
-	name: string,
-	brand: string,
-	year: string,
-	fuel: string,
-	value: string
+  id?: string;
+	name?: string;
+	brand?: string;
+	year?: string;
+	fuel?: string;
+	value?: string;
 }
 
 const AnnouncementModal = () => {
     const { createAnnouncement } = useContext(AnnouncementContext)
 
-    const { register, handleSubmit, formState: { errors } } = useForm<IAnnouncementCreate>({
-      resolver: yupResolver(createAnnouncementSchema)
+    const { register, control, handleSubmit, formState: { errors } } = useForm<IAnnouncementCreate>({
+      resolver: yupResolver(createAnnouncementSchema),
+      defaultValues: {
+        gallery_image: [{url: ""}]
+      },
+      mode: "onBlur"
+    });
+    const { fields, append, remove } = useFieldArray({
+      control,
+      name: "gallery_image",
     })
+    
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const [galleryImage, setGalleryImage] = useState([0]);
 
-    const addImage = () => {
-      setGalleryImage([...galleryImage, galleryImage.length]);
-    }
     const fipUrl = axios.create({
 	    baseURL: "https://kenzie-kars.herokuapp.com",
     });
@@ -51,14 +55,7 @@ const AnnouncementModal = () => {
     const [selectedModelAlready, setSelectedModelAlready] = useState(1)
     const [brands, setBrands] = useState<string[]>([])
     const [models, setModels] = useState<IModel[]>([])
-    const [model, setModel] = useState<IModel>({
-      id: "",
-      name: "",
-      brand: "",
-      year: "",
-      fuel: "",
-      value: ""
-    })
+    const [model, setModel] = useState<IModel | undefined>(undefined)
     useEffect(() => {
         const fipRequest = async () => {
           try{
@@ -92,7 +89,6 @@ const AnnouncementModal = () => {
             <Modals
             modalTitle={"Criar anúncio"}
             sizeTitle={"1em"}
-            
             buttonWidth={"160px"}
             nameButton={"Criar anuncio"}
             modalButtonColor={"#4529E6"}
@@ -101,7 +97,7 @@ const AnnouncementModal = () => {
             buttonBorder={"2px"}
             buttonBorderColor={"#4529E6"}
             isOpen={isOpen}
-            onOpen={() => { setGalleryImage([0]); onOpen() }}
+            onOpen={() => { onOpen() }}
             onClose={() => { onClose()}} 
             titlesColor={""} 
             modalButtons={""} 
@@ -114,7 +110,7 @@ const AnnouncementModal = () => {
                     <Text fontSize={"14px"}>Infomações do veículo</Text>
                     <FormControl isRequired isInvalid={!!errors.model?.message}>
                       <FormLabel>Marca</FormLabel>
-                      <Select onChange={(e) => selectedBrand(e.target.value)}>
+                      <Select {...register("brand")} onChange={(e) => selectedBrand(e.target.value)}>
                         {selectedBrandAlready < 1 ? <></> : <option></option>}
                         {
                           brands.map((item: any, index: any) => (
@@ -125,7 +121,7 @@ const AnnouncementModal = () => {
                     </FormControl>
                     <FormControl isRequired isInvalid={!!errors.model?.message}>
                       <FormLabel>Modelo</FormLabel>
-                      <Select onChange={(e) => selectedModel(e.target.value)}>
+                      <Select {...register("model")} onChange={(e) => selectedModel(e.target.value)}>
                         {selectedModelAlready < 1 ? <></> : <option></option>}
                         {
                           models ? models.map((item: any, index: any) => (
@@ -189,7 +185,7 @@ const AnnouncementModal = () => {
                         inputtype={"text"}
                         inputplaceholder={"R$ 48.000,00"}
                         isRequired={true}
-                        value={`R$ ${model?.value}`}
+                        value={`${model?.value}`}
                       ></InputForm>
 
                       <InputForm
@@ -224,29 +220,36 @@ const AnnouncementModal = () => {
                       inputplaceholder={"https://image.com"}
                       isRequired={true}
                     ></InputForm>
-                    <div>
-                      {/* {galleryImage.map((item: any, index: any) => (
-                          <InputForm key={index}
-                            id={index}
-                            // isInvalid={!!errors.gallery_images?.message}
-                            // inputregister={{ ...register("gallery_images") }}
-                            errors={errors.gallery_images?.message}
-                            labeltext={`${index + 1}º Imagem da Galeria`}
-                            inputtype={"text"}
-                            inputplaceholder={"https://image.com"}
-                            isRequired={false}
-                          ></InputForm>
-                      ))} */}
-                    </div>
-                    <Buttons
-                      backgroundColor={"#EDEAFD"}
-                      valueButton={"Adicionar campo para imagem da Galeria"}
-                      color={"#4529E6"}
-                      fontSize={"14px"}
-                      width={"315px"}
-                      maxWidth={"95%"}
-                      onClick={addImage}
-                    />
+                    <ul>
+                      {fields.map((field, index) => {
+                        return (
+                          <div key={field.id}>
+                            <section className={"section"} key={field.id}>
+                              {/* <input
+                                placeholder="url"
+                                {...register(`gallery_image.${index}.url` as const, {
+                                  required: true
+                                })}
+                                className={errors?.gallery_image?.[index]?.url ? "error" : ""}
+                              /> */}
+                                <InputForm
+                                  isInvalid={!!errors.gallery_image?.[index]?.url}
+                                  inputregister={{ ...register(`gallery_image.${index}.url` as const, {
+                                    required: true
+                                  }) }}
+                                  errors={errors.price?.message}
+                                  labeltext={`Imagem ${index + 1}`}
+                                  inputtype={"text"}
+                                  inputplaceholder={"https://image.com"}
+                                  isRequired={false}
+                                ></InputForm>
+                                <Button my={"12px"} w={"50%"} h={"48px"} color={"white"} fontWeight={"500"} bgColor={"blue.300"} border={"1px solid blue.300"} _hover={{ borderColor: "blue.400", bgColor: "blue.400" }} onClick={() => remove(index)} type={"button"}>Remover</Button>
+                            </section>
+                          </div>
+                        )
+                      })}
+                      <Button mt={"12px"} w={"100%"} h={"48px"} color={"blue.400"} fontWeight={"600"} bgColor={"blue.100"} border={"1px solid blue.300"} _hover={{ borderColor: "blue.400", bgColor: "blue.400", color: "white" }} onClick={() => append({url: ""})} type={"button"}>Adicionar campo para imagem da galeria</Button>
+                    </ul>
 
                     <ButtonGroup ml={"auto"} mt={"18px"} mb={"0px"}>
                       <Buttons

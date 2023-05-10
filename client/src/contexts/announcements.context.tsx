@@ -43,6 +43,7 @@ interface AnnouncementProviderData {
 	setComments : React.Dispatch<React.SetStateAction<IComments[] | undefined>>;
 	getAnnouncementById(announcement_id: string): Promise<void>
 	announcementById: IAnnouncement
+	getAllAnnouncementsByIdOwner(ownerId: string): Promise<void>
 }
 
 export interface IFilters {
@@ -93,8 +94,12 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
     const toast = useToast()
 
     async function createAnnouncement(dataForm: IAnnouncementCreate) {
+		const { gallery_image, ...formWithoutGallery } = dataForm;
+
         try {
-            await api.post("/annoucements", dataForm)
+            const { data } = await api.post("/annoucements", formWithoutGallery);
+
+			await api.post(`annoucements/${data.id}/gallery-images`, gallery_image);
         } catch (err){
             toast({
                 title: "error",
@@ -177,13 +182,11 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 		try {
 			const { data } = await api.get(`/annoucements?owner_id=${ownerId}`);
 			setAnnouncementsByOwner(data.data);
+			router.push("/announcements");
+			setLoading(false);
 		} catch (error) {
 			console.error(error);
-		} finally {
-			setTimeout(() => {
-				setLoading(false);
-				router.push("/announcements");
-			}, 1000);
+			setLoading(false);
 		}
 	}
 
@@ -264,7 +267,8 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 				comments,
 				setComments,
 				getAnnouncementById,
-				announcementById
+				announcementById,
+				getAllAnnouncementsByIdOwner,
 			}}>
 			{children}
 		</AnnouncementContext.Provider>

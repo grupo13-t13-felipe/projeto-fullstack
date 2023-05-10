@@ -5,9 +5,11 @@ import { UserContext } from "@/contexts/users.context";
 import UserModal from "../UserModal";
 import AddressModal from "../AddressModal";
 import { useRouter } from "next/router";
+import { AnnouncementContext } from "@/contexts/announcements.context";
 
 const ProfileMenuList = () => {
   const {user, logoutUser} = useContext(UserContext)
+  const {getOwnerById} = useContext(AnnouncementContext)
   
   return (
     <MenuList maxW={"92px"} ml={"auto"}>
@@ -17,7 +19,7 @@ const ProfileMenuList = () => {
       <MenuItem>
         <AddressModal/>
       </MenuItem>
-      {user?.is_seller? <MenuItem><Link href="/announcements">{""}Meus anúncios</Link> </MenuItem> : <></> }
+      {user?.is_seller? <MenuItem onClick={() => getOwnerById(user.id)}>{""}Meus anúncios</MenuItem> : <></> }
 
      
       <MenuItem>

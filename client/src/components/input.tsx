@@ -117,6 +117,7 @@ const InputForm = (props: InputFormProps) => {
 				placeholder={props.inputplaceholder}
 				value={props.value}
 				disabled={props.disabled}
+				defaultValue={props.defaultValue}
 			/>
 			<FormErrorMessage mt={"4px"} position={"absolute"}>
 				{props.errors}
