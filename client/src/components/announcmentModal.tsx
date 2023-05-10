@@ -11,6 +11,7 @@ import {
   useDisclosure,
   Textarea,
   Select,
+  Button,
 } from "@chakra-ui/react";
 import Buttons from "./button";
 import { useContext, useEffect, useState } from "react";
@@ -18,7 +19,7 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { IAnnouncementCreate } from "@/types/announcements";
 import { AnnouncementContext } from "@/contexts/announcements.context";
 import { createAnnouncementSchema } from "@/schemas/annoucement.schema";
-import { useForm, useFieldArray, Control, useWatch } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import axios from "axios";
 
 interface IModel {
@@ -42,10 +43,10 @@ const AnnouncementModal = () => {
     });
     const { fields, append, remove } = useFieldArray({
       control,
-      name: "gallery_image"
+      name: "gallery_image",
     })
+    
     const { isOpen, onOpen, onClose } = useDisclosure()
-    const [galleryImage, setGalleryImage] = useState([0]);
 
     const fipUrl = axios.create({
 	    baseURL: "https://kenzie-kars.herokuapp.com",
@@ -54,7 +55,7 @@ const AnnouncementModal = () => {
     const [selectedModelAlready, setSelectedModelAlready] = useState(1)
     const [brands, setBrands] = useState<string[]>([])
     const [models, setModels] = useState<IModel[]>([])
-    const [model, setModel] = useState<IModel | null>(null)
+    const [model, setModel] = useState<IModel | undefined>(undefined)
     useEffect(() => {
         const fipRequest = async () => {
           try{
@@ -69,9 +70,6 @@ const AnnouncementModal = () => {
         }
         fipRequest()
     }, [])
-
-    console.log(brands)
-    console.log(model)
 
     const selectedBrand = async (brand: string) => {
       const {data} = await fipUrl.get(`/cars?brand=${brand}`)
@@ -91,7 +89,6 @@ const AnnouncementModal = () => {
             <Modals
             modalTitle={"Criar anúncio"}
             sizeTitle={"1em"}
-            
             buttonWidth={"160px"}
             nameButton={"Criar anuncio"}
             modalButtonColor={"#4529E6"}
@@ -100,7 +97,7 @@ const AnnouncementModal = () => {
             buttonBorder={"2px"}
             buttonBorderColor={"#4529E6"}
             isOpen={isOpen}
-            onOpen={() => { setGalleryImage([0]); onOpen() }}
+            onOpen={() => { onOpen() }}
             onClose={() => { onClose()}} 
             titlesColor={""} 
             modalButtons={""} 
@@ -228,36 +225,31 @@ const AnnouncementModal = () => {
                         return (
                           <div key={field.id}>
                             <section className={"section"} key={field.id}>
-                              <input
+                              {/* <input
                                 placeholder="url"
                                 {...register(`gallery_image.${index}.url` as const, {
                                   required: true
                                 })}
                                 className={errors?.gallery_image?.[index]?.url ? "error" : ""}
-                              />
-                              <button type="button" onClick={() => remove(index)}>
-                                Remover
-                              </button>
+                              /> */}
+                                <InputForm
+                                  isInvalid={!!errors.gallery_image?.[index]?.url}
+                                  inputregister={{ ...register(`gallery_image.${index}.url` as const, {
+                                    required: true
+                                  }) }}
+                                  errors={errors.price?.message}
+                                  labeltext={`Imagem ${index + 1}`}
+                                  inputtype={"text"}
+                                  inputplaceholder={"https://image.com"}
+                                  isRequired={false}
+                                ></InputForm>
+                                <Button my={"12px"} w={"50%"} h={"48px"} color={"white"} fontWeight={"500"} bgColor={"blue.300"} border={"1px solid blue.300"} _hover={{ borderColor: "blue.400", bgColor: "blue.400" }} onClick={() => remove(index)} type={"button"}>Remover</Button>
                             </section>
                           </div>
                         )
                       })}
-
-                      <button type="button" onClick={() => append({
-                        url: ""
-                      })}>
-                        Adicionar
-                      </button>
+                      <Button mt={"12px"} w={"100%"} h={"48px"} color={"blue.400"} fontWeight={"600"} bgColor={"blue.100"} border={"1px solid blue.300"} _hover={{ borderColor: "blue.400", bgColor: "blue.400", color: "white" }} onClick={() => append({url: ""})} type={"button"}>Adicionar campo para imagem da galeria</Button>
                     </ul>
-                    {/* <Buttons
-                      backgroundColor={"#EDEAFD"}
-                      valueButton={"Adicionar campo para imagem da Galeria"}
-                      color={"#4529E6"}
-                      fontSize={"14px"}
-                      width={"315px"}
-                      maxWidth={"95%"}
-                      onClick={addImage}
-                    /> */}
 
                     <ButtonGroup ml={"auto"} mt={"18px"} mb={"0px"}>
                       <Buttons

@@ -94,23 +94,26 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
 
     async function createAnnouncement(dataForm: IAnnouncementCreate) {
 		console.log(dataForm)
-        // try {
-        //     await api.post("/annoucements", dataForm)
-        // } catch (err){
-        //     toast({
-        //         title: "error",
-        //         variant: "solid",
-        //         position: "top-right",
-        //         isClosable: true,
-        //         render: () => {
-        //             return (
-        //                 <Box borderRadius={"4px"} color={"grey.50"} p={3} bg={"red.700"} fontWeight={"500"}>
-        //                     Ops!! Verifique seus dados e tente novamente!
-        //                 </Box>
-        //             )
-        //         }
-        //     })
-        // }
+		const { gallery_image, ...formWithoutGallery } = dataForm;
+        try {
+            const { data } = await api.post("/annoucements", formWithoutGallery);
+
+			await api.post(`annoucements/${data.id}/gallery-images`, gallery_image);
+        } catch (err){
+            toast({
+                title: "error",
+                variant: "solid",
+                position: "top-right",
+                isClosable: true,
+                render: () => {
+                    return (
+                        <Box borderRadius={"4px"} color={"grey.50"} p={3} bg={"red.700"} fontWeight={"500"}>
+                            Ops!! Verifique seus dados e tente novamente!
+                        </Box>
+                    )
+                }
+            })
+        }
     }
 
 	async function editAnnouncement (dataForm: IAnnouncementEdit) {

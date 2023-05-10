@@ -17,7 +17,7 @@ const Advertiser = () => {
 
     const { announcementsByOwner, loading, owner } = annoucementCtx()
     const { user } = useContext(UserContext)
-   
+
     return (
         <>
             {
