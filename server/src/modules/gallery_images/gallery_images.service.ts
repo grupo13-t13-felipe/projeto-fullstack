@@ -33,9 +33,6 @@ export class GalleryImagesService {
     const formatted = galleryImageDtos.map((imageDto) => {
       return { ...imageDto, annoucement_id };
     });
-    /* const images = await this.prisma.galleryImage.createMany({
-      data: formatted,
-    }); */
     const images = [];
     for (let i = 0; i < formatted.length; i++) {
       const image = await this.prisma.galleryImage.create({
@@ -45,7 +42,7 @@ export class GalleryImagesService {
     }
     return images;
   }
-
+  s;
   async findAllFromAnnoucement(annoucement_id: string) {
     const images = await this.prisma.galleryImage.findMany({
       where: { annoucement_id },
