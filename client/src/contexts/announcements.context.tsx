@@ -93,23 +93,24 @@ export const AnnouncementProvider = ({ children }: IProviderProps) => {
     const toast = useToast()
 
     async function createAnnouncement(dataForm: IAnnouncementCreate) {
-        try {
-            await api.post("/annoucements", dataForm)
-        } catch (err){
-            toast({
-                title: "error",
-                variant: "solid",
-                position: "top-right",
-                isClosable: true,
-                render: () => {
-                    return (
-                        <Box borderRadius={"4px"} color={"grey.50"} p={3} bg={"red.700"} fontWeight={"500"}>
-                            Ops!! Verifique seus dados e tente novamente!
-                        </Box>
-                    )
-                }
-            })
-        }
+		console.log(dataForm)
+        // try {
+        //     await api.post("/annoucements", dataForm)
+        // } catch (err){
+        //     toast({
+        //         title: "error",
+        //         variant: "solid",
+        //         position: "top-right",
+        //         isClosable: true,
+        //         render: () => {
+        //             return (
+        //                 <Box borderRadius={"4px"} color={"grey.50"} p={3} bg={"red.700"} fontWeight={"500"}>
+        //                     Ops!! Verifique seus dados e tente novamente!
+        //                 </Box>
+        //             )
+        //         }
+        //     })
+        // }
     }
 
 	async function editAnnouncement (dataForm: IAnnouncementEdit) {
