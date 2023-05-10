@@ -29,14 +29,21 @@ export class GalleryImagesService {
     return galleryImageData;
   }
 
-  async create(annoucement_id: string, galleryImageDto: GalleryImageDto) {
-    const image = await this.prisma.galleryImage.create({
-      data: {
-        ...galleryImageDto,
-        annoucement_id,
-      },
+  async create(annoucement_id: string, galleryImageDtos: GalleryImageDto[]) {
+    const formatted = galleryImageDtos.map((imageDto) => {
+      return { ...imageDto, annoucement_id };
     });
-    return image;
+    /* const images = await this.prisma.galleryImage.createMany({
+      data: formatted,
+    }); */
+    const images = [];
+    for (let i = 0; i < formatted.length; i++) {
+      const image = await this.prisma.galleryImage.create({
+        data: formatted[i],
+      });
+      images.push(image);
+    }
+    return images;
   }
 
   async findAllFromAnnoucement(annoucement_id: string) {
