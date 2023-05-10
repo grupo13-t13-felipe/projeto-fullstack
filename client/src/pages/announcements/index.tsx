@@ -5,19 +5,15 @@ import HeaderProfile from "@/components/headers/headerProfile";
 import ProductCard from "@/components/productCard";
 import { annoucementCtx } from "@/contexts/announcements.context";
 import { UserContext } from "@/contexts/users.context";
-import { commentSchema } from "@/schemas/user.schema";
-import { Flex, List, ListItem, Text, Link, Avatar } from "@chakra-ui/react";
-import { yupResolver } from "@hookform/resolvers/yup";
-import NextLink from "next/link";
+import { Flex, List, ListItem, Text, Avatar } from "@chakra-ui/react";
 import { useContext } from "react";
-import { useForm } from "react-hook-form";
 
 
 const Advertiser = () => {
 
     const { announcementsByOwner, loading, owner } = annoucementCtx()
     const { user } = useContext(UserContext)
-   
+
     return (
         <>
             {
@@ -96,16 +92,6 @@ const Advertiser = () => {
                                 direction={'column'}
                                 my={'50px'}
                             >
-                                {/* <Text
-                                    display={"flex"}
-                                    w={"100%"}
-                                    justifyContent={"flex-start"}
-                                    color={"grey.500"}
-                                    fontWeight={"semibold"}
-                                    fontSize={"2xl"}
-                                >
-                                    Anúncios
-                                </Text> */}
                                 <List
                                     border={"none"} width={["100%", "100%", "95%"]} maxW={["none", "none", "1400px"]} overflowX={"auto"} display={"flex"} flexWrap={["nowrap", "nowrap", "wrap"]} alignItems={"center"} gap={["16px", "24px"]} ml={"0"} pb={"8px"}
                                 >

@@ -33,9 +33,9 @@ export class GalleryImagesController {
   @UseGuards(JwtAuthGuard, AnnoucementExistsGuard, IsAnnoucementOwnerGuard)
   create(
     @Param('annoucement_id') annoucement_id: string,
-    @Body() galleryImageDto: GalleryImageDto,
+    @Body() galleryImageDtos: GalleryImageDto[],
   ) {
-    return this.galleryImagesService.create(annoucement_id, galleryImageDto);
+    return this.galleryImagesService.create(annoucement_id, galleryImageDtos);
   }
 
   @Patch('gallery-images/:image_id')
