@@ -180,7 +180,7 @@ const EditAnnouncementModal = ({ announcId, announcementInfo }: editProps) => {
                 id={index}
                 // isInvalid={!!errors.gallery_images?.message}
                 // inputregister={{ ...register("gallery_images") }}
-                errors={errors.gallery_images?.message}
+                errors={errors.gallery_image?.message}
                 labeltext={`${index + 1}º Imagem da Galeria`}
                 inputtype={"text"}
                 inputplaceholder={"https://image.com"}
