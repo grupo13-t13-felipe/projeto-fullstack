@@ -9,7 +9,7 @@ const mailGenerator = new Mailgen({
     theme: 'default',
     product: {
         name: 'Full Stack',
-        link: 'http://localhost:3000'
+        link: 'https://projeto-fullstack-kohl.vercel.app'
     },
 })
 
@@ -48,7 +48,7 @@ export class MailService {
                     button: {
                         color: '#DC4D2F',
                         text: 'Reset your password',
-                        link: `http://localhost:3000/users/reset-password/${resetToken}`,
+                        link: `https://projeto-fullstack-kohl.vercel.app/users/reset-password/${resetToken}`,
                     },
                 },
                 outro:
